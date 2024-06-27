@@ -18,6 +18,7 @@ import axios from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
+import "./ManageUser.css";
 
 const style = {
     position: "absolute",
@@ -64,20 +65,22 @@ export default function ManageUser() {
     // Handle password visibility
     const handleClickShowPassword = () => setShowPassword(!showPassword);
 
-    useEffect(() => {
-        if (!localStorage.getItem("user")) {
-            console.log("User not logged in");
-            navigate("/");
-        }
-        axios
-            .get(`http://localhost:1337/viewusers`)
-            .then((response) => {
-                setUsers(response.data);
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    }, [refreshData, navigate]);
+//MARK:USEEFFECT balikan ko 
+
+    // useEffect(() => {
+    //     if (!localStorage.getItem("user")) {
+    //         console.log("User not logged in");
+    //         navigate("/");
+    //     }
+    //     axios
+    //         .get(`http://localhost:1337/viewusers`)
+    //         .then((response) => {
+    //             setUsers(response.data);
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error fetching data:", error);
+    //         });
+    // }, [refreshData, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

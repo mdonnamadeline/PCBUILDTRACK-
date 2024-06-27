@@ -1,0 +1,43 @@
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: white;
+}
+.viewuser {
+    display: flex;
+    
+}
+
+.vucon {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+    gap: 1em;
+}
+
+.vucon h1 {
+    margin-left: 10px;
+}
+
+.addbutton {
+    display: flex;
+}
+
+.editModalText {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+}
+
+.box {
+    display: flex;
+    gap: 1em;
+    flex-direction: column;
+}

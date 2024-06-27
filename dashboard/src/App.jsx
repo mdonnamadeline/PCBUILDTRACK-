@@ -11,13 +11,13 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Navigate replace to="/mateo" />} />
+                <Route path="/" element={<Navigate replace to="/login" />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/dashboard" element={<Dashboard/>} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/navbar" element={<Navbar />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/product" element={<Product />} />
-                <Route path="/mateo" element={<Dashboard/>} />
                 <Route path="/manageuser" element={<ManageUser />} />
             </Routes>
         </BrowserRouter>
