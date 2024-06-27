@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Unica+One&display=swap");
+
+.navbar {
+    font-family: "Unica One", Arial, Helvetica, sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 130px;
+    background-color: rgb(161, 27, 27) ;
+    font-size: 18px;
+    position: sticky;
+    top: 0;
+    padding-left: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-items {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-between;
+    font-weight: bold;
+    align-items: center;
+    margin-left: 5px;
+    font-family: "Unica One", Arial, Helvetica, sans-serif;
+
+}
+
+.navbar-items-tile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    font-family: "Unica One", Arial, Helvetica, sans-serif;
+
+}
+
+@media (max-width: 600px) {
+    .navbar-items {
+        flex-direction: column;
+    }
+}
+
+a {
+    text-decoration: none;
+}
+
+.navbar-items-section a {
+    color: white; 
+    text-decoration: none;
+}
+
+.navbar-items-section {
+    color: white;
+    display: flex;
+    justify-content: flex-end;
+    font-family: "Unica One", Arial, Helvetica, sans-serif;
+    margin-left: 5px;
+}
