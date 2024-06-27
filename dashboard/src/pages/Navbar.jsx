@@ -17,8 +17,8 @@ export default function Navbar() {
                     marginRight: "40px",
                 }}
             >
-                <Link to="/mateo">HOME</Link>
-                <Link to="/product">PRODUCTS</Link>
+                <Link to="/home">HOME</Link>
+                <Link to="/menu">MENU</Link>
                 <Link to="/login">LOGIN</Link>
               
             </div>
