@@ -41,7 +41,7 @@ export default function ManageUser() {
     const [showPassword, setShowPassword] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const navigate = useNavigate();
-
+    
     const initialUserState = {
         firstname: "",
         lastname: "",
@@ -65,22 +65,21 @@ export default function ManageUser() {
     // Handle password visibility
     const handleClickShowPassword = () => setShowPassword(!showPassword);
 
-//MARK:USEEFFECT balikan ko 
-
-    // useEffect(() => {
-    //     if (!localStorage.getItem("user")) {
-    //         console.log("User not logged in");
-    //         navigate("/");
-    //     }
-    //     axios
-    //         .get(`http://localhost:1337/viewusers`)
-    //         .then((response) => {
-    //             setUsers(response.data);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching data:", error);
-    //         });
-    // }, [refreshData, navigate]);
+// MARK:USEEFFECT 
+    useEffect(() => {
+        if (!localStorage.getItem("user")) {
+            console.log("User not logged in");
+            navigate("/");
+        }
+        axios
+            .get(`http://localhost:1337/viewusers`)
+            .then((response) => {
+                setUsers(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+    }, [refreshData, navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

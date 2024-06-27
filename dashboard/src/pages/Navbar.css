@@ -28,6 +28,11 @@
     font-family: "Unica One", Arial, Helvetica, sans-serif;
 }
 
+.navbar-items img {
+    height: 75px;
+    width: 75px;
+}
+
 @media (max-width: 600px) {
     .navbar-items {
         flex-direction: column;

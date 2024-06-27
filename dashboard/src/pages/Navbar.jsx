@@ -1,11 +1,13 @@
 import React from "react";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
+import logo from "../images/logo.png";
 
 export default function Navbar() {
   return (
     <div className="navbar">
         <div className="navbar-items">
+        <img src={logo} alt="Logo" style={{ marginRight: "auto" }} /> 
             <div
                 className="navbar-items-section"
                 style={{
