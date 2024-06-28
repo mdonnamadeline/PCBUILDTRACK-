@@ -22,6 +22,7 @@ export default function ManageProducts() {
     const [refreshDataList, setRefreshDataList] = useState(false);
     const [modalState, setModalState] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
+    const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
     const initialData = {
         name: "",
@@ -52,7 +53,7 @@ export default function ManageProducts() {
 
     useEffect(() => {
         axios
-            .get(`http://localhost:1337/get-products`)
+            .get(`${VITE_REACT_APP_API_HOST}/get-products`)
             .then((response) => {
                 setDataList(response.data);
             })
@@ -66,7 +67,7 @@ export default function ManageProducts() {
 
         try {
             const response = await axios.post(
-                "http://localhost:1337/add-product",
+                `${VITE_REACT_APP_API_HOST}/add-product`,
                 currentData
             );
 
@@ -88,7 +89,7 @@ export default function ManageProducts() {
 
         try {
             const response = await axios.post(
-                "http://localhost:1337/edit-product",
+                `${VITE_REACT_APP_API_HOST}/edit-product`,
                 currentData
             );
 

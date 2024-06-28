@@ -40,7 +40,8 @@ export default function ManageUser() {
     const [showPassword, setShowPassword] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const navigate = useNavigate();
-    
+    const { VITE_REACT_APP_API_HOST } = import.meta.env;
+
     const initialUserState = {
         firstname: "",
         lastname: "",
@@ -68,7 +69,7 @@ export default function ManageUser() {
         //     navigate("/");
         // }
         axios
-            .get(`http://localhost:1337/viewusers`)
+            .get(`${VITE_REACT_APP_API_HOST}/viewusers`)
             .then((response) => {
                 setUsers(response.data);
             })
@@ -90,7 +91,7 @@ export default function ManageUser() {
 
         try {
             const response = await axios.post(
-                "http://localhost:1337/updateuser",
+                `${VITE_REACT_APP_API_HOST}/updateuser`,
                 currentUser
             );
 
@@ -114,7 +115,7 @@ export default function ManageUser() {
 
         try {
             const response = await axios.post(
-                "http://localhost:1337/adduser",
+                `${VITE_REACT_APP_API_HOST}/adduser`,
                 currentUser
             );
 
