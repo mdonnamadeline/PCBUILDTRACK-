@@ -10,7 +10,7 @@ body {
   flex-direction: column;
   justify-content: center;
   width: 300px;
-  height: 400px;
+  height: auto; 
   margin-top: 20px;
   border-radius: 10px;
   padding: 20px;
@@ -18,14 +18,14 @@ body {
   gap: 1rem;
 }
 
-.loginForm input[type="text"] {
+
+.loginForm .MuiTextField-root {
   width: 100%;
 }
 
-.loginForm h6 {
-  margin-top: 10px;
-  font-size: 30px;
-  margin-bottom: 10px;
+.loginForm h2, .loginForm p {
+  text-align: center;
+  margin: 10px 0;
 }
 
 .loginContainer {

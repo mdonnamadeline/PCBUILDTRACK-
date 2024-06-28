@@ -25,17 +25,22 @@ export default function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(
-                "http://localhost:1337/signin",
-                user
-            );
-            const result = response.data;
-            if (result.success) {
-                localStorage.setItem("user", JSON.stringify(result.user));
-                navigate("/dashboard"); // Redirect to user dashboard
-            } else {
-                alert(result.message);
+            if(user.email != "admin" && user.password != "admin") {
+                alert("not valid");
+                return;
             }
+            navigate("/dashboard");
+            // const response = await axios.post(
+            //     "http://localhost:1337/signin",
+            //     user
+            // );
+            // const result = response.data;
+            // if (result.success) {
+            //     localStorage.setItem("user", JSON.stringify(result.user));
+            //     navigate("/dashboard"); 
+            // } else {
+            //     alert(result.message);
+            // }
         } catch (error) {
             console.error("Error logging in:", error);
             alert("An error occurred. Please try again.");
@@ -86,6 +91,13 @@ export default function Login() {
                 />
                 <Button variant="contained" type="submit" className="redButton">
                     Login
+                </Button>
+                <Button
+                    variant="contained" 
+                    onClick={() => navigate("/signup")}
+                    className="redButton" 
+                >
+                    Sign Up
                 </Button>
             </form>
         </div>

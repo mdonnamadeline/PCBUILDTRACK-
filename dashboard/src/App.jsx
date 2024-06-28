@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import SignUp from "./pages/SignUp";
 import ManageUser from "./pages/ManageUser";
 import Menu from "./pages/Menu";
+import ManageProducts from "./pages/ManageProducts";
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/home" element={<Home />} />
                 <Route path="/menu" element={<Menu />} />
                 <Route path="/manageuser" element={<ManageUser />} />
+                <Route path="manageproduct" element={<ManageProducts />} />
             </Routes>
         </BrowserRouter>
     );

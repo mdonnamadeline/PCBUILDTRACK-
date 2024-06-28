@@ -1,18 +1,13 @@
 const mongoose = require('mongoose');
-const { Schema, model: _model } = mongoose;
 
-const requiredString = { type: String, required: true };
-const requiredUniqueString = { type: String, required: true, unique: true };
-const collectionName = 'model-data';
+const DataSchema = new mongoose.Schema({
+  firstname: { type: String, required: true },
+  lastname: { type: String, required: true },
+  middlename: { type: String },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
+});
 
-const DataModel = new Schema(
-  {
-    name: requiredUniqueString,
-    image: requiredString,
-  },
-  { collection: collectionName } 
-);
+const DataModel = mongoose.model('Data', DataSchema);
 
-const model = _model(collectionName, DataModel);
-
-module.exports = model;
+module.exports = DataModel;
