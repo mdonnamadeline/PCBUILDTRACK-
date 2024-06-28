@@ -14,12 +14,13 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const port = 1337;
+const host = "0.0.0.0";
 const dbName = "final-data";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-app.listen(port, () => {
+app.listen(port, host, () => {
     console.log(`Server is running on port ${port}`);
 });
 

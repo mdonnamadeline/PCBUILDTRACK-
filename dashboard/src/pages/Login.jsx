@@ -14,6 +14,7 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const navigate = useNavigate();
+    const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
     const handleChange = (e) => {
         setUser({
@@ -25,22 +26,25 @@ export default function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            if(user.email != "admin" && user.password != "admin") {
-                alert("not valid");
-                return;
-            }
-            navigate("/dashboard");
-            // const response = await axios.post(
-            //     "http://localhost:1337/signin",
-            //     user
-            // );
-            // const result = response.data;
-            // if (result.success) {
-            //     localStorage.setItem("user", JSON.stringify(result.user));
-            //     navigate("/dashboard"); 
-            // } else {
-            //     alert(result.message);
+            // if(user.email != "admin" && user.password != "admin") {
+            //     alert("not valid");
+            //     return;
             // }
+            // navigate("/dashboard");
+            const response = await axios.post(
+                `${VITE_REACT_APP_API_HOST}/signin`,
+                user
+            );
+
+            console.log(response);
+
+            const result = response.data;
+            if (result.success) {
+                localStorage.setItem("user", JSON.stringify(result.user));
+                navigate("/dashboard");
+            } else {
+                alert(result.message);
+            }
         } catch (error) {
             console.error("Error logging in:", error);
             alert("An error occurred. Please try again.");
@@ -60,7 +64,7 @@ export default function Login() {
                     value={user.email}
                     onChange={handleChange}
                     inputProps={{
-                        pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$",
+                        pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
                     }}
                 />
                 <TextField
@@ -93,9 +97,9 @@ export default function Login() {
                     Login
                 </Button>
                 <Button
-                    variant="contained" 
+                    variant="contained"
                     onClick={() => navigate("/signup")}
-                    className="redButton" 
+                    className="redButton"
                 >
                     Sign Up
                 </Button>
