@@ -19,7 +19,7 @@ import {
     MenuItem,
 } from "@mui/material";
 import axios from "axios";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Delete, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import "./ManageUser.css";
@@ -43,6 +43,8 @@ export default function ManageUser() {
     const [refreshData, setRefreshData] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
     const navigate = useNavigate();
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
@@ -69,10 +71,6 @@ export default function ManageUser() {
     const handleClickShowPassword = () => setShowPassword(!showPassword);
 
     useEffect(() => {
-        // if (!localStorage.getItem("user")) {
-        //     console.log("User not logged in");
-        //     navigate("/");
-        // }
         axios
             .get(`${VITE_REACT_APP_API_HOST}/viewusers`)
             .then((response) => {
@@ -81,7 +79,7 @@ export default function ManageUser() {
             .catch((error) => {
                 console.error("Error fetching data:", error);
             });
-    }, [refreshData, navigate]);
+    }, [refreshData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -93,20 +91,20 @@ export default function ManageUser() {
 
     const handleUpdateUser = async (e) => {
         e.preventDefault();
-    
+
         console.log("Updating user with data:", currentUser);
-    
+
         try {
             const response = await axios.put(
                 `${VITE_REACT_APP_API_HOST}/updateuser/${currentUser._id}`,
                 currentUser
             );
-    
+
             const result = response.data;
-    
+
             if (result.success) {
                 alert(result.message);
-                setRefreshData(!refreshData); 
+                setRefreshData(!refreshData);
                 setOpen(false);
             } else {
                 alert("Failed to update user. Please try again!");
@@ -114,6 +112,35 @@ export default function ManageUser() {
         } catch (error) {
             console.error("Error updating user:", error);
             alert("An error occurred. Please try again.");
+        }
+    };
+
+    const handleDeleteDialogOpen = (userId) => {
+        setUserToDelete(userId);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteDialogClose = () => {
+        setUserToDelete(null);
+        setDeleteDialogOpen(false);
+    };
+
+    const handleDeleteUser = async () => {
+        if (!userToDelete) {
+            return;
+        }
+
+        try {
+            await axios.delete(
+                `${VITE_REACT_APP_API_HOST}/deleteuser/${userToDelete}`
+            );
+            setUsers((prevUsers) =>
+                prevUsers.filter((user) => user._id !== userToDelete)
+            );
+            handleDeleteDialogClose();
+        } catch (error) {
+            console.error("Failed to delete user:", error);
+            alert("Failed to delete user. Please try again.");
         }
     };
 
@@ -192,6 +219,16 @@ export default function ManageUser() {
                                                 >
                                                     EDIT
                                                 </Button>
+                                                <IconButton
+                                                    onClick={() =>
+                                                        handleDeleteDialogOpen(
+                                                            user._id
+                                                        )
+                                                    }
+                                                    color="error"
+                                                >
+                                                    <Delete />
+                                                </IconButton>
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -248,55 +285,25 @@ export default function ManageUser() {
                                     <TextField
                                         required
                                         name="email"
+                                        id="email"
                                         label="Email"
-                                        disabled={isEditMode}
                                         variant="outlined"
                                         value={currentUser?.email || ""}
                                         onChange={handleChange}
                                         inputProps={{
-                                            pattern: "^[A-Za-z @.]+$",
+                                            pattern:
+                                                "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
                                         }}
                                     />
-                                    <FormControl
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                    >
-                                        <InputLabel id="role-select-label">
-                                            Role
-                                        </InputLabel>
-                                        <Select
-                                            labelId="role-select-label"
-                                            id="role-select"
-                                            value={currentUser?.role || ""}
-                                            onChange={handleChange}
-                                            label="Role"
-                                            name="role"
-                                        >
-                                            <MenuItem value="Admin">
-                                                Admin
-                                            </MenuItem>
-                                            <MenuItem value="Owner">
-                                                Owner
-                                            </MenuItem>
-                                            <MenuItem value="Staff">
-                                                Staff
-                                            </MenuItem>
-                                            <MenuItem value="Customer">
-                                                Customer
-                                            </MenuItem>
-                                        </Select>
-                                    </FormControl>
-
                                     <TextField
-                                        id="password"
                                         required
                                         name="password"
+                                        id="password"
                                         label="Password"
+                                        variant="outlined"
                                         type={
                                             showPassword ? "text" : "password"
                                         }
-                                        variant="outlined"
                                         value={currentUser?.password || ""}
                                         onChange={handleChange}
                                         InputProps={{
@@ -307,32 +314,84 @@ export default function ManageUser() {
                                                         onClick={
                                                             handleClickShowPassword
                                                         }
+                                                        edge="end"
                                                     >
                                                         {showPassword ? (
-                                                            <Visibility />
-                                                        ) : (
                                                             <VisibilityOff />
+                                                        ) : (
+                                                            <Visibility />
                                                         )}
                                                     </IconButton>
                                                 </InputAdornment>
                                             ),
                                         }}
                                     />
-                                    <div className="buttonGroup">
-                                        <Button
-                                            variant="contained"
-                                            onClick={handleClose}
+                                    <FormControl required variant="outlined">
+                                        <InputLabel htmlFor="role">
+                                            Role
+                                        </InputLabel>
+                                        <Select
+                                            label="Role"
+                                            name="role"
+                                            id="role"
+                                            value={currentUser?.role || ""}
+                                            onChange={handleChange}
                                         >
-                                            Close
-                                        </Button>
+                                            <MenuItem value="Admin">
+                                                Admin
+                                            </MenuItem>
+                                            <MenuItem value="User">
+                                                User
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    <Box mt={2}>
                                         <Button
                                             variant="contained"
+                                            color="primary"
                                             type="submit"
                                         >
-                                            SAVE
+                                            {isEditMode ? "Update" : "Add"}
                                         </Button>
-                                    </div>
+                                    </Box>
                                 </form>
+                            </Box>
+                        </Modal>
+
+                        <Modal
+                            open={deleteDialogOpen}
+                            onClose={handleDeleteDialogClose}
+                        >
+                            <Box sx={style}>
+                                <Typography
+                                    id="modal-modal-title"
+                                    variant="h6"
+                                    component="h2"
+                                >
+                                    Confirm Delete
+                                </Typography>
+                                <Typography sx={{ mt: 2 }}>
+                                    Are you sure you want to delete this user?
+                                </Typography>
+                                <Box
+                                    mt={2}
+                                    display="flex"
+                                    justifyContent="space-between"
+                                >
+                                    <Button
+                                        variant="contained"
+                                        color="error"
+                                        onClick={handleDeleteUser}
+                                    >
+                                        Delete
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleDeleteDialogClose}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </Box>
                             </Box>
                         </Modal>
                     </div>
