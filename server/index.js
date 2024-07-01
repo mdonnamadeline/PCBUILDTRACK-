@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 
 const port = 1337;
 const host = "0.0.0.0";
-const dbName = "final-data";
+const dbName = "KFC-data";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });

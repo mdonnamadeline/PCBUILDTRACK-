@@ -340,9 +340,16 @@ export default function ManageUser() {
                                             <MenuItem value="Admin">
                                                 Admin
                                             </MenuItem>
-                                            <MenuItem value="User">
-                                                User
+                                            <MenuItem value="Owner">
+                                                Owner
                                             </MenuItem>
+                                            <MenuItem value="Costumer">
+                                                Costumer
+                                            </MenuItem>
+                                            <MenuItem value="Staff">
+                                                Staff
+                                            </MenuItem>
+
                                         </Select>
                                     </FormControl>
                                     <Box mt={2}>
