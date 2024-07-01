@@ -27,6 +27,11 @@ body {
   text-align: center;
   margin: 10px 0;
 }
+.loginForm p {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 12px;
+}
 
 .loginContainer {
   height: 100vh;

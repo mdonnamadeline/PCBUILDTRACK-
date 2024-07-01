@@ -13,6 +13,10 @@ import {
     TableRow,
     TextField,
     Typography,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
 } from "@mui/material";
 import axios from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -48,6 +52,7 @@ export default function ManageUser() {
         middlename: "",
         email: "",
         password: "",
+        role: "",
     };
 
     function handleOpen(user, edit) {
@@ -85,6 +90,22 @@ export default function ManageUser() {
             [name]: value,
         }));
     };
+
+   
+    useEffect(() => {
+        
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("URL_TO_FETCH_DATA");
+                
+                setData(response.data);
+            } catch (error) {
+                console.error("Failed to fetch data for ComboBox:", error);
+            }
+        };
+
+        fetchData();
+    }, [refreshData]); 
 
     const handleUpdateUser = async (e) => {
         e.preventDefault();
@@ -156,6 +177,7 @@ export default function ManageUser() {
                                         <TableCell>Last Name</TableCell>
                                         <TableCell>Middle Name</TableCell>
                                         <TableCell>Email</TableCell>
+                                        <TableCell>Role</TableCell>
                                         <TableCell>EDIT</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -163,10 +185,17 @@ export default function ManageUser() {
                                 <TableBody>
                                     {users.map((user) => (
                                         <TableRow key={user.email}>
-                                            <TableCell>{user.firstname}</TableCell>
-                                            <TableCell>{user.lastname}</TableCell>
-                                            <TableCell>{user.middlename}</TableCell>
+                                            <TableCell>
+                                                {user.firstname}
+                                            </TableCell>
+                                            <TableCell>
+                                                {user.lastname}
+                                            </TableCell>
+                                            <TableCell>
+                                                {user.middlename}
+                                            </TableCell>
                                             <TableCell>{user.email}</TableCell>
+                                            <TableCell>{user.role}</TableCell>
 
                                             <TableCell>
                                                 <Button
@@ -238,14 +267,49 @@ export default function ManageUser() {
                                         variant="outlined"
                                         value={currentUser?.email || ""}
                                         onChange={handleChange}
-                                        inputProps={{ pattern: "^[A-Za-z @.]+$" }}
+                                        inputProps={{
+                                            pattern: "^[A-Za-z @.]+$",
+                                        }}
                                     />
+                                    <FormControl
+                                        variant="outlined"
+                                        fullWidth
+                                        required
+                                    >
+                                        <InputLabel id="role-select-label">
+                                            Role
+                                        </InputLabel>
+                                        <Select
+                                            labelId="role-select-label"
+                                            id="role-select"
+                                            value={currentUser?.role || ""}
+                                            onChange={handleChange}
+                                            label="Role"
+                                            name="role"
+                                        >
+                                            <MenuItem value="Admin">
+                                                Admin
+                                            </MenuItem>
+                                            <MenuItem value="Owner">
+                                                Owner
+                                            </MenuItem>
+                                            <MenuItem value="Staff">
+                                                Staff
+                                            </MenuItem>
+                                            <MenuItem value="Customer">
+                                                Customer
+                                            </MenuItem>
+                                        </Select>
+                                    </FormControl>
+
                                     <TextField
                                         id="password"
                                         required
                                         name="password"
                                         label="Password"
-                                        type={showPassword ? "text" : "password"}
+                                        type={
+                                            showPassword ? "text" : "password"
+                                        }
                                         variant="outlined"
                                         value={currentUser?.password || ""}
                                         onChange={handleChange}
@@ -275,7 +339,10 @@ export default function ManageUser() {
                                         >
                                             Close
                                         </Button>
-                                        <Button variant="contained" type="submit">
+                                        <Button
+                                            variant="contained"
+                                            type="submit"
+                                        >
                                             SAVE
                                         </Button>
                                     </div>

@@ -6,7 +6,7 @@ const fs = require("fs");
 const mongoose = require("mongoose");
 const User = require("./models/user.model");
 const Menu = require("./models/menu.model");
-const DataModel = require("./models/data.model"); // Import the DataModel
+// const DataModel = require("./models/data.model"); 
 const multer = require('multer');
 const path = require('path');
 
@@ -33,68 +33,7 @@ mongoose
     .then(() => console.log("Database connected successfully"))
     .catch((err) => console.error("Database connection error", err));
 
-// Add Entry
-app.post("/AddEntry", async (req, res) => {
-    const incomingData = req.body;
-
-    try {
-        const dataObject = new DataModel(incomingData);
-        await dataObject.save();
-        res.json({ success: true, message: "Data added successfully!" });
-    } catch (error) {
-        console.error("Error adding data:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
-
-// View Entries
-app.get("/ViewEntries", async (req, res) => {
-    try {
-        const dataList = await DataModel.find();
-        res.json(dataList);
-    } catch (error) {
-        console.error("Error getting data:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
-
-// Edit Entry
-app.post("/EditEntry", async (req, res) => {
-    const incomingData = req.body;
-
-    try {
-        const dataObject = await DataModel.findOne({ email: incomingData.email });
-        if (!dataObject) {
-            res.json({ success: false, message: "Data not found" });
-        } else {
-            Object.assign(dataObject, incomingData);
-            await dataObject.save();
-            res.json({ success: true, message: "Data updated successfully!" });
-        }
-    } catch (error) {
-        console.error("Error updating data:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
-
-// Delete Entry
-app.delete("/delete", async (req, res) => {
-    const incomingData = req.body;
-
-    try {
-        const dataObject = await DataModel.findOne({ email: incomingData.email });
-        if (!dataObject) {
-            res.json({ success: false, message: "Data not found" });
-        } else {
-            await dataObject.remove();
-            res.json({ success: true, message: "Data deleted successfully!" });
-        }
-    } catch (error) {
-        console.error("Error deleting data:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
-
+    //MARK:SIGNUP ADMIN
 // Sign-Up Endpoint
 app.post("/signup", async (req, res) => {
     const { firstname, lastname, middlename, email, password } = req.body;

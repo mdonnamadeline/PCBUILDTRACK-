@@ -59,6 +59,10 @@ export default function Menu() {
                 {renderSection("Desserts", "desserts")}
                 {renderSection("Drinks", "drinks")}
             </div>
+
+            <div className="first-menu">
+                
+            </div>
         </div>
     );
 }

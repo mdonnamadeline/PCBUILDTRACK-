@@ -26,22 +26,23 @@ export default function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            // if(user.email != "admin" && user.password != "admin") {
-            //     alert("not valid");
-            //     return;
-            // }
-            // navigate("/dashboard");
             const response = await axios.post(
                 `${VITE_REACT_APP_API_HOST}/signin`,
                 user
             );
-
+    
             console.log(response);
-
+    
             const result = response.data;
+            console.log(result);
             if (result.success) {
                 localStorage.setItem("user", JSON.stringify(result.user));
-                navigate("/dashboard");
+                // Check the user's role and navigate accordingly
+                if (["Admin", "Owner"].includes(result.user.role)) {
+                    navigate("/dashboard"); // Navigate to the dashboard for Admins and Owners
+                } else {
+                    navigate("/home"); // Navigate to the home page for all other roles
+                }
             } else {
                 alert(result.message);
             }
@@ -55,7 +56,6 @@ export default function Login() {
         <div className="loginContainer">
             <form className="loginForm" onSubmit={handleLogin}>
                 <h2>KFC! Kinseng Fried Chicken</h2>
-                <p>Welcome Admin!</p>
                 <TextField
                     required
                     name="email"
@@ -93,6 +93,7 @@ export default function Login() {
                         ),
                     }}
                 />
+                <p>New user? please click sign</p>
                 <Button variant="contained" type="submit" className="redButton">
                     Login
                 </Button>

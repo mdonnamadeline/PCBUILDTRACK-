@@ -30,9 +30,7 @@ export default function Navbar() {
                 <Link to="/menu">MENU</Link>
                 <Link to="/manageuser">MANAGE USER</Link>
                 <Link to="/manageproduct">MANAGE PRODUCT</Link>
-                <Link to="/login">LOGIN</Link>
-                <Link to="/login">LOGOUT</Link>
-              
+                <Link to="/login">Login</Link>
             </div>
         </div>
     </div>

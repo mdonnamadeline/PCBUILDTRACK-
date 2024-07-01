@@ -34,6 +34,8 @@
     width: 75px;
 }
 
+
+
 @media (max-width: 600px) {
     .navbar-items {
         flex-direction: column;
@@ -58,6 +60,7 @@
 
 a {
     text-decoration: none;
+    font-size: 20px;
 }
 
 .navbar-items-section a {
@@ -65,6 +68,9 @@ a {
     text-decoration: none;
 }
 
+.navbar a:hover {
+    color: #ff9e01;
+}
 .navbar-items-section {
     color: white;
     display: flex;

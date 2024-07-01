@@ -7,6 +7,7 @@ import SignUp from "./pages/SignUp";
 import ManageUser from "./pages/ManageUser";
 import Menu from "./pages/Menu";
 import ManageProducts from "./pages/ManageProducts";
+import Sidebar from "./pages/Sidebar";
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard/>} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/navbar" element={<Navbar />} />
+                <Route path="/sidebar"element={<Sidebar />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/menu" element={<Menu />} />
                 <Route path="/manageuser" element={<ManageUser />} />
