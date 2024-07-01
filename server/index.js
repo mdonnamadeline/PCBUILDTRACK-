@@ -12,6 +12,7 @@ const path = require('path');
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 const port = 1337;
 const host = "0.0.0.0";
@@ -74,7 +75,6 @@ app.post('/signin', async (req, res) => {
     }
 });
 
-//MARK:ADMIN CRUD
 //MARK:ADMIN CRUD
 // Create user
 app.post('/adduser', async (req, res) => {
@@ -157,22 +157,23 @@ app.post('/signin', async (req, res) => {
 
 //MARK:MENU CRUD 
 //Upload Menu
-app.post('/upload-menu', upload.single('file'), async (req, res) => {
+// Upload Menu Item
+app.post("/upload-menu", upload.single("file"), async (req, res) => {
     try {
-        const { name, price, description } = req.body;
-        const image = req.file.buffer.toString('base64');
+        const { name, price, description, disabled } = req.body;
+        const image = req.file ? req.file.buffer : null;
 
-        const newDish = new Menu({ name, price, description, image });
+        const newDish = new Menu({ name, price, description, image, disabled });
         await newDish.save();
 
-        res.send({ status: 'ok', message: 'Menu item added successfully', data: newDish });
+        res.send({ status: "ok", message: "Menu item added successfully", data: newDish });
     } catch (error) {
-        console.error('Error uploading dish:', error);
-        res.status(500).send({ status: 'error', message: error.message });
+        console.error("Error uploading dish:", error);
+        res.status(500).send({ status: "error", message: error.message });
     }
 });
 
-//Display Menu
+// Get Menu Items
 app.get("/get-menu", async (req, res) => {
     try {
         const data = await Menu.find({});
@@ -182,7 +183,7 @@ app.get("/get-menu", async (req, res) => {
     }
 });
 
-// Delete endpoint
+// Delete Menu Item
 app.delete("/delete-menu/:id", async (req, res) => {
     const { id } = req.params;
     try {
@@ -198,10 +199,11 @@ app.delete("/delete-menu/:id", async (req, res) => {
     }
 });
 
-// Update endpoint
-app.put("/update-menu/:id", async (req, res) => {
+// Update Menu Item
+app.put("/update-menu/:id", upload.single("file"), async (req, res) => {
     const { id } = req.params;
-    const { name, price, description } = req.body;
+    const { name, price, description, disabled } = req.body;
+    const image = req.file ? req.file.buffer : null;
 
     try {
         const menu = await Menu.findById(id);
@@ -209,6 +211,10 @@ app.put("/update-menu/:id", async (req, res) => {
             menu.name = name;
             menu.price = price;
             menu.description = description;
+            menu.disabled = disabled;
+            if (image) {
+                menu.image = image;
+            }
 
             const updatedMenu = await menu.save();
             res.send({ status: "ok", message: "Menu updated successfully", data: updatedMenu });
@@ -220,3 +226,4 @@ app.put("/update-menu/:id", async (req, res) => {
         res.status(500).send({ status: "error", message: error.message });
     }
 });
+
