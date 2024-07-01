@@ -91,39 +91,25 @@ export default function ManageUser() {
         }));
     };
 
-   
-    useEffect(() => {
-        
-        const fetchData = async () => {
-            try {
-                const response = await axios.get("URL_TO_FETCH_DATA");
-                
-                setData(response.data);
-            } catch (error) {
-                console.error("Failed to fetch data for ComboBox:", error);
-            }
-        };
-
-        fetchData();
-    }, [refreshData]); 
-
     const handleUpdateUser = async (e) => {
         e.preventDefault();
-
+    
+        console.log("Updating user with data:", currentUser);
+    
         try {
-            const response = await axios.post(
-                `${VITE_REACT_APP_API_HOST}/updateuser`,
+            const response = await axios.put(
+                `${VITE_REACT_APP_API_HOST}/updateuser/${currentUser._id}`,
                 currentUser
             );
-
+    
             const result = response.data;
-
+    
             if (result.success) {
                 alert(result.message);
-                setRefreshData(!refreshData);
+                setRefreshData(!refreshData); 
                 setOpen(false);
             } else {
-                alert("Failed to update user. Please try again!.");
+                alert("Failed to update user. Please try again!");
             }
         } catch (error) {
             console.error("Error updating user:", error);

@@ -78,14 +78,16 @@ app.post('/signin', async (req, res) => {
 //MARK:ADMIN CRUD
 // Create user
 app.post('/adduser', async (req, res) => {
-  const { firstname, lastname, middlename, email, password } = req.body;
-  try {
-    const newUser = new User({ firstname, lastname, middlename, email, password });
-    await newUser.save();
-    res.status(201).json({ success: true, message: 'User added successfully' });
-  } catch (error) {
-    res.status(400).json({ success: false, message: 'Failed to add user', error });
-  }
+    const incomingData = req.body;
+
+    try {
+        const dataObject = new User(incomingData);
+        await dataObject.save();
+        res.json({ success: true, message: "User added successfully!" });
+    } catch (error) {
+        console.error("Error adding User:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 });
 
 // Read all users
@@ -99,17 +101,22 @@ app.get('/viewusers', async (req, res) => {
 });
 
 // Update user
-app.post('/updateuser', async (req, res) => {
-  const { _id, firstname, lastname, middlename, email, password } = req.body;
-  try {
-    const updatedUser = await User.findByIdAndUpdate(_id, { firstname, lastname, middlename, email, password }, { new: true });
-    if (!updatedUser) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+app.put('/updateuser/:id', async (req, res) => {
+    const incomingData = req.body;
+
+    try {
+        const dataObject = await User.findById(req.params.id);
+        if (!dataObject) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        Object.assign(dataObject, incomingData);
+        await dataObject.save();
+        res.json({ success: true, message: "User updated successfully!" });
+    } catch (error) {
+        console.error("Error updating data:", error);
+        res.status(400).json({ success: false, message: 'Failed to update user', error: error.message });
     }
-    res.status(200).json({ success: true, message: 'User updated successfully', user: updatedUser });
-  } catch (error) {
-    res.status(400).json({ success: false, message: 'Failed to update user', error });
-  }
 });
 
 // Delete user
@@ -125,6 +132,7 @@ app.post('/deleteuser', async (req, res) => {
     res.status(400).json({ success: false, message: 'Failed to delete user', error });
   }
 });
+
 //signin 
 app.post('/signin', async (req, res) => {
   const { email, password } = req.body;
