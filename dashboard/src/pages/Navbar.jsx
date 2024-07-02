@@ -41,22 +41,27 @@ export default function Navbar() {
                         marginRight: "40px",
                     }}
                 >
-                    <Link to="/home">HOME</Link>
-                    <Link to="/menu">MENU</Link>
-
+                    
                     {isAdminOrOwner ? (
                         <>
                             <Link to="/manageuser">MANAGE USER</Link>
                             <Link to="/manageproduct">MANAGE PRODUCT</Link>
+                            <a href="#" onClick={handleLogout}>
+                                LOGOUT
+                            </a>
                         </>
-                    ) : null}
-
-                    {isLoggedIn ? (
-                        <a href="#" onClick={handleLogout}>
-                            LOGOUT
-                        </a>
                     ) : (
-                        <Link to="/login">Login</Link>
+                        <>
+                            <Link to="/home">HOME</Link>
+                            <Link to="/menu">MENU</Link>
+                            {isLoggedIn ? (
+                                <a href="#" onClick={handleLogout}>
+                                    LOGOUT
+                                </a>
+                            ) : (
+                                <Link to="/login">Login</Link>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

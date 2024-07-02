@@ -90,7 +90,7 @@ export default function ManageProducts() {
         formData.append("name", currentData.name);
         formData.append("description", currentData.description);
         formData.append("price", currentData.price);
-        formData.append("disabled", currentData.disabled); // Ensure disabled status is included in formData
+        formData.append("disabled", currentData.disabled); 
         if (file) formData.append("file", file);
 
         try {
@@ -158,7 +158,7 @@ export default function ManageProducts() {
                     variant="contained"
                     onClick={() => openModal(initialData, false)} // Open add modal
                 >
-                    ADD ENTRY
+                    ADD PRODUCT
                 </Button>
 
                 <TableContainer className="table-container">
