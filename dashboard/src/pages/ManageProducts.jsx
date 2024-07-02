@@ -56,7 +56,7 @@ export default function ManageProducts() {
         });
     };
 
-    // Inside your component
+    
     useEffect(() => {
         console.log("Updated disabled state:", currentData.disabled);
     }, [currentData.disabled]);
@@ -156,7 +156,7 @@ export default function ManageProducts() {
                 <Button
                     className="manage-button"
                     variant="contained"
-                    onClick={() => openModal(initialData, false)} // Open add modal
+                    onClick={() => openModal(initialData, false)} 
                 >
                     ADD PRODUCT
                 </Button>
@@ -273,7 +273,7 @@ export default function ManageProducts() {
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={currentData.disabled || false} // Ensure the disabled state is correct
+                                        checked={currentData.disabled || false} 
                                         onChange={handleSwitch}
                                         name="disabled"
                                         inputProps={{

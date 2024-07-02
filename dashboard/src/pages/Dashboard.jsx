@@ -1,15 +1,16 @@
-import React from 'react';
+import React from "react";
 // import Sidebar from './Sidebar' ;
-import Navbar from './Navbar';
+import Navbar from "./Navbar";
 
 export default function Dashboard() {
-  return (
-    <div className='dashboard'>
-      {/* <Sidebar /> */}
-      <Navbar />
-      <div className='con'>
-      <h1>Welcome Admin!</h1> 
-      </div>
-    </div>
-  );
+    return (
+        <div className="dashboard">
+            {/* <Sidebar /> */}
+            <Navbar />
+            <div className="con">
+                <h1>ADMIN DASHBOARD</h1>
+                <p>Welcome Admin!</p>
+            </div>
+        </div>
+    );
 }

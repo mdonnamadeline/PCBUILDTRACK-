@@ -37,11 +37,11 @@ export default function Login() {
             console.log(result);
             if (result.success) {
                 localStorage.setItem("user", JSON.stringify(result.user));
-                // Check the user's role and navigate accordingly
+              
                 if (["Admin", "Owner"].includes(result.user.role)) {
-                    navigate("/dashboard"); // Navigate to the dashboard for Admins and Owners
+                    navigate("/dashboard"); 
                 } else {
-                    navigate("/home"); // Navigate to the home page for all other roles
+                    navigate("/home"); 
                 }
             } else {
                 alert(result.message);
@@ -55,7 +55,7 @@ export default function Login() {
     return (
         <div className="loginContainer">
             <form className="loginForm" onSubmit={handleLogin}>
-                <h2>KFC! Kinseng Fried Chicken</h2>
+                <h2>Hello, Welcome to KFC!</h2>
                 <TextField
                     required
                     name="email"
