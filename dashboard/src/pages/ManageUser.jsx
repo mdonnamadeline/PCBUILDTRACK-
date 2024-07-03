@@ -178,7 +178,7 @@ export default function ManageUser() {
                                 variant="contained"
                                 onClick={() => handleOpen(null, false)}
                             >
-                                ADD USER
+                                MANAGE USER
                             </Button>
                             <br />
                         </div>
