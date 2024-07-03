@@ -172,13 +172,13 @@ export default function ManageUser() {
             <div className="content">
                 <div className="viewuser">
                     <div className="vucon">
-                        <h1>View User</h1>
+                        <h1>Manage User</h1>
                         <div className="addbutton">
                             <Button
                                 variant="contained"
                                 onClick={() => handleOpen(null, false)}
                             >
-                                MANAGE USER
+                                ADD USER
                             </Button>
                             <br />
                         </div>
