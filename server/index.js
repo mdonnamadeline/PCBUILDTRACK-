@@ -12,14 +12,24 @@ const path = require('path');
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/images', express.static(path.join(__dirname, 'images')));
 
 const port = 1337;
 const host = "0.0.0.0";
 const dbName = "KFC-data";
 
-const storage = multer.memoryStorage();
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, 'uploads')); // Use 'uploads' directory
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
 const upload = multer({ storage: storage });
+
+
 
 app.listen(port, host, () => {
     console.log(`Server is running on port ${port}`);
@@ -156,74 +166,87 @@ app.post('/signin', async (req, res) => {
 });
 
 //MARK:MENU CRUD 
-//Upload Menu
-// Upload Menu Item
-app.post("/upload-menu", upload.single("file"), async (req, res) => {
+// Add Menu
+app.post("/addmenu", upload.single("image"), async (req, res) => {
+    const incomingData = req.body;
+
+    if (req.file) {
+        incomingData.image = req.file.filename;
+    } else {
+        return res.status(400).json({ success: false, message: "No file uploaded!" });
+    }
+
     try {
-        const { name, price, description, disabled } = req.body;
-        const image = req.file ? req.file.buffer : null;
-
-        const newDish = new Menu({ name, price, description, image, disabled });
-        await newDish.save();
-
-        res.send({ status: "ok", message: "Menu item added successfully", data: newDish });
+        const dataObject = new Menu(incomingData);
+        await dataObject.save();
+        res.json({ success: true, message: "Data added successfully!" });
     } catch (error) {
-        console.error("Error uploading dish:", error);
+        console.error("Error adding data:", error);
+        res.status(500).json({ status: "error", message: error.message });
+    }
+});
+
+// View Menu
+app.get("/viewmenu", async (req, res) => {
+    try {
+        const gotDataList = await Menu.find();
+        res.json({ data: gotDataList });
+    } catch (error) {
+        console.error("Error getting data:", error);
         res.status(500).send({ status: "error", message: error.message });
     }
 });
 
-// Get Menu Items
-app.get("/get-menu", async (req, res) => {
-    try {
-        const data = await Menu.find({});
-        res.send({ status: "ok", data: data });
-    } catch (error) {
-        res.status(500).send({ status: "error", message: error.message });
-    }
-});
+// Update Menu
+app.put("/updatemenu/:id", upload.single("image"), async (req, res) => {
+    const incomingData = req.body;
 
-// Delete Menu Item
-app.delete("/delete-menu/:id", async (req, res) => {
-    const { id } = req.params;
+    if (req.file) {
+        incomingData.image = req.file.filename;
+    }
+
     try {
-        const result = await Menu.findByIdAndDelete(id);
-        if (result) {
-            res.send({ status: "ok", message: "Menu deleted successfully" });
-        } else {
-            res.status(404).send({ status: "error", message: "Menu not found" });
+        const dataObject = await Menu.findById(req.params.id);
+        if (!dataObject) {
+            return res.status(404).json({ message: "Data not found" });
         }
-    } catch (error) {
-        console.error("Error deleting menu:", error);
-        res.status(500).send({ status: "error", message: error.message });
-    }
-});
 
-// Update Menu Item
-app.put("/update-menu/:id", upload.single("file"), async (req, res) => {
-    const { id } = req.params;
-    const { name, price, description, disabled } = req.body;
-    const image = req.file ? req.file.buffer : null;
-
-    try {
-        const menu = await Menu.findById(id);
-        if (menu) {
-            menu.name = name;
-            menu.price = price;
-            menu.description = description;
-            menu.disabled = disabled;
-            if (image) {
-                menu.image = image;
+        if (req.file && dataObject.image && typeof dataObject.image === "string") {
+            const imagePath = path.join(__dirname, 'uploads', dataObject.image);
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
             }
-
-            const updatedMenu = await menu.save();
-            res.send({ status: "ok", message: "Menu updated successfully", data: updatedMenu });
-        } else {
-            res.status(404).send({ status: "error", message: "Menu not found" });
         }
+
+        Object.assign(dataObject, incomingData);
+        await dataObject.save();
+        res.json({ success: true, message: "Data updated successfully!" });
     } catch (error) {
-        console.error("Error updating menu:", error);
-        res.status(500).send({ status: "error", message: error.message });
+        console.error("Error updating data:", error);
+        res.status(500).json({ status: "error", message: error.message });
     }
 });
 
+// Delete Menu
+app.delete("/deletemenu", async (req, res) => {
+    const { name } = req.body;
+    try {
+        const dataObject = await Menu.findOne({ name });
+        if (!dataObject) {
+            return res.status(404).json({ message: "Data not found" });
+        }
+
+        if (dataObject.image && typeof dataObject.image === "string") {
+            const imagePath = path.join(__dirname, 'uploads', dataObject.image);
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
+        }
+
+        await Menu.deleteOne({ name });
+        res.json({ success: true, message: "Data deleted successfully!" });
+    } catch (error) {
+        console.error("Error deleting data:", error);
+        res.status(500).json({ status: "error", message: error.message });
+    }
+});

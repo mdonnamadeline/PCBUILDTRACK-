@@ -14,18 +14,13 @@ import {
     Switch,
     Input,
     FormControlLabel,
+    IconButton,
 } from "@mui/material";
 import Navbar from "./Navbar";
-import "./ManageProducts.css";
 import { Delete, Edit } from "@mui/icons-material";
+import "./ManageProducts.css";
 
 export default function ManageProducts() {
-    const [dataList, setDataList] = useState([]);
-    const [refreshDataList, setRefreshDataList] = useState(false);
-    const [modalState, setModalState] = useState(false);
-    const [isEditMode, setIsEditMode] = useState(false);
-    const { VITE_REACT_APP_API_HOST } = import.meta.env;
-
     const initialData = {
         name: "",
         description: "",
@@ -34,18 +29,28 @@ export default function ManageProducts() {
         disabled: false,
     };
 
+    const [dataList, setDataList] = useState([]);
+    const [refreshDataList, setRefreshDataList] = useState(false);
     const [currentData, setCurrentData] = useState(initialData);
+    const [modalState, setModalState] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
     const [file, setFile] = useState(null);
+    const [imageUrl, setImageUrl] = useState("");
 
-    const openModal = (data = initialData, isEdit = false) => {
-        setCurrentData(data);
-        setFile(null);
-        setIsEditMode(isEdit);
-        setModalState(true);
-    };
+    const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
-    const closeModal = () => {
-        setModalState(false);
+    useEffect(() => {
+        fetchData();
+    }, [refreshDataList]);
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`${VITE_REACT_APP_API_HOST}/viewmenu`);
+            setDataList(Array.isArray(response.data.data) ? response.data.data : []);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            setDataList([]); 
+        }
     };
 
     const handleChange = (e) => {
@@ -56,91 +61,88 @@ export default function ManageProducts() {
         });
     };
 
-    
-    useEffect(() => {
-        console.log("Updated disabled state:", currentData.disabled);
-    }, [currentData.disabled]);
-
-    const handleSwitch = (event) => {
+    const handleSwitch = (e) => {
         setCurrentData({
             ...currentData,
-            disabled: event.target.checked,
+            disabled: e.target.checked,
         });
     };
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
+        if (e.target.files[0]) {
+            setFile(e.target.files[0]);
+            setImageUrl(URL.createObjectURL(e.target.files[0]));
+        }
     };
 
-    useEffect(() => {
-        axios
-            .get(`${VITE_REACT_APP_API_HOST}/get-menu`)
-            .then((response) => {
-                setDataList(response.data.data);
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    }, [refreshDataList]);
+    const openModal = (data = initialData, isEdit = false) => {
+        setCurrentData(data);
+        setFile(null);
+        setIsEditMode(isEdit);
+        setModalState(true);
+    };
+
+    const closeModal = () => {
+        setModalState(false);
+        setImageUrl("");
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
+        if (!VITE_REACT_APP_API_HOST) {
+            alert("API host is not defined. Please check your environment variables.");
+            return;
+        }
+    
         const formData = new FormData();
         formData.append("name", currentData.name);
         formData.append("description", currentData.description);
         formData.append("price", currentData.price);
-        formData.append("disabled", currentData.disabled); 
-        if (file) formData.append("file", file);
-
+        formData.append("disabled", currentData.disabled);
+        if (file) formData.append("image", file);
+    
         try {
             let response;
-
             if (isEditMode) {
                 response = await axios.put(
-                    `${VITE_REACT_APP_API_HOST}/update-menu/${currentData._id}`,
+                    `${VITE_REACT_APP_API_HOST}/updatemenu/${currentData._id}`,
                     formData,
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
             } else {
                 response = await axios.post(
-                    `${VITE_REACT_APP_API_HOST}/upload-menu`,
+                    `${VITE_REACT_APP_API_HOST}/addmenu`,
                     formData,
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
             }
-
+    
             const result = response.data;
-
-            if (result.status === "ok" || result.success) {
+            if (result.success) {
                 alert(result.message);
                 setRefreshDataList(!refreshDataList);
                 setModalState(false);
             } else {
-                alert(
-                    result.message || "Failed to submit data. Please try again!"
-                );
+                alert(result.message || "Failed to submit data. Please try again!");
             }
         } catch (error) {
             console.error("Error submitting data:", error);
-            alert("An error occurred. Please try again.");
+            alert(`An error occurred. Please try again. Error: ${error.message}`);
         }
     };
-
+    
     const handleDelete = async (id) => {
         try {
             const response = await axios.delete(
-                `${VITE_REACT_APP_API_HOST}/delete-menu/${id}`
+                `${VITE_REACT_APP_API_HOST}/deletemenu/${id}`
             );
             const result = response.data;
-
             if (result.status === "ok") {
                 alert(result.message);
                 setRefreshDataList(!refreshDataList);
             } else {
-                alert(
-                    result.message || "Failed to delete data. Please try again!"
-                );
+                alert(result.message || "Failed to delete data. Please try again!");
             }
         } catch (error) {
             console.error("Error deleting data:", error);
@@ -156,7 +158,7 @@ export default function ManageProducts() {
                 <Button
                     className="manage-button"
                     variant="contained"
-                    onClick={() => openModal(initialData, false)} 
+                    onClick={() => openModal(initialData, false)}
                 >
                     ADD PRODUCT
                 </Button>
@@ -166,9 +168,7 @@ export default function ManageProducts() {
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">Name</TableCell>
-                                <TableCell align="center">
-                                    Description
-                                </TableCell>
+                                <TableCell align="center">Description</TableCell>
                                 <TableCell align="center">Image</TableCell>
                                 <TableCell align="center">Price</TableCell>
                                 <TableCell align="center">Disabled</TableCell>
@@ -178,38 +178,26 @@ export default function ManageProducts() {
                         <TableBody>
                             {dataList.map((item) => (
                                 <TableRow key={item._id}>
-                                    <TableCell align="center">
-                                        {item.name}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {item.description}
-                                    </TableCell>
+                                    <TableCell align="center">{item.name}</TableCell>
+                                    <TableCell align="center">{item.description}</TableCell>
                                     <TableCell align="center">
                                         <img
-                                            src={`${VITE_REACT_APP_API_HOST}/images/${item._id}.jpg`} // Change based on how you serve images
+                                            src={`${VITE_REACT_APP_API_HOST}/images/${item._id}.jpg`}
                                             alt={item.name}
                                             style={{ width: "50px" }}
                                         />
                                     </TableCell>
-                                    <TableCell align="center">
-                                        ₱ {item.price}
-                                    </TableCell>
+                                    <TableCell align="center">₱ {item.price}</TableCell>
                                     <TableCell align="center">
                                         {item.disabled ? "Yes" : "No"}
                                     </TableCell>
                                     <TableCell align="center">
-                                        <Edit
-                                            className="icon-edit"
-                                            onClick={() =>
-                                                openModal(item, true)
-                                            }
-                                        />
-                                        <Delete
-                                            className="icon-delete"
-                                            onClick={() =>
-                                                handleDelete(item._id)
-                                            }
-                                        />
+                                        <IconButton onClick={() => openModal(item, true)}>
+                                            <Edit className="icon-edit" />
+                                        </IconButton>
+                                        <IconButton onClick={() => handleDelete(item._id)}>
+                                            <Delete className="icon-delete" />
+                                        </IconButton>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -220,8 +208,16 @@ export default function ManageProducts() {
                 <Modal open={modalState} onClose={closeModal}>
                     <Box className="modal">
                         <form onSubmit={handleSubmit}>
-                            <p>{isEditMode ? "EDIT" : "ADD NEW ENTRY"}</p>
-
+                            <p>{isEditMode ? "EDIT" : "ADD NEW PRODUCT"}</p>
+                            {imageUrl && (
+                                <div className="image-container">
+                                    <img
+                                        src={imageUrl}
+                                        alt="Current"
+                                        style={{ width: "300px", height: "194px", objectFit: "cover" }}
+                                    />
+                                </div>
+                            )}
                             {!isEditMode && (
                                 <Input
                                     type="file"
@@ -230,7 +226,6 @@ export default function ManageProducts() {
                                     margin="none"
                                 />
                             )}
-
                             <TextField
                                 id="name"
                                 required
@@ -242,7 +237,6 @@ export default function ManageProducts() {
                                 fullWidth
                                 margin="normal"
                             />
-
                             <TextField
                                 id="description"
                                 required
@@ -256,7 +250,6 @@ export default function ManageProducts() {
                                 fullWidth
                                 margin="normal"
                             />
-
                             <TextField
                                 id="price"
                                 required
@@ -269,21 +262,17 @@ export default function ManageProducts() {
                                 fullWidth
                                 margin="normal"
                             />
-
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={currentData.disabled || false} 
+                                        checked={currentData.disabled || false}
                                         onChange={handleSwitch}
                                         name="disabled"
-                                        inputProps={{
-                                            "aria-label": "Disabled toggle",
-                                        }}
+                                        inputProps={{ "aria-label": "Disabled toggle" }}
                                     />
                                 }
                                 label="Disabled"
                             />
-
                             <Button
                                 className="buttonmodal"
                                 variant="contained"

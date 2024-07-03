@@ -1,44 +1,45 @@
 import React, { useState, useEffect } from "react";
-import "./Menu.css";
+import axios from "axios";
 import Navbar from "./Navbar";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardMedia,
+    Typography,
+} from "@mui/material";
+import "./Menu.css";
 
 export default function Menu() {
     const [menu, setMenu] = useState([]);
+    const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
-    const fetchMenu = async () => {
-        try {
-            const response = await fetch("http://localhost:1337/get-menu");
-            const data = await response.json();
-            if (data && data.data) {
-                setMenu(data.data);
-            } else {
-                console.error("Invalid data format:", data);
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
 
     useEffect(() => {
-        fetchMenu();
+        fetchData();
     }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`${ VITE_REACT_APP_API_HOST }/viewmenu`);
+            if (response.data && response.data.data) {
+                setMenu(response.data.data);
+            } else {
+                console.error("Invalid data format:", response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
 
     const renderSection = (title, category) => (
         <div className="menu-section" id={category}>
             <h2>{title}</h2>
-            <div className="image-container">
+            <div className="menu-list">
                 {menu
                     .filter((dish) => dish.category === category)
-                    .map((dish, index) => (
-                        <div key={dish.id || index} className="image-item">
-                            <img
-                                src={`data:image/jpeg;base64,${dish.image}`}
-                                alt={dish.name}
-                            />
-                            <div className="image-text">{dish.name}</div>
-                            <div className="image-text">₱ {dish.price}</div>
-                            <div className="image-text">{dish.description}</div>
-                        </div>
+                    .map((dish) => (
+                        <ProductCard key={dish.id} dish={dish} />
                     ))}
             </div>
         </div>
@@ -59,10 +60,31 @@ export default function Menu() {
                 {renderSection("Desserts", "desserts")}
                 {renderSection("Drinks", "drinks")}
             </div>
-
-            <div className="first-menu">
-                
-            </div>
         </div>
     );
 }
+
+function ProductCard({ dish }) {
+    const imageUrl = `http://localhost:1337/${dish.image}`;
+
+    return (
+        <Card className="product-card">
+            <CardHeader
+                title={<div style={{ whiteSpace: "nowrap" }}>{dish.name}</div>}
+                subheader={`₱${dish.price}`}
+            />
+            <CardMedia
+                component="img"
+                height="194"
+                image={imageUrl}
+                alt={dish.name}
+            />
+            <CardContent>
+                <Typography variant="body2" color="text.secondary">
+                    {dish.description}
+                </Typography>
+            </CardContent>
+        </Card>
+    );
+}
+
