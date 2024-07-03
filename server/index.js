@@ -228,10 +228,9 @@ app.put("/updatemenu/:id", upload.single("image"), async (req, res) => {
 });
 
 // Delete Menu
-app.delete("/deletemenu", async (req, res) => {
-    const { name } = req.body;
+app.delete("/deletemenu/:id", async (req, res) => {
     try {
-        const dataObject = await Menu.findOne({ name });
+        const dataObject = await Menu.findById(req.params.id);
         if (!dataObject) {
             return res.status(404).json({ message: "Data not found" });
         }
@@ -243,7 +242,7 @@ app.delete("/deletemenu", async (req, res) => {
             }
         }
 
-        await Menu.deleteOne({ name });
+        await Menu.findByIdAndDelete(req.params.id);
         res.json({ success: true, message: "Data deleted successfully!" });
     } catch (error) {
         console.error("Error deleting data:", error);

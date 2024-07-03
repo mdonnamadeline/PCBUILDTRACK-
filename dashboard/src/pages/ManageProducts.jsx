@@ -72,12 +72,21 @@ export default function ManageProducts() {
         if (e.target.files[0]) {
             setFile(e.target.files[0]);
             setImageUrl(URL.createObjectURL(e.target.files[0]));
+        } else {
+            setFile(null);
+            setImageUrl(currentData.image ? `${VITE_REACT_APP_API_HOST}/uploads/${currentData.image}` : "");
         }
     };
 
     const openModal = (data = initialData, isEdit = false) => {
         setCurrentData(data);
         setFile(null);
+        // Check if editing and if the product has an image
+        if (isEdit && data.image) {
+            setImageUrl(`${VITE_REACT_APP_API_HOST}/uploads/${data.image}`); // Set the current image URL for the modal
+        } else {
+            setImageUrl(""); // Clear the image URL for add mode or when there's no image
+        }
         setIsEditMode(isEdit);
         setModalState(true);
     };
@@ -89,19 +98,19 @@ export default function ManageProducts() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         if (!VITE_REACT_APP_API_HOST) {
             alert("API host is not defined. Please check your environment variables.");
             return;
         }
-    
+
         const formData = new FormData();
         formData.append("name", currentData.name);
         formData.append("description", currentData.description);
         formData.append("price", currentData.price);
         formData.append("disabled", currentData.disabled);
-        if (file) formData.append("image", file);
-    
+        if (file) formData.append("image", file); // Append the new image if it exists
+
         try {
             let response;
             if (isEditMode) {
@@ -117,7 +126,7 @@ export default function ManageProducts() {
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
             }
-    
+
             const result = response.data;
             if (result.success) {
                 alert(result.message);
@@ -131,22 +140,27 @@ export default function ManageProducts() {
             alert(`An error occurred. Please try again. Error: ${error.message}`);
         }
     };
-    
+
     const handleDelete = async (id) => {
-        try {
-            const response = await axios.delete(
-                `${VITE_REACT_APP_API_HOST}/deletemenu/${id}`
-            );
-            const result = response.data;
-            if (result.status === "ok") {
-                alert(result.message);
-                setRefreshDataList(!refreshDataList);
-            } else {
-                alert(result.message || "Failed to delete data. Please try again!");
+        if (!VITE_REACT_APP_API_HOST) {
+            alert("API host is not defined. Please check your environment variables.");
+            return;
+        }
+
+        if (window.confirm("Are you sure you want to delete this menu item?")) {
+            try {
+                const response = await axios.delete(`${VITE_REACT_APP_API_HOST}/deletemenu/${id}`);
+                const result = response.data;
+                if (result.success) {
+                    alert(result.message);
+                    setRefreshDataList(!refreshDataList);
+                } else {
+                    alert(result.message || "Failed to delete data. Please try again!");
+                }
+            } catch (error) {
+                console.error("Error deleting data:", error);
+                alert(`An error occurred. Please try again. Error: ${error.message}`);
             }
-        } catch (error) {
-            console.error("Error deleting data:", error);
-            alert("An error occurred. Please try again.");
         }
     };
 
@@ -182,7 +196,7 @@ export default function ManageProducts() {
                                     <TableCell align="center">{item.description}</TableCell>
                                     <TableCell align="center">
                                         <img
-                                            src={`${VITE_REACT_APP_API_HOST}/images/${item._id}.jpg`}
+                                            src={`${VITE_REACT_APP_API_HOST}/uploads/${item.image}`}
                                             alt={item.name}
                                             style={{ width: "50px" }}
                                         />
@@ -218,14 +232,12 @@ export default function ManageProducts() {
                                     />
                                 </div>
                             )}
-                            {!isEditMode && (
-                                <Input
-                                    type="file"
-                                    onChange={handleFileChange}
-                                    fullWidth
-                                    margin="none"
-                                />
-                            )}
+                            <Input
+                                type="file"
+                                onChange={handleFileChange}
+                                fullWidth
+                                margin="normal"
+                            />
                             <TextField
                                 id="name"
                                 required
