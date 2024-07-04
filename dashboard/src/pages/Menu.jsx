@@ -6,21 +6,12 @@ import {
     CardContent,
     CardHeader,
     CardMedia,
-    Divider,
     Typography,
 } from "@mui/material";
 
 export default function Menu() {
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
-    const initialData = {
-        name: "",
-        description: "",
-        image: "",
-        price: "",
-        disabled: false,
-    };
-    const [currentData, setCurrentData] = useState(initialData);
     const [dataList, setDataList] = useState([]);
 
     useEffect(() => {
@@ -28,36 +19,25 @@ export default function Menu() {
     }, []);
 
     const fetchData = async () => {
-        await getMenuList();
+        try {
+            const response = await axios.get(`${VITE_REACT_APP_API_HOST}/viewmenu`);
+            setDataList(response.data.data || []);  // Make sure to access `data.data` to get the correct array
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
     };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    async function getMenuList() {
-        axios
-            .get(`${VITE_REACT_APP_API_HOST}/viewmenu`)
-            .then((response) => {
-                setDataList(response.data);
-            })
-            .catch((error) => {
-                console.error("Error fetching data:", error);
-            });
-    }
 
     return (
         <div className="page-container">
             <Navbar />
-
             <div className="content">
                 <h1>MENU</h1>
                 <div className="menu-list">
-                    {Array.isArray(dataList) ? (
+                    {dataList.length > 0 ? (
                         dataList
                             .filter((menu) => !menu.disabled)
-                            .map((menu, index) => (
-                                <ProductCard key={index} menu={menu} />
+                            .map((menu) => (
+                                <ProductCard key={menu._id} menu={menu} />
                             ))
                     ) : (
                         <p>No menu items available.</p>
@@ -69,6 +49,7 @@ export default function Menu() {
 }
 
 function ProductCard({ menu }) {
+    const { VITE_REACT_APP_API_HOST } = import.meta.env;
     const imageUrl = `${VITE_REACT_APP_API_HOST}/uploads/${menu.image}`;
 
     return (
@@ -76,7 +57,7 @@ function ProductCard({ menu }) {
             <CardHeader
                 title={<div style={{ whiteSpace: "nowrap" }}>{menu.name}</div>}
                 subheader={`₱${menu.price}`}
-            ></CardHeader>
+            />
             <CardMedia
                 component="img"
                 height="194"
