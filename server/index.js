@@ -12,6 +12,7 @@ const path = require('path');
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads', express.static('uploads'));
 
 const port = 1337;
 const host = "0.0.0.0";
@@ -19,7 +20,7 @@ const dbName = "KFC-data";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'uploads')); // Use 'uploads' directory
+        cb(null, path.join(__dirname, 'uploads')); 
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -212,8 +213,7 @@ app.put("/updatemenu/:id", upload.single("image"), async (req, res) => {
         }
 
         if (req.file && dataObject.image && typeof dataObject.image === "string") {
-            const imagePath = path.join(__dirname, 'uploads', dataObject.image);
-            if (fs.existsSync(imagePath)) {
+            const imageUrl = `${window.location.origin}/uploads/${menuItem.image}`;            if (fs.existsSync(imagePath)) {
                 fs.unlinkSync(imagePath);
             }
         }
