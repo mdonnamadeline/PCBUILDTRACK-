@@ -9,9 +9,6 @@ export default function Navbar() {
         user && (user.role === "Admin" || user.role === "Owner");
     const isLoggedIn = true;
 
-    console.log("User:", user);
-    console.log("Is Admin or Owner:", isAdminOrOwner);
-
     const navigate = useNavigate();
     const handleHome = () => {
         navigate("/home");
