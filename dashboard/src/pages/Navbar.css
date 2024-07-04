@@ -1,8 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
 
 .navbar {
-    font-family: "Open Sans", Arial, Helvetica, sans-serif;
-    color: white;
+    font-family: "Poppins", sans-serif;    color: white;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -26,8 +24,7 @@
     font-weight: bold;
     align-items: center; 
     margin-left: 5px;
-    font-family: "Poppins", Arial, Helvetica, sans-serif;
-}
+    font-family: "Poppins", sans-serif;}
 
 .navbar-items img {
     height: 75px;
@@ -48,8 +45,7 @@
     flex-direction: row;
     align-items: center;
     gap: 30px;
-    font-family: "Poppins", Arial, Helvetica, sans-serif;
-
+    font-family: "Poppins", sans-serif;
 }
 
 @media (max-width: 600px) {
@@ -75,6 +71,6 @@ a {
     color: white;
     display: flex;
     justify-content: flex-end;
-    font-family: "Poppins", Arial, Helvetica, sans-serif;
-    margin-left: 5px;
+    font-family: "Poppins", sans-serif;
+        margin-left: 5px;
 }
