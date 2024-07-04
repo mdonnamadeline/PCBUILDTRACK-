@@ -6,85 +6,92 @@ import {
     CardContent,
     CardHeader,
     CardMedia,
+    Divider,
     Typography,
 } from "@mui/material";
-import "./Menu.css";
 
 export default function Menu() {
-    const [menu, setMenu] = useState([]);
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
+    const initialData = {
+        name: "",
+        description: "",
+        image: "",
+        price: "",
+        disabled: false,
+    };
+    const [currentData, setCurrentData] = useState(initialData);
+    const [dataList, setDataList] = useState([]);
 
     useEffect(() => {
         fetchData();
     }, []);
 
     const fetchData = async () => {
-        try {
-            const response = await axios.get(`${ VITE_REACT_APP_API_HOST }/viewmenu`);
-            if (response.data && response.data.data) {
-                setMenu(response.data.data);
-            } else {
-                console.error("Invalid data format:", response.data);
-            }
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
+        await getMenuList();
     };
 
-    const renderSection = (title, category) => (
-        <div className="menu-section" id={category}>
-            <h2>{title}</h2>
-            <div className="menu-list">
-                {menu
-                    .filter((dish) => dish.category === category)
-                    .map((dish) => (
-                        <ProductCard key={dish.id} dish={dish} />
-                    ))}
-            </div>
-        </div>
-    );
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    async function getMenuList() {
+        axios
+            .get(`${VITE_REACT_APP_API_HOST}/viewmenu`)
+            .then((response) => {
+                setDataList(response.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching data:", error);
+            });
+    }
 
     return (
-        <div className="menu">
+        <div className="page-container">
             <Navbar />
-            <div className="menu-main">
-                <h1 className="menu-Title">So Good! Order Now!</h1>
-            </div>
-            <div className="section-menu">
-                {renderSection("What's Hot", "whats-hot")}
-                {renderSection("Secret Menu", "secret-menu")}
-                {renderSection("Chicken Meals", "chicken-meals")}
-                {renderSection("Sandwiches", "sandwiches")}
-                {renderSection("Breakfast Meals", "breakfast-meals")}
-                {renderSection("Desserts", "desserts")}
-                {renderSection("Drinks", "drinks")}
+
+            <div className="content">
+                <h1>MENU</h1>
+                <div className="menu-list">
+                    {Array.isArray(dataList) ? (
+                        dataList
+                            .filter((menu) => !menu.disabled)
+                            .map((menu, index) => (
+                                <ProductCard key={index} menu={menu} />
+                            ))
+                    ) : (
+                        <p>No menu items available.</p>
+                    )}
+                </div>
             </div>
         </div>
     );
 }
 
-function ProductCard({ dish }) {
-    const imageUrl = `http://localhost:1337/${dish.image}`;
+function ProductCard({ menu }) {
+    const imageUrl = `${VITE_REACT_APP_API_HOST}/uploads/${menu.image}`;
 
     return (
         <Card className="product-card">
             <CardHeader
-                title={<div style={{ whiteSpace: "nowrap" }}>{dish.name}</div>}
-                subheader={`₱${dish.price}`}
-            />
+                title={<div style={{ whiteSpace: "nowrap" }}>{menu.name}</div>}
+                subheader={`₱${menu.price}`}
+            ></CardHeader>
             <CardMedia
                 component="img"
                 height="194"
                 image={imageUrl}
-                alt={dish.name}
+                alt={menu.name}
             />
             <CardContent>
-                <Typography variant="body2" color="text.secondary">
-                    {dish.description}
+                <Typography
+                    variant="body2"
+                    component="div"
+                    color="text.secondary"
+                >
+                    {menu.description}
                 </Typography>
             </CardContent>
         </Card>
     );
 }
-
