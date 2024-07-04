@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./ManageProducts.css";
+import Navbar from "./Navbar";
 import {
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Button,
-    Modal,
     Box,
-    Table,
-    TableContainer,
-    TextField,
-    Switch,
-    Input,
+    Button,
+    FormControl,
     FormControlLabel,
     IconButton,
+    InputLabel,
+    MenuItem,
+    Modal,
+    Select,
+    Switch,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField,
 } from "@mui/material";
-import Navbar from "./Navbar";
 import { Delete, Edit } from "@mui/icons-material";
-import "./ManageProducts.css";
 
 export default function ManageProducts() {
     const initialData = {
@@ -29,12 +32,16 @@ export default function ManageProducts() {
         disabled: false,
     };
 
+    const [currentData, setCurrentData] = useState(initialData);
     const [dataList, setDataList] = useState([]);
     const [refreshDataList, setRefreshDataList] = useState(false);
-    const [currentData, setCurrentData] = useState(initialData);
+
+    const [search, setSearch] = useState("");
+    const [filterSearch, setFilterSearch] = useState("");
+
     const [modalState, setModalState] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [file, setFile] = useState(null);
+
     const [imageUrl, setImageUrl] = useState("");
 
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
@@ -46,18 +53,130 @@ export default function ManageProducts() {
     const fetchData = async () => {
         try {
             const response = await axios.get(`${VITE_REACT_APP_API_HOST}/viewmenu`);
-            setDataList(Array.isArray(response.data.data) ? response.data.data : []);
+            // Adjusted to access the nested array correctly
+            if (response.data && Array.isArray(response.data.data)) {
+                setDataList(response.data.data);
+            } else {
+                console.error("Unexpected response data:", response.data);
+            }
         } catch (error) {
             console.error("Error fetching data:", error);
-            setDataList([]); 
         }
     };
 
+    const handleAddData = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        Object.keys(currentData).forEach((key) => {
+            formData.append(key, currentData[key]);
+        });
+
+        try {
+            const response = await axios.post(
+                `${VITE_REACT_APP_API_HOST}/addmenu`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            const result = response.data;
+
+            if (result.success) {
+                alert(result.message);
+                setRefreshDataList(!refreshDataList);
+                setModalState(false);
+                setImageUrl("");
+            } else {
+                alert("Failed to add menu. Please try again!");
+            }
+        } catch (error) {
+            console.error("Error adding menu:", error);
+            alert("An error occurred. Please try again.");
+        }
+    };
+
+    const handleUpdateData = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        Object.keys(currentData).forEach((key) => {
+            formData.append(key, currentData[key]);
+        });
+
+        try {
+            const response = await axios.put(
+                `${VITE_REACT_APP_API_HOST}/updatemenu/${currentData._id}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            const result = response.data;
+
+            if (result.success) {
+                alert(result.message);
+                setRefreshDataList(!refreshDataList);
+                setModalState(false);
+                setImageUrl("");
+            } else {
+                alert("Failed to update menu. Please try again!");
+            }
+        } catch (error) {
+            console.error("Error updating menu:", error);
+            alert("An error occurred. Please try again.");
+        }
+    };
+
+    const handleDeleteData = async (data) => {
+        const confirmDelete = window.confirm(
+            "Are you sure you want to delete this menu item?"
+        );
+
+        if (!confirmDelete) {
+            return;
+        }
+
+        try {
+            const response = await axios.delete(
+                `${VITE_REACT_APP_API_HOST}/deletemenu/${data._id}`
+            );
+
+            const result = response.data;
+            if (result.success) {
+                alert(result.message);
+                setRefreshDataList(!refreshDataList);
+            } else {
+                alert("Failed to delete menu. Please try again!");
+            }
+        } catch (error) {
+            console.error("Error deleting menu:", error);
+            alert("An error occurred. Please try again.");
+        }
+    };
+
+    const openModal = (dataTile = initialData, isEdit = false) => {
+        setCurrentData(dataTile);
+        setImageUrl(dataTile.image ? `${VITE_REACT_APP_API_HOST}/uploads/${dataTile.image}` : "");
+        setIsEditMode(isEdit);
+        setModalState(true);
+    };
+
+    const closeModal = () => {
+        setModalState(false);
+        setImageUrl("");
+    };
+
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
         setCurrentData({
             ...currentData,
-            [name]: type === "checkbox" ? checked : value,
+            [e.target.name || e.target.id]: e.target.value,
         });
     };
 
@@ -68,150 +187,120 @@ export default function ManageProducts() {
         });
     };
 
-    const handleFileChange = (e) => {
-        if (e.target.files[0]) {
-            setFile(e.target.files[0]);
+    const handleImageChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setCurrentData({
+                ...currentData,
+                image: e.target.files[0],
+            });
             setImageUrl(URL.createObjectURL(e.target.files[0]));
-        } else {
-            setFile(null);
-            setImageUrl(currentData.image ? `${VITE_REACT_APP_API_HOST}/uploads/${currentData.image}` : "");
         }
     };
 
-    const openModal = (data = initialData, isEdit = false) => {
-        setCurrentData(data);
-        setFile(null);
-        // Check if editing and if the product has an image
-        if (isEdit && data.image) {
-            setImageUrl(`${VITE_REACT_APP_API_HOST}/uploads/${data.image}`); // Set the current image URL for the modal
-        } else {
-            setImageUrl(""); // Clear the image URL for add mode or when there's no image
-        }
-        setIsEditMode(isEdit);
-        setModalState(true);
+    const handleFilterSearchChange = (event) => {
+        setFilterSearch(event.target.value);
     };
 
-    const closeModal = () => {
-        setModalState(false);
-        setImageUrl("");
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!VITE_REACT_APP_API_HOST) {
-            alert("API host is not defined. Please check your environment variables.");
-            return;
+    const filteredDataList = dataList.filter((data) => {
+        if (!search) return true;
+        if (!filterSearch) {
+            return (
+                (data.name && String(data.name).toLowerCase().includes(search.toLowerCase())) ||
+                (data.description && data.description.toLowerCase().includes(search.toLowerCase())) ||
+                (data.price && String(data.price).toLowerCase().includes(search.toLowerCase())) ||
+                (data.disabled && String(data.disabled).toLowerCase().includes(search.toLowerCase()))
+            );
         }
-
-        const formData = new FormData();
-        formData.append("name", currentData.name);
-        formData.append("description", currentData.description);
-        formData.append("price", currentData.price);
-        formData.append("disabled", currentData.disabled);
-        if (file) formData.append("image", file); // Append the new image if it exists
-
-        try {
-            let response;
-            if (isEditMode) {
-                response = await axios.put(
-                    `${VITE_REACT_APP_API_HOST}/updatemenu/${currentData._id}`,
-                    formData,
-                    { headers: { "Content-Type": "multipart/form-data" } }
-                );
-            } else {
-                response = await axios.post(
-                    `${VITE_REACT_APP_API_HOST}/addmenu`,
-                    formData,
-                    { headers: { "Content-Type": "multipart/form-data" } }
-                );
-            }
-
-            const result = response.data;
-            if (result.success) {
-                alert(result.message);
-                setRefreshDataList(!refreshDataList);
-                setModalState(false);
-            } else {
-                alert(result.message || "Failed to submit data. Please try again!");
-            }
-        } catch (error) {
-            console.error("Error submitting data:", error);
-            alert(`An error occurred. Please try again. Error: ${error.message}`);
-        }
-    };
-
-    const handleDelete = async (id) => {
-        if (!VITE_REACT_APP_API_HOST) {
-            alert("API host is not defined. Please check your environment variables.");
-            return;
-        }
-
-        if (window.confirm("Are you sure you want to delete this menu item?")) {
-            try {
-                const response = await axios.delete(`${VITE_REACT_APP_API_HOST}/deletemenu/${id}`);
-                const result = response.data;
-                if (result.success) {
-                    alert(result.message);
-                    setRefreshDataList(!refreshDataList);
-                } else {
-                    alert(result.message || "Failed to delete data. Please try again!");
-                }
-            } catch (error) {
-                console.error("Error deleting data:", error);
-                alert(`An error occurred. Please try again. Error: ${error.message}`);
-            }
-        }
-    };
+        if (filterSearch === "Name")
+            return data.name && String(data.name).toLowerCase().includes(search.toLowerCase());
+        if (filterSearch === "Description")
+            return data.description && data.description.toLowerCase().includes(search.toLowerCase());
+        if (filterSearch === "Price")
+            return data.price && String(data.price).toLowerCase().includes(search.toLowerCase());
+        if (filterSearch === "Disabled")
+            return data.disabled !== undefined && (data.disabled ? "yes" : "no").includes(search.toLowerCase());
+        return false;
+    });
 
     return (
-        <div className="container">
+        <div className="page">
             <Navbar />
-            <div className="content">
+            <div className="page-content">
                 <h1>Manage Products</h1>
-                <Button
-                    className="manage-button"
-                    variant="contained"
-                    onClick={() => openModal(initialData, false)}
-                >
-                    ADD PRODUCT
-                </Button>
 
-                <TableContainer className="table-container">
+                <div className="column-gap">
+                    <div className="search-filter">
+                        <FormControl sx={{ minWidth: 160 }}>
+                            <InputLabel>Filter</InputLabel>
+                            <Select
+                                value={filterSearch}
+                                label="Filter"
+                                onChange={handleFilterSearchChange}
+                            >
+                                <MenuItem value="">
+                                    <em>None</em>
+                                </MenuItem>
+                                <MenuItem value={"Name"}>Name</MenuItem>
+                                <MenuItem value={"Description"}>
+                                    Description
+                                </MenuItem>
+                                <MenuItem value={"Price"}>Price</MenuItem>
+                                <MenuItem value={"Disabled"}>Disabled</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <TextField
+                            variant="outlined"
+                            id="search"
+                            label="Search"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            sx={{ flexGrow: 1 }}
+                        />
+                    </div>
+
+                    <Button
+                        className="tablebutton"
+                        variant="contained"
+                        onClick={() => openModal(initialData, false)}
+                        style={{ backgroundColor: "#aa0f0f" }}
+                    >
+                        ADD PRODUCT
+                    </Button>
+                </div>
+
+                <TableContainer>
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center">Name</TableCell>
-                                <TableCell align="center">Description</TableCell>
-                                <TableCell align="center">Image</TableCell>
-                                <TableCell align="center">Price</TableCell>
-                                <TableCell align="center">Disabled</TableCell>
-                                <TableCell align="center">Actions</TableCell>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Description</TableCell>
+                                <TableCell>Image</TableCell>
+                                <TableCell>Price</TableCell>
+                                <TableCell>Disabled</TableCell>
+                                <TableCell>Edit</TableCell>
                             </TableRow>
                         </TableHead>
+
                         <TableBody>
-                            {dataList.map((item) => (
-                                <TableRow key={item._id}>
-                                    <TableCell align="center">{item.name}</TableCell>
-                                    <TableCell align="center">{item.description}</TableCell>
-                                    <TableCell align="center">
-                                        <img
-                                            src={`${VITE_REACT_APP_API_HOST}/uploads/${item.image}`}
-                                            alt={item.name}
-                                            style={{ width: "50px" }}
-                                        />
-                                    </TableCell>
-                                    <TableCell align="center">₱ {item.price}</TableCell>
-                                    <TableCell align="center">
-                                        {item.disabled ? "Yes" : "No"}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        <IconButton onClick={() => openModal(item, true)}>
-                                            <Edit className="icon-edit" />
-                                        </IconButton>
-                                        <IconButton onClick={() => handleDelete(item._id)}>
-                                            <Delete className="icon-delete" />
-                                        </IconButton>
+                            {filteredDataList.map((data) => (
+                                <TableRow key={data._id}>
+                                    <TableCell>{data.name}</TableCell>
+                                    <TableCell>{data.description}</TableCell>
+                                    <TableCell>{data.image}</TableCell>
+                                    <TableCell>{data.price}</TableCell>
+                                    <TableCell>{data.disabled ? "Yes" : "No"}</TableCell>
+                                    <TableCell>
+                                        <div className="buttongroup">
+                                            <IconButton onClick={() => openModal(data, true)}>
+                                                <Edit className="actionicon" />
+                                            </IconButton>
+                                            <IconButton onClick={() => handleDeleteData(data)}>
+                                                <Delete className="actionicon" />
+                                            </IconButton>
+                                        </div>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -219,78 +308,117 @@ export default function ManageProducts() {
                     </Table>
                 </TableContainer>
 
+                {/* //MARK: MODAL */}
                 <Modal open={modalState} onClose={closeModal}>
                     <Box className="modal">
-                        <form onSubmit={handleSubmit}>
-                            <p>{isEditMode ? "EDIT" : "ADD NEW PRODUCT"}</p>
-                            {imageUrl && (
+                        <form
+                            className="modalform"
+                            onSubmit={isEditMode ? handleUpdateData : handleAddData}
+                        >
+                            {imageUrl ? (
                                 <div className="image-container">
                                     <img
                                         src={imageUrl}
                                         alt="Current"
-                                        style={{ width: "300px", height: "194px", objectFit: "cover" }}
+                                        style={{
+                                            width: "300px",
+                                            height: "194px",
+                                            objectFit: "cover",
+                                        }}
                                     />
                                 </div>
+                            ) : typeof currentData.image === "string" &&
+                              currentData.image !== "" ? (
+                                <div className="image-container">
+                                    <img
+                                        src={`${VITE_REACT_APP_API_HOST}/uploads/${currentData.image}`}
+                                        alt="Current"
+                                        style={{
+                                            width: "300px",
+                                            height: "194px",
+                                            objectFit: "cover",
+                                        }}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="image-container">
+                                    <div
+                                        style={{
+                                            width: "300px",
+                                            height: "194px",
+                                            border: "1px solid #ccc",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        No image yet
+                                    </div>
+                                </div>
                             )}
-                            <Input
-                                type="file"
-                                onChange={handleFileChange}
-                                fullWidth
-                                margin="normal"
-                            />
+
                             <TextField
+                                variant="outlined"
                                 id="name"
                                 required
                                 label="Name"
-                                variant="outlined"
-                                name="name"
                                 value={currentData.name}
                                 onChange={handleChange}
-                                fullWidth
-                                margin="normal"
+                                disabled={isEditMode}
                             />
+
                             <TextField
+                                variant="outlined"
                                 id="description"
                                 required
                                 label="Description"
-                                variant="outlined"
-                                name="description"
                                 value={currentData.description}
                                 onChange={handleChange}
-                                multiline
-                                rows="4"
-                                fullWidth
-                                margin="normal"
                             />
+
                             <TextField
+                                variant="outlined"
+                                id="image"
+                                required
+                                type="file"
+                                label={isEditMode ? "Update Image" : "Add Image"}
+                                onChange={handleImageChange}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+
+                            <TextField
+                                variant="outlined"
                                 id="price"
                                 required
-                                label="Price"
-                                variant="outlined"
-                                name="price"
                                 type="number"
+                                label="Price"
                                 value={currentData.price}
                                 onChange={handleChange}
-                                fullWidth
-                                margin="normal"
+                                inputProps={{ className: "hide-arrows" }}
                             />
+
                             <FormControlLabel
                                 control={
                                     <Switch
-                                        checked={currentData.disabled || false}
+                                        checked={currentData.disabled}
                                         onChange={handleSwitch}
                                         name="disabled"
-                                        inputProps={{ "aria-label": "Disabled toggle" }}
+                                        inputProps={{
+                                            "aria-label": "Disabled toggle",
+                                        }}
                                     />
                                 }
                                 label="Disabled"
                             />
+
                             <Button
-                                className="buttonmodal"
+                                className="tablebutton"
                                 variant="contained"
                                 type="submit"
                             >
-                                {isEditMode ? "EDIT" : "ADD"}
+                                {isEditMode ? "UPDATE" : "ADD"}
                             </Button>
                         </form>
                     </Box>
