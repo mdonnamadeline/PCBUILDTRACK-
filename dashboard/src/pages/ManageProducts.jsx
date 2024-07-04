@@ -47,9 +47,9 @@ export default function ManageProducts() {
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
     useEffect(() => {
-        fetchData();
+        fetchData();    
     }, [refreshDataList]);
-
+    
     const fetchData = async () => {
         try {
             const response = await axios.get(`${VITE_REACT_APP_API_HOST}/viewmenu`);
@@ -63,7 +63,6 @@ export default function ManageProducts() {
             console.error("Error fetching data:", error);
         }
     };
-
     const handleAddData = async (e) => {
         e.preventDefault();
 
@@ -160,7 +159,6 @@ export default function ManageProducts() {
             alert("An error occurred. Please try again.");
         }
     };
-
     const openModal = (dataTile = initialData, isEdit = false) => {
         setCurrentData(dataTile);
         setImageUrl(dataTile.image ? `${VITE_REACT_APP_API_HOST}/uploads/${dataTile.image}` : "");
@@ -196,6 +194,7 @@ export default function ManageProducts() {
             setImageUrl(URL.createObjectURL(e.target.files[0]));
         }
     };
+    
 
     const handleFilterSearchChange = (event) => {
         setFilterSearch(event.target.value);
@@ -205,20 +204,44 @@ export default function ManageProducts() {
         if (!search) return true;
         if (!filterSearch) {
             return (
-                (data.name && String(data.name).toLowerCase().includes(search.toLowerCase())) ||
-                (data.description && data.description.toLowerCase().includes(search.toLowerCase())) ||
-                (data.price && String(data.price).toLowerCase().includes(search.toLowerCase())) ||
-                (data.disabled && String(data.disabled).toLowerCase().includes(search.toLowerCase()))
+                (data.name &&
+                    String(data.name)
+                        .toLowerCase()
+                        .includes(search.toLowerCase())) ||
+                (data.description &&
+                    data.description
+                        .toLowerCase()
+                        .includes(search.toLowerCase())) ||
+                (data.price &&
+                    String(data.price)
+                        .toLowerCase()
+                        .includes(search.toLowerCase())) ||
+                (data.disabled &&
+                    String(data.disabled)
+                        .toLowerCase()
+                        .includes(search.toLowerCase()))
             );
         }
         if (filterSearch === "Name")
-            return data.name && String(data.name).toLowerCase().includes(search.toLowerCase());
+            return (
+                data.name &&
+                String(data.name).toLowerCase().includes(search.toLowerCase())
+            );
         if (filterSearch === "Description")
-            return data.description && data.description.toLowerCase().includes(search.toLowerCase());
+            return (
+                data.description &&
+                data.description.toLowerCase().includes(search.toLowerCase())
+            );
         if (filterSearch === "Price")
-            return data.price && String(data.price).toLowerCase().includes(search.toLowerCase());
+            return (
+                data.price &&
+                String(data.price).toLowerCase().includes(search.toLowerCase())
+            );
         if (filterSearch === "Disabled")
-            return data.disabled !== undefined && (data.disabled ? "yes" : "no").includes(search.toLowerCase());
+            return (
+                data.disabled !== undefined &&
+                (data.disabled ? "yes" : "no").includes(search.toLowerCase())
+            );
         return false;
     });
 
@@ -291,13 +314,23 @@ export default function ManageProducts() {
                                     <TableCell>{data.description}</TableCell>
                                     <TableCell>{data.image}</TableCell>
                                     <TableCell>{data.price}</TableCell>
-                                    <TableCell>{data.disabled ? "Yes" : "No"}</TableCell>
+                                    <TableCell>
+                                        {data.disabled ? "Yes" : "No"}
+                                    </TableCell>
                                     <TableCell>
                                         <div className="buttongroup">
-                                            <IconButton onClick={() => openModal(data, true)}>
+                                            <IconButton
+                                                onClick={() =>
+                                                    openModal(data, true)
+                                                }
+                                            >
                                                 <Edit className="actionicon" />
                                             </IconButton>
-                                            <IconButton onClick={() => handleDeleteData(data)}>
+                                            <IconButton
+                                                onClick={() =>
+                                                    handleDeleteData(data)
+                                                }
+                                            >
                                                 <Delete className="actionicon" />
                                             </IconButton>
                                         </div>
@@ -313,7 +346,9 @@ export default function ManageProducts() {
                     <Box className="modal">
                         <form
                             className="modalform"
-                            onSubmit={isEditMode ? handleUpdateData : handleAddData}
+                            onSubmit={
+                                isEditMode ? handleUpdateData : handleAddData
+                            }
                         >
                             {imageUrl ? (
                                 <div className="image-container">
@@ -379,9 +414,11 @@ export default function ManageProducts() {
                             <TextField
                                 variant="outlined"
                                 id="image"
-                                required
+                                required={!isEditMode}
                                 type="file"
-                                label={isEditMode ? "Update Image" : "Add Image"}
+                                label={
+                                    isEditMode ? "Update Image" : "Add Image"
+                                }
                                 onChange={handleImageChange}
                                 InputLabelProps={{
                                     shrink: true,
