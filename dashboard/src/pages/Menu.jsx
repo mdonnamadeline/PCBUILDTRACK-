@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "./Navbar";
 import {
+    Button,
     Card,
     CardContent,
     CardHeader,
     CardMedia,
     Typography,
 } from "@mui/material";
+import "./Menu.css"; // Import the CSS file
 
 export default function Menu() {
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
@@ -20,18 +22,20 @@ export default function Menu() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get(`${VITE_REACT_APP_API_HOST}/viewmenu`);
-            setDataList(response.data.data || []);  // Make sure to access `data.data` to get the correct array
+            const response = await axios.get(
+                `${VITE_REACT_APP_API_HOST}/viewmenu`
+            );
+            setDataList(response.data.data || []); // Ensure accessing the nested data
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
 
     return (
-        <div className="page-container">
-            <Navbar />
-            <div className="content">
-                <h1>MENU</h1>
+        <div className="menu">
+            <Navbar className="NavBar" />
+            <div className="menu-main">
+                <h1 className="menu-Title">MENU</h1>
                 <div className="menu-list">
                     {dataList.length > 0 ? (
                         dataList
@@ -55,12 +59,16 @@ function ProductCard({ menu }) {
     return (
         <Card className="product-card">
             <CardHeader
-                title={<div style={{ whiteSpace: "nowrap" }}>{menu.name}</div>}
+                title={
+                    <div style={{ whiteSpace: "nowrap", fontSize: "14px" }}>
+                        {menu.name}
+                    </div>
+                }
                 subheader={`₱${menu.price}`}
             />
             <CardMedia
                 component="img"
-                height="194"
+                height="100" 
                 image={imageUrl}
                 alt={menu.name}
             />
@@ -69,9 +77,17 @@ function ProductCard({ menu }) {
                     variant="body2"
                     component="div"
                     color="text.secondary"
+                    style={{ fontSize: "12px" }} 
                 >
                     {menu.description}
                 </Typography>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ marginTop: "10px", width: "300px", color: "white", backgroundColor: "red" }}
+                >
+                    Order Now
+                </Button>
             </CardContent>
         </Card>
     );
