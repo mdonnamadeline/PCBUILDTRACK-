@@ -33,7 +33,7 @@ export default function SignUp() {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        console.log("Customer object:", user); // Log customer object
+        console.log("Customer object:", user); 
         try {
             const response = await axios.post(
                 `${VITE_REACT_APP_API_HOST}/signup`,
@@ -56,7 +56,7 @@ export default function SignUp() {
         <div className="SignUpContainer">
             <div className="SignUpMain">
                 <form className="signupForm" onSubmit={handleSignup}>
-                    <h6>PLEASE SIGN UP</h6>
+                    <h6>REGISTER HERE!</h6>
                     <TextField
                         required
                         id="firstname"
