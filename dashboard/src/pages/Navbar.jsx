@@ -23,7 +23,7 @@ export default function Navbar() {
         console.log("Logging out...");
         localStorage.removeItem("user");
         setUser(null);
-        navigate("/login");
+        navigate("/home");
     };
 
     return (
