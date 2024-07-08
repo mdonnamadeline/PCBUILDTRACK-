@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
 
 export default function Navbar() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const isAdminOrOwner =
-        user && (user.role === "Admin" || user.role === "Owner");
-    const isLoggedIn = true;
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem("user"));
+        setUser(storedUser);
+    }, []);
+
+    const isAdminOrOwner = user && (user.role === "Admin" || user.role === "Owner");
+    const isLoggedIn = Boolean(user);
 
     const navigate = useNavigate();
     const handleHome = () => {
@@ -16,6 +21,8 @@ export default function Navbar() {
 
     const handleLogout = () => {
         console.log("Logging out...");
+        localStorage.removeItem("user");
+        setUser(null);
         navigate("/login");
     };
 
@@ -28,7 +35,6 @@ export default function Navbar() {
                     style={{ marginRight: "auto" }}
                     onClick={handleHome}
                 />
-
                 <div
                     className="navbar-items-section"
                     style={{
@@ -38,28 +44,30 @@ export default function Navbar() {
                         marginRight: "40px",
                     }}
                 >
-                    
-                    {isAdminOrOwner ? (
-                        <>
-                            <Link to="/manageuser">MANAGE USER</Link>
-                            <Link to="/manageproduct">MANAGE PRODUCT</Link>
-                            <a href="#" onClick={handleLogout}>
-                                LOGOUT
-                            </a>
-                        </>
-                    ) : (
-                        <>
-                            <Link to="/home">HOME</Link>
-                            <Link to="/menu">MENU</Link>
-                            {isLoggedIn ? (
-                                <a href="#" onClick={handleLogout}>
-                                    LOGOUT
-                                </a>
-                            ) : (
-                                <Link to="/login">Login</Link>
-                            )}
-                        </>
-                    )}
+                     {isLoggedIn ? (
+                    <>
+                        {isAdminOrOwner ? (
+                            <>
+                                <Link to="/manageuser">MANAGE USER</Link>
+                                <Link to="/manageproduct">MANAGE PRODUCT</Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/home">HOME</Link>
+                                <Link to="/menu">MENU</Link>
+                            </>
+                        )}
+                        <a href="#" onClick={handleLogout}>
+                            LOGOUT
+                        </a>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/home">HOME</Link>
+                        <Link to="/menu">MENU</Link>
+                        <Link to="/login">Login</Link>
+                    </>
+                )}
                 </div>
             </div>
         </div>
