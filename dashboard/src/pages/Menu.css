@@ -31,7 +31,6 @@
     padding: 0 10px;
 }
 
-
 .product-card {
     text-align: center;
     border: 1px solid #ccc;
@@ -42,7 +41,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     width: 300px; 
     height: 400px; 
 }
@@ -55,9 +54,22 @@
     border-radius: 8px;
 }
 
-.CardContent {
+.product-details {
     margin-top: 5px;
     font-size: 16px;
+}
+
+.product-price {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.order-button {
+    margin-top: 10px;
+    width: 100%;
+    color: white;
+    background-color: red;
 }
 
 @media (max-width: 1200px) {
