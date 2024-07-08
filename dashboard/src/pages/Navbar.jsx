@@ -48,23 +48,23 @@ export default function Navbar() {
                     <>
                         {isAdminOrOwner ? (
                             <>
-                                <Link to="/manageuser">MANAGE USER</Link>
-                                <Link to="/manageproduct">MANAGE PRODUCT</Link>
+                                <Link to="/manageuser">Manage User</Link>
+                                <Link to="/manageproduct">Manage Product</Link>
                             </>
                         ) : (
                             <>
-                                <Link to="/home">HOME</Link>
-                                <Link to="/menu">MENU</Link>
+                                <Link to="/home">Home</Link>
+                                <Link to="/menu">Menu</Link>
                             </>
                         )}
                         <a href="#" onClick={handleLogout}>
-                            LOGOUT
+                            Logout
                         </a>
                     </>
                 ) : (
                     <>
-                        <Link to="/home">HOME</Link>
-                        <Link to="/menu">MENU</Link>
+                        <Link to="/home">Home</Link>
+                        <Link to="/menu">Menu</Link>
                         <Link to="/login">Login</Link>
                     </>
                 )}
