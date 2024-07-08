@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export default function Navbar() {
     const [user, setUser] = useState(null);
@@ -11,7 +12,8 @@ export default function Navbar() {
         setUser(storedUser);
     }, []);
 
-    const isAdminOrOwner = user && (user.role === "Admin" || user.role === "Owner");
+    const isAdminOrOwner =
+        user && (user.role === "Admin" || user.role === "Owner");
     const isLoggedIn = Boolean(user);
 
     const navigate = useNavigate();
@@ -44,30 +46,38 @@ export default function Navbar() {
                         marginRight: "40px",
                     }}
                 >
-                     {isLoggedIn ? (
-                    <>
-                        {isAdminOrOwner ? (
-                            <>
-                                <Link to="/manageuser">Manage User</Link>
-                                <Link to="/manageproduct">Manage Product</Link>
-                            </>
-                        ) : (
-                            <>
-                                <Link to="/home">Home</Link>
-                                <Link to="/menu">Menu</Link>
-                            </>
-                        )}
-                        <a href="#" onClick={handleLogout}>
-                            Logout
-                        </a>
-                    </>
-                ) : (
-                    <>
-                        <Link to="/home">Home</Link>
-                        <Link to="/menu">Menu</Link>
-                        <Link to="/login">Login</Link>
-                    </>
-                )}
+                    {isLoggedIn ? (
+                        <>
+                            {isAdminOrOwner ? (
+                                <>
+                                    <Link to="/manageuser">Manage User</Link>
+                                    <Link to="/manageproduct">
+                                        Manage Product
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                    <Link to="/home">Home</Link>
+                                    <Link to="/menu">Menu</Link>
+                                    <Link to="/cart">
+                                        <ShoppingCartIcon />{" "}
+                                    </Link>
+                                </>
+                            )}
+                            <a href="#" onClick={handleLogout}>
+                                Logout
+                            </a>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/home">Home</Link>
+                            <Link to="/menu">Menu</Link>
+                            <Link to="/cart">
+                                <ShoppingCartIcon />
+                            </Link>
+                            <Link to="/login">Login</Link>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
