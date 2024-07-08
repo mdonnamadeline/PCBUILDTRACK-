@@ -8,6 +8,10 @@ import ManageUser from "./pages/ManageUser";
 import Menu from "./pages/Menu";
 import ManageProducts from "./pages/ManageProducts";
 import Sidebar from "./pages/Sidebar";
+import Cart from "./pages/Cart";
+import Payment from "./pages/Payment";
+import Location from "./pages/Location";
+
 
 function App() {
     return (
@@ -22,7 +26,10 @@ function App() {
                 <Route path="/home" element={<Home />} />
                 <Route path="/menu" element={<Menu />} />
                 <Route path="/manageuser" element={<ManageUser />} />
-                <Route path="manageproduct" element={<ManageProducts />} />
+                <Route path="/manageproduct" element={<ManageProducts />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/payment" element={<Payment />} />
+                <Route path="/location" element={<Location />} />
             </Routes>
         </BrowserRouter>
     );
