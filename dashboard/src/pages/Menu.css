@@ -89,3 +89,17 @@
         grid-template-columns: 1fr; 
     }
 }
+
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.product-card img {
+    object-fit: cover;  
+}
+
+

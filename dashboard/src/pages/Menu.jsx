@@ -11,7 +11,11 @@ import {
     Typography,
     Modal,
     Box,
+    TextField,
+    IconButton,
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import "./Menu.css";
 
 const modalStyle = {
@@ -32,6 +36,9 @@ export default function Menu() {
     const [dataList, setDataList] = useState([]);
     const [user, setUser] = useState(null);
     const [open, setOpen] = useState(false);
+    const [openAddToOrder, setOpenAddToOrder] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [quantity, setQuantity] = useState(1);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -51,8 +58,44 @@ export default function Menu() {
         }
     };
 
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleOpenAddToOrder = (product) => {
+        setSelectedProduct(product);
+        setQuantity(1);
+        setOpenAddToOrder(true);
+    };
+
+    const handleCloseAddToOrder = () => {
+        setOpenAddToOrder(false);
+        setSelectedProduct(null);
+    };
+
+    const handleQuantityChange = (operation) => {
+        setQuantity((prevQuantity) =>
+            operation === "+" ? prevQuantity + 1 : Math.max(1, prevQuantity - 1)
+        );
+    };
+
+    const handleAddToCart = () => {
+        if (user) {
+            // Implement the logic to add the product to the cart
+            // For example, you could dispatch an action or call an API
+            // to add the product to the cart with the selected quantity
+            console.log(`Add ${quantity} ${selectedProduct.name} to cart`);
+            navigate("/cart", {
+                state: {
+                    cartItems: [{ ...selectedProduct, quantity }],
+                },
+            });
+            handleCloseAddToOrder();
+        } else {
+            handleCloseAddToOrder();
+            setOpen(true); // Open the sign up/login modal
+        }
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <div className="menu">
@@ -68,8 +111,7 @@ export default function Menu() {
                                     key={menu._id}
                                     menu={menu}
                                     user={user}
-                                    navigate={navigate}
-                                    handleOpen={handleOpen}
+                                    handleOpen={handleOpenAddToOrder}
                                 />
                             ))
                     ) : (
@@ -77,6 +119,80 @@ export default function Menu() {
                     )}
                 </div>
             </div>
+
+            {/* Modal for Add to Order */}
+            <Modal
+                open={openAddToOrder}
+                onClose={handleCloseAddToOrder}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box sx={modalStyle}>
+                    {selectedProduct && (
+                        <>
+                            <Typography
+                                id="modal-title"
+                                variant="h6"
+                                component="h2"
+                            >
+                                {selectedProduct.name}
+                            </Typography>
+                            <CardMedia
+                                component="img"
+                                height="140"
+                                image={`${VITE_REACT_APP_API_HOST}/uploads/${selectedProduct.image}`}
+                                alt={selectedProduct.name}
+                                sx={{ mt: 2, mb: 2, objectFit: "contain" }} 
+                            />
+                            <Typography id="modal-description" sx={{ mt: 2 }}>
+                                {selectedProduct.description}
+                            </Typography>
+                            <Typography sx={{ mt: 2 }}>
+                                ₱{selectedProduct.price} x {quantity} = ₱
+                                {selectedProduct.price * quantity}
+                            </Typography>
+                            <div
+                                className="quantity-control"
+                                style={{ marginTop: "16px" }}
+                            >
+                                <IconButton
+                                    onClick={() => handleQuantityChange("-")}
+                                >
+                                    <RemoveIcon />
+                                </IconButton>
+                                <TextField
+                                    value={quantity}
+                                    inputProps={{
+                                        readOnly: true,
+                                        style: { textAlign: "center" },
+                                    }}
+                                    sx={{ width: "60px", mx: 2 }}
+                                />
+                                <IconButton
+                                    onClick={() => handleQuantityChange("+")}
+                                >
+                                    <AddIcon />
+                                </IconButton>
+                            </div>
+                            <Button
+                                variant="contained"
+                                onClick={handleAddToCart}
+                                sx={{
+                                    mt: 2,
+                                    backgroundColor: "rgb(161,27,27)",
+                                    "&:hover": {
+                                        backgroundColor: "rgb(135,22,22)",
+                                    },
+                                }}
+                            >
+                                Add to Cart
+                            </Button>
+                        </>
+                    )}
+                </Box>
+            </Modal>
+
+            {/* Modal for Sign Up/Login */}
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -119,17 +235,9 @@ export default function Menu() {
     );
 }
 
-function ProductCard({ menu, user, navigate, handleOpen }) {
+function ProductCard({ menu, user, handleOpen }) {
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
     const imageUrl = `${VITE_REACT_APP_API_HOST}/uploads/${menu.image}`;
-
-    const handleButtonClick = () => {
-        if (user) {
-            navigate(`/add-to-order/${menu._id}`);
-        } else {
-            handleOpen();
-        }
-    };
 
     return (
         <Card className="product-card">
@@ -165,7 +273,7 @@ function ProductCard({ menu, user, navigate, handleOpen }) {
                         color: "white",
                         backgroundColor: "red",
                     }}
-                    onClick={handleButtonClick}
+                    onClick={() => handleOpen(menu)}
                 >
                     {user ? "Add to Order" : "Order Now"}
                 </Button>
