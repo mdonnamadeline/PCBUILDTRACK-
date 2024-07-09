@@ -45,6 +45,7 @@ export default function ManageUser() {
     const [isEditMode, setIsEditMode] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [userToDelete, setUserToDelete] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
@@ -88,6 +89,16 @@ export default function ManageUser() {
             [name]: value,
         }));
     };
+
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const filteredUsers = users.filter((user) =>
+        `${user.firstname} ${user.lastname} ${user.middlename} ${user.email} ${user.role}`
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+    );
 
     const handleUpdateUser = async (e) => {
         e.preventDefault();
@@ -182,6 +193,14 @@ export default function ManageUser() {
                             </Button>
                             <br />
                         </div>
+                        <div className="search">
+                            <TextField
+                                label="Search Users"
+                                variant="outlined"
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                            />
+                        </div>
                         <TableContainer style={{ maxHeight: 500 }}>
                             <Table stickyHeader>
                                 <TableHead>
@@ -196,7 +215,7 @@ export default function ManageUser() {
                                 </TableHead>
 
                                 <TableBody>
-                                    {users.map((user) => (
+                                    {filteredUsers.map((user) => (
                                         <TableRow key={user.email}>
                                             <TableCell>
                                                 {user.firstname}
