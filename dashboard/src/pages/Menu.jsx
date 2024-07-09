@@ -59,9 +59,13 @@ export default function Menu() {
     };
 
     const handleOpenAddToOrder = (product) => {
-        setSelectedProduct(product);
-        setQuantity(1);
-        setOpenAddToOrder(true);
+        if (user) {
+            setSelectedProduct(product);
+            setQuantity(1);
+            setOpenAddToOrder(true);
+        } else {
+            setOpen(true); // Open the sign up/login modal
+        }
     };
 
     const handleCloseAddToOrder = () => {
@@ -77,18 +81,22 @@ export default function Menu() {
 
     const handleAddToCart = () => {
         if (user) {
-            // Implement the logic to add the product to the cart
-            // For example, you could dispatch an action or call an API
-            // to add the product to the cart with the selected quantity
-            console.log(`Add ${quantity} ${selectedProduct.name} to cart`);
+            const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+            const newItem = {
+                ...selectedProduct,
+                quantity,
+                addedDate: new Date().toLocaleString(),
+            };
+            const updatedCartItems = [...cartItems, newItem];
+            localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+
             navigate("/cart", {
                 state: {
-                    cartItems: [{ ...selectedProduct, quantity }],
+                    cartItems: updatedCartItems,
                 },
             });
             handleCloseAddToOrder();
         } else {
-            handleCloseAddToOrder();
             setOpen(true); // Open the sign up/login modal
         }
     };
@@ -121,76 +129,78 @@ export default function Menu() {
             </div>
 
             {/* Modal for Add to Order */}
-            <Modal
-                open={openAddToOrder}
-                onClose={handleCloseAddToOrder}
-                aria-labelledby="modal-title"
-                aria-describedby="modal-description"
-            >
-                <Box sx={modalStyle}>
-                    {selectedProduct && (
-                        <>
-                            <Typography
-                                id="modal-title"
-                                variant="h6"
-                                component="h2"
-                            >
-                                {selectedProduct.name}
-                            </Typography>
-                            <CardMedia
-                                component="img"
-                                height="140"
-                                image={`${VITE_REACT_APP_API_HOST}/uploads/${selectedProduct.image}`}
-                                alt={selectedProduct.name}
-                                sx={{ mt: 2, mb: 2, objectFit: "contain" }} 
-                            />
-                            <Typography id="modal-description" sx={{ mt: 2 }}>
-                                {selectedProduct.description}
-                            </Typography>
-                            <Typography sx={{ mt: 2 }}>
-                                ₱{selectedProduct.price} x {quantity} = ₱
-                                {selectedProduct.price * quantity}
-                            </Typography>
-                            <div
-                                className="quantity-control"
-                                style={{ marginTop: "16px" }}
-                            >
-                                <IconButton
-                                    onClick={() => handleQuantityChange("-")}
+            {user && (
+                <Modal
+                    open={openAddToOrder}
+                    onClose={handleCloseAddToOrder}
+                    aria-labelledby="modal-title"
+                    aria-describedby="modal-description"
+                >
+                    <Box sx={modalStyle}>
+                        {selectedProduct && (
+                            <>
+                                <Typography
+                                    id="modal-title"
+                                    variant="h6"
+                                    component="h2"
                                 >
-                                    <RemoveIcon />
-                                </IconButton>
-                                <TextField
-                                    value={quantity}
-                                    inputProps={{
-                                        readOnly: true,
-                                        style: { textAlign: "center" },
-                                    }}
-                                    sx={{ width: "60px", mx: 2 }}
+                                    {selectedProduct.name}
+                                </Typography>
+                                <CardMedia
+                                    component="img"
+                                    height="140"
+                                    image={`${VITE_REACT_APP_API_HOST}/uploads/${selectedProduct.image}`}
+                                    alt={selectedProduct.name}
+                                    sx={{ mt: 2, mb: 2, objectFit: "contain" }} 
                                 />
-                                <IconButton
-                                    onClick={() => handleQuantityChange("+")}
+                                <Typography id="modal-description" sx={{ mt: 2 }}>
+                                    {selectedProduct.description}
+                                </Typography>
+                                <Typography sx={{ mt: 2 }}>
+                                    ₱{selectedProduct.price} x {quantity} = ₱
+                                    {selectedProduct.price * quantity}
+                                </Typography>
+                                <div
+                                    className="quantity-control"
+                                    style={{ marginTop: "16px" }}
                                 >
-                                    <AddIcon />
-                                </IconButton>
-                            </div>
-                            <Button
-                                variant="contained"
-                                onClick={handleAddToCart}
-                                sx={{
-                                    mt: 2,
-                                    backgroundColor: "rgb(161,27,27)",
-                                    "&:hover": {
-                                        backgroundColor: "rgb(135,22,22)",
-                                    },
-                                }}
-                            >
-                                Add to Cart
-                            </Button>
-                        </>
-                    )}
-                </Box>
-            </Modal>
+                                    <IconButton
+                                        onClick={() => handleQuantityChange("-")}
+                                    >
+                                        <RemoveIcon />
+                                    </IconButton>
+                                    <TextField
+                                        value={quantity}
+                                        inputProps={{
+                                            readOnly: true,
+                                            style: { textAlign: "center" },
+                                        }}
+                                        sx={{ width: "60px", mx: 2 }}
+                                    />
+                                    <IconButton
+                                        onClick={() => handleQuantityChange("+")}
+                                    >
+                                        <AddIcon />
+                                    </IconButton>
+                                </div>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleAddToCart}
+                                    sx={{
+                                        mt: 2,
+                                        backgroundColor: "rgb(161,27,27)",
+                                        "&:hover": {
+                                            backgroundColor: "rgb(135,22,22)",
+                                        },
+                                    }}
+                                >
+                                    Add to Cart
+                                </Button>
+                            </>
+                        )}
+                    </Box>
+                </Modal>
+            )}
 
             {/* Modal for Sign Up/Login */}
             <Modal
