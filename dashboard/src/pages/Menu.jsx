@@ -89,18 +89,13 @@ export default function Menu() {
             };
             const updatedCartItems = [...cartItems, newItem];
             localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-
-            navigate("/cart", {
-                state: {
-                    cartItems: updatedCartItems,
-                },
-            });
+    
+            alert("Item added to cart!");
             handleCloseAddToOrder();
         } else {
-            setOpen(true); // Open the sign up/login modal
+            setOpen(true); 
         }
     };
-
     const handleClose = () => {
         setOpen(false);
     };

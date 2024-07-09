@@ -1,5 +1,5 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -33,7 +33,6 @@ export default function SignUp() {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        console.log("Customer object:", user); 
         try {
             const response = await axios.post(
                 `${VITE_REACT_APP_API_HOST}/signup`,
@@ -42,9 +41,13 @@ export default function SignUp() {
             const result = response.data;
 
             if (result.success) {
+                // Clear the cart and user data, and redirect to the homepage
+                localStorage.removeItem("cartItems");
+                localStorage.removeItem("user");
                 navigate("/");
+            } else {
+                alert(result.message);
             }
-            alert(result.message);
         } catch (error) {
             console.error("Error signing up customer:", error);
             alert("An error occurred. Please try again.");

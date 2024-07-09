@@ -25,16 +25,15 @@ export default function Cart() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-        setCartItems(storedCartItems);
-    }, []);
-
-    useEffect(() => {
-        // Check if the user is logged in
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {
-            navigate("/login"); // Redirect to login page if not logged in
+            navigate("/login");
+            return;
         }
+
+        // Fetch the current cart items for the logged-in user
+        const storedCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+        setCartItems(storedCartItems.filter(item => item.userId === user.id));
     }, [navigate]);
 
     const handleSelectItem = (item) => {
