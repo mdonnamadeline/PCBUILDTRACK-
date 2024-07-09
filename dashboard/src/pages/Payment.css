@@ -1,0 +1,62 @@
+/* Payment.css */
+.payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    padding: 20px;
+    background-color: #f0f0f0; /* Light background color for the page */
+}
+
+.payment-title {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    font-weight: 500;
+    color: #333; /* Dark text color */
+}
+
+.payment-form {
+    background-color: #fff; /* White background for the form */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for the form */
+    max-width: 400px; /* Max width for the form */
+    width: 100%; /* Full width for smaller screens */
+}
+
+.payment-form .MuiFormControl-root {
+    margin-bottom: 16px;
+}
+
+.payment-form .MuiTextField-root {
+    margin-bottom: 16px;
+}
+
+.payment-button {
+    background-color: #d32f2f; 
+    color: #fff;
+}
+
+.payment-button:hover {
+    background-color: #b71c1c; 
+
+}
+
+.payment-summary {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #e0e0e0; 
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.payment-summary .summary-text {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.payment-summary .summary-amount {
+    font-size: 1.2rem;
+    color: #333; 
+}
