@@ -1,12 +1,12 @@
 import React from "react";
-// import Sidebar from './Sidebar' ;
-import Navbar from "./Navbar";
+import Sidebar from './Sidebar' ;
+// import Navbar from "./Navbar";
 
 export default function Dashboard() {
     return (
         <div className="dashboard">
-            {/* <Sidebar /> */}
-            <Navbar />
+            <Sidebar />
+            {/* <Navbar /> */}
             <div className="con">
                 <h1>ADMIN DASHBOARD</h1>
                 <p>Welcome Admin!</p>
