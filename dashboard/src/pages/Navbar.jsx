@@ -17,6 +17,7 @@ export default function Navbar() {
     const isLoggedIn = Boolean(user);
 
     const navigate = useNavigate();
+
     const handleHome = () => {
         navigate("/home");
     };
@@ -26,6 +27,13 @@ export default function Navbar() {
         localStorage.removeItem("user");
         setUser(null);
         navigate("/home");
+    };
+
+    const handleCartClick = (e) => {
+        if (!isLoggedIn) {
+            e.preventDefault();
+            alert("Your cart is empty. Please sign in first.");
+        }
     };
 
     return (
@@ -51,16 +59,14 @@ export default function Navbar() {
                             {isAdminOrOwner ? (
                                 <>
                                     <Link to="/manageuser">Manage User</Link>
-                                    <Link to="/manageproduct">
-                                        Manage Product
-                                    </Link>
+                                    <Link to="/manageproduct">Manage Product</Link>
                                 </>
                             ) : (
                                 <>
                                     <Link to="/home">Home</Link>
                                     <Link to="/menu">Menu</Link>
-                                    <Link to="/cart">
-                                        <ShoppingCartIcon />{" "}
+                                    <Link to="/cart" onClick={handleCartClick}>
+                                        <ShoppingCartIcon />
                                     </Link>
                                 </>
                             )}
@@ -72,7 +78,7 @@ export default function Navbar() {
                         <>
                             <Link to="/home">Home</Link>
                             <Link to="/menu">Menu</Link>
-                            <Link to="/cart">
+                            <Link to="/cart" onClick={handleCartClick}>
                                 <ShoppingCartIcon />
                             </Link>
                             <Link to="/login">Login</Link>
