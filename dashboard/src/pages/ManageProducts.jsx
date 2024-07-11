@@ -182,7 +182,7 @@ export default function ManageProducts() {
     const handleSwitch = (e) => {
         setCurrentData({
             ...currentData,
-            disabled: e.target.checked,
+            [e.target.name]: e.target.checked,
         });
     };
 
