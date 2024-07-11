@@ -39,12 +39,14 @@ export default function Menu() {
     const [openAddToOrder, setOpenAddToOrder] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
+    const [cartItemCount, setCartItemCount] = useState(0); // New state for cart item count
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchData();
         const storedUser = JSON.parse(localStorage.getItem("user"));
         setUser(storedUser);
+        updateCartItemCount(); // Update cart item count on component mount
     }, []);
 
     const fetchData = async () => {
@@ -56,6 +58,11 @@ export default function Menu() {
         } catch (error) {
             console.error("Error fetching data:", error);
         }
+    };
+
+    const updateCartItemCount = () => {
+        const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+        setCartItemCount(cartItems.length); // Update cart item count based on local storage
     };
 
     const handleOpenAddToOrder = (product) => {
@@ -81,7 +88,8 @@ export default function Menu() {
 
     const handleAddToCart = () => {
         if (user) {
-            const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+            const cartItems =
+                JSON.parse(localStorage.getItem("cartItems")) || [];
             const newItem = {
                 ...selectedProduct,
                 quantity,
@@ -89,20 +97,23 @@ export default function Menu() {
             };
             const updatedCartItems = [...cartItems, newItem];
             localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-    
+            updateCartItemCount(); // Update cart item count after adding to cart
+
             alert("Item added to cart!");
             handleCloseAddToOrder();
         } else {
-            setOpen(true); 
+            setOpen(true);
         }
     };
+
     const handleClose = () => {
         setOpen(false);
     };
 
     return (
         <div className="menu">
-            <Navbar />
+            <Navbar cartItemCount={cartItemCount} />{" "}
+            {/* Pass cart item count to Navbar */}
             <div className="menu-main">
                 <h1 className="menu-Title">MENU</h1>
                 <div className="menu-list">
@@ -122,7 +133,6 @@ export default function Menu() {
                     )}
                 </div>
             </div>
-
             {/* Modal for Add to Order */}
             {user && (
                 <Modal
@@ -146,9 +156,12 @@ export default function Menu() {
                                     height="140"
                                     image={`${VITE_REACT_APP_API_HOST}/uploads/${selectedProduct.image}`}
                                     alt={selectedProduct.name}
-                                    sx={{ mt: 2, mb: 2, objectFit: "contain" }} 
+                                    sx={{ mt: 2, mb: 2, objectFit: "contain" }}
                                 />
-                                <Typography id="modal-description" sx={{ mt: 2 }}>
+                                <Typography
+                                    id="modal-description"
+                                    sx={{ mt: 2 }}
+                                >
                                     {selectedProduct.description}
                                 </Typography>
                                 <Typography sx={{ mt: 2 }}>
@@ -160,7 +173,9 @@ export default function Menu() {
                                     style={{ marginTop: "16px" }}
                                 >
                                     <IconButton
-                                        onClick={() => handleQuantityChange("-")}
+                                        onClick={() =>
+                                            handleQuantityChange("-")
+                                        }
                                     >
                                         <RemoveIcon />
                                     </IconButton>
@@ -173,7 +188,9 @@ export default function Menu() {
                                         sx={{ width: "60px", mx: 2 }}
                                     />
                                     <IconButton
-                                        onClick={() => handleQuantityChange("+")}
+                                        onClick={() =>
+                                            handleQuantityChange("+")
+                                        }
                                     >
                                         <AddIcon />
                                     </IconButton>
@@ -196,7 +213,6 @@ export default function Menu() {
                     </Box>
                 </Modal>
             )}
-
             {/* Modal for Sign Up/Login */}
             <Modal
                 open={open}

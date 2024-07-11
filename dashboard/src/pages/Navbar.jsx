@@ -3,13 +3,25 @@ import "./Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Badge } from "@mui/material";
 
-export default function Navbar() {
+export default function Navbar({ cartItemCount }) {
     const [user, setUser] = useState(null);
+    const [cartCount, setCartCount] = useState(0);
 
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem("user"));
         setUser(storedUser);
+
+        if (storedUser) {
+            const storedCartItems =
+                JSON.parse(localStorage.getItem("cartItems")) || [];
+            const count = storedCartItems.reduce(
+                (total, item) => total + item.quantity,
+                0
+            );
+            setCartCount(count);
+        }
     }, []);
 
     const isAdminOrOwner =
@@ -26,6 +38,7 @@ export default function Navbar() {
         console.log("Logging out...");
         localStorage.removeItem("user");
         setUser(null);
+        setCartCount(0);
         navigate("/home");
     };
 
@@ -58,26 +71,27 @@ export default function Navbar() {
                         <>
                             {isAdminOrOwner ? (
                                 <>
-                                    {" "}
                                     <Link to="/home">Home</Link>
                                     <Link to="/menu">Menu</Link>
                                     <Link to="/manageuser">Manage User</Link>
                                     <Link to="/manageproduct">
                                         Manage Product
                                     </Link>
-                                    <Link to="/cart" onClick={handleCartClick}>
-                                        <ShoppingCartIcon />
-                                    </Link>
                                 </>
                             ) : (
                                 <>
                                     <Link to="/home">Home</Link>
                                     <Link to="/menu">Menu</Link>
-                                    <Link to="/cart" onClick={handleCartClick}>
-                                        <ShoppingCartIcon />
-                                    </Link>
                                 </>
                             )}
+                            <Link to="/cart" onClick={handleCartClick}>
+                                <Badge
+                                    badgeContent={cartItemCount}
+                                    color="error"
+                                >
+                                    <ShoppingCartIcon />
+                                </Badge>
+                            </Link>
                             <a href="#" onClick={handleLogout}>
                                 Logout
                             </a>
