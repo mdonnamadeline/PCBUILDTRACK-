@@ -4,9 +4,10 @@
 }
 
 .page-content {
-    padding-top: 60px; 
+    padding-top: 60px;
     padding: 20px;
     flex-grow: 1;
+    padding-left: 250px;
 }
 
 .column-gap {
@@ -60,7 +61,7 @@
     margin: 0;
 }
 
-.hide-arrows[type=number] {
+.hide-arrows[type="number"] {
     -moz-appearance: textfield;
 }
 
@@ -68,7 +69,6 @@
     cursor: pointer;
 }
 
-/* Adjustments for responsiveness */
 @media (max-width: 768px) {
     .column-gap {
         flex-direction: column;

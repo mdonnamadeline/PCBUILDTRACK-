@@ -1,14 +1,19 @@
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
-.dashboard{
+.dashboard {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
-    height: 100vh; 
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.con{
-   padding: 1em;
+.con {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1em;
+    height: 100%;
+    width: 100%;
 }
