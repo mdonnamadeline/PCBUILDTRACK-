@@ -58,8 +58,16 @@ export default function Navbar() {
                         <>
                             {isAdminOrOwner ? (
                                 <>
+                                    {" "}
+                                    <Link to="/home">Home</Link>
+                                    <Link to="/menu">Menu</Link>
                                     <Link to="/manageuser">Manage User</Link>
-                                    <Link to="/manageproduct">Manage Product</Link>
+                                    <Link to="/manageproduct">
+                                        Manage Product
+                                    </Link>
+                                    <Link to="/cart" onClick={handleCartClick}>
+                                        <ShoppingCartIcon />
+                                    </Link>
                                 </>
                             ) : (
                                 <>
