@@ -1,4 +1,4 @@
-/* Payment.css */
+
 .payment-container {
     display: flex;
     flex-direction: column;
@@ -6,23 +6,23 @@
     justify-content: center;
     height: 100vh;
     padding: 20px;
-    background-color: #f0f0f0; /* Light background color for the page */
+    background-color: #f0f0f0; 
 }
 
 .payment-title {
     margin-bottom: 20px;
     font-size: 2rem;
     font-weight: 500;
-    color: #333; /* Dark text color */
+    color: #333; 
 }
 
 .payment-form {
-    background-color: #fff; /* White background for the form */
+    background-color: #fff; 
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for the form */
-    max-width: 400px; /* Max width for the form */
-    width: 100%; /* Full width for smaller screens */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+    max-width: 400px; 
+    width: 100%; 
 }
 
 .payment-form .MuiFormControl-root {
