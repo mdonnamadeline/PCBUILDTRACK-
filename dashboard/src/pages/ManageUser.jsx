@@ -21,7 +21,7 @@ import {
 import axios from "axios";
 import { Delete, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 import "./ManageUser.css";
 
 const style = {
@@ -179,7 +179,7 @@ export default function ManageUser() {
 
     return (
         <div className="manage-user">
-            <Navbar />
+            <Sidebar />
             <div className="content">
                 <div className="viewuser">
                     <div className="vucon">

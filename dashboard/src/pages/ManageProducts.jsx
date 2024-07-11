@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./ManageProducts.css";
-import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 import {
     Box,
     Button,
@@ -223,7 +223,7 @@ export default function ManageProducts() {
 
     return (
         <div className="page">
-            <Navbar />
+            <Sidebar />
             <div className="page-content">
                 <h1>Manage Products</h1>
 
