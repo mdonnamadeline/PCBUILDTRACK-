@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
     Box,
     Button,
@@ -12,7 +12,7 @@ import {
     Card,
     CardContent,
 } from "@mui/material";
-import Navbar from './Navbar'; 
+import Navbar from "./Navbar";
 import "./Payment.css";
 
 export default function Payment() {
@@ -44,26 +44,24 @@ export default function Payment() {
     return (
         <>
             <Navbar />
-            <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                height="100vh"
-                padding="20px"
-            >
-                <Typography variant="h4" gutterBottom>
+            <Box className="payment-container">
+                <Typography className="payment-title" variant="h4" gutterBottom>
                     Payment
                 </Typography>
-                <Card>
+                <Card className="payment-form">
                     <CardContent>
-                        <Typography variant="h6" gutterBottom>
-                            Total Amount: ₱{totalAmount}
-                        </Typography>
                         <FormControl component="fieldset">
                             <RadioGroup value={bank} onChange={handleBankChange}>
-                                <FormControlLabel value="Union Bank" control={<Radio />} label="Union Bank" />
-                                <FormControlLabel value="Metro Bank" control={<Radio />} label="Metro Bank" />
+                                <FormControlLabel
+                                    value="Union Bank"
+                                    control={<Radio />}
+                                    label="Union Bank"
+                                />
+                                <FormControlLabel
+                                    value="Metro Bank"
+                                    control={<Radio />}
+                                    label="Metro Bank"
+                                />
                             </RadioGroup>
                         </FormControl>
                         <TextField
@@ -74,11 +72,14 @@ export default function Payment() {
                             value={accountNumber}
                             onChange={(e) => setAccountNumber(e.target.value)}
                         />
+                        <Typography className="payment-summary-text" variant="h6" gutterBottom>
+                            Total Amount: ₱{totalAmount}
+                        </Typography>
                         <Button
+                            className="payment-button"
                             variant="contained"
                             color="primary"
                             onClick={handleCheckout}
-                            style={{ marginTop: "20px" }}
                         >
                             Checkout
                         </Button>
