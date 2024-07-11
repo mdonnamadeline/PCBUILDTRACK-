@@ -6,7 +6,6 @@ const fs = require("fs");
 const mongoose = require("mongoose");
 const User = require("./models/user.model");
 const Menu = require("./models/menu.model");
-// const DataModel = require("./models/data.model"); 
 const multer = require('multer');
 const path = require('path');
 
