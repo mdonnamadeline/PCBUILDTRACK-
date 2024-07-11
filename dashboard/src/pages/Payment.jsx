@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import Navbar from "./Navbar";
 import "./Payment.css";
+import axios from 'axios'
 
 export default function Payment() {
     const [bank, setBank] = useState("");
@@ -22,23 +23,35 @@ export default function Payment() {
     const location = useLocation();
     const cartItems = location.state?.cartItems || [];
     const totalAmount = location.state?.totalAmount || 0;
+    const [values, setValues] = useState({
+        debitAccount: "",
+        creditAccount: "000000015",
+        amount: totalAmount,
+    });
 
     useEffect(() => {
+        fetchCredentials()
+    }, []);
+
+    const fetchCredentials = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {
             navigate("/login");
-        }
-    }, [navigate]);
+        }     
+    }
 
     const handleBankChange = (event) => {
         setBank(event.target.value);
     };
 
-    const handleCheckout = () => {
-        console.log("Bank:", bank);
-        console.log("Account Number:", accountNumber);
-        console.log("Cart Items:", cartItems);
-        console.log("Total Amount:", totalAmount);
+    const handleCheckout = async() => {
+        const token = '$2b$10$utpivAVbFbcbRTDsX96OEuyk7a1iZJVjQSXglpwNtH6n72dReGD0i'
+        const res = await axios.post(`http://192.168.10.14:3001/api/unionbank/transfertransaction`, values, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+       if(res?.data?.success) return alert(res?.data?.message)
     };
 
     return (
@@ -51,7 +64,10 @@ export default function Payment() {
                 <Card className="payment-form">
                     <CardContent>
                         <FormControl component="fieldset">
-                            <RadioGroup value={bank} onChange={handleBankChange}>
+                            <RadioGroup
+                                value={bank}
+                                onChange={handleBankChange}
+                            >
                                 <FormControlLabel
                                     value="Union Bank"
                                     control={<Radio />}
@@ -69,10 +85,19 @@ export default function Payment() {
                             variant="outlined"
                             margin="normal"
                             label="Account Number"
-                            value={accountNumber}
-                            onChange={(e) => setAccountNumber(e.target.value)}
+                            value={values?.debitAccount}
+                            onChange={(e) => {
+                                setValues((prev) => ({
+                                    ...prev,
+                                    debitAccount: e.target.value,
+                                }));
+                            }}
                         />
-                        <Typography className="payment-summary-text" variant="h6" gutterBottom>
+                        <Typography
+                            className="payment-summary-text"
+                            variant="h6"
+                            gutterBottom
+                        >
                             Total Amount: ₱{totalAmount}
                         </Typography>
                         <Button
