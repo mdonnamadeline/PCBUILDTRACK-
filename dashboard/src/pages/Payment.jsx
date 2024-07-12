@@ -11,14 +11,20 @@ import {
     Typography,
     Card,
     CardContent,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
 } from "@mui/material";
 import Navbar from "./Navbar";
 import "./Payment.css";
-import axios from 'axios'
+import axios from "axios";
 
 export default function Payment() {
     const [bank, setBank] = useState("");
     const [accountNumber, setAccountNumber] = useState("");
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const cartItems = location.state?.cartItems || [];
@@ -30,28 +36,40 @@ export default function Payment() {
     });
 
     useEffect(() => {
-        fetchCredentials()
+        fetchCredentials();
     }, []);
 
     const fetchCredentials = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {
             navigate("/login");
-        }     
-    }
+        }
+    };
 
     const handleBankChange = (event) => {
         setBank(event.target.value);
     };
 
-    const handleCheckout = async() => {
-        const token = '$2b$10$utpivAVbFbcbRTDsX96OEuyk7a1iZJVjQSXglpwNtH6n72dReGD0i'
-        const res = await axios.post(`http://192.168.10.14:3001/api/unionbank/transfertransaction`, values, {
-            headers: {
-                Authorization: `Bearer ${token}`
+    const handleCheckout = async () => {
+        const token =
+            "$2b$10$utpivAVbFbcbRTDsX96OEuyk7a1iZJVjQSXglpwNtH6n72dReGD0i";
+        const res = await axios.post(
+            `http://192.168.10.14:3001/api/unionbank/transfertransaction`,
+            values,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             }
-        })
-       if(res?.data?.success) return alert(res?.data?.message)
+        );
+        if (res?.data?.success) {
+            setOpen(true);
+        }
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        navigate("/");
     };
 
     return (
@@ -110,6 +128,27 @@ export default function Payment() {
                         </Button>
                     </CardContent>
                 </Card>
+                <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle className="payment-success-title">
+                        Payment Successful
+                    </DialogTitle>
+                    <DialogContent className="center-content">
+                        <DialogContentText className="dialog-content-text">
+                            The payment of ₱{totalAmount} was successfully made
+                            using {bank}.
+                            <span className="thank-you-text">Thank You!</span>
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions className="center-content">
+                        <Button
+                            onClick={handleClose}
+                            color="primary"
+                            className="red-text-button"
+                        >
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Box>
         </>
     );

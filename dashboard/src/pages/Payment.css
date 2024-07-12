@@ -76,3 +76,30 @@
         font-size: 1rem;
     }
 }
+
+.payment-success-title {
+    background-color: #b71c1c;
+    color: white; 
+}
+
+
+.center-content {
+    text-align: center;
+    margin-top: 10px; 
+
+}
+
+.dialog-content-text {
+    font-size: 18px !important; 
+    margin-top: 30px !important; 
+}
+
+.thank-you-text {
+    margin-left: 5px;
+    font-size: 25px;
+    display: block; 
+}
+
+.red-text-button {
+    color: #b71c1c !important;
+}
