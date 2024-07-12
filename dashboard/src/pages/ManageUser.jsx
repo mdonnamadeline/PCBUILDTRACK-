@@ -188,6 +188,10 @@ export default function ManageUser() {
                             <Button
                                 variant="contained"
                                 onClick={() => handleOpen(null, false)}
+                                style={{
+                                    backgroundColor: "darkred",
+                                    color: "white",
+                                }}
                             >
                                 ADD USER
                             </Button>
@@ -235,6 +239,11 @@ export default function ManageUser() {
                                                     onClick={() =>
                                                         handleOpen(user, true)
                                                     }
+                                                    style={{
+                                                        backgroundColor:
+                                                            "darkred",
+                                                        color: "white",
+                                                    }}
                                                 >
                                                     EDIT
                                                 </Button>
@@ -368,7 +377,6 @@ export default function ManageUser() {
                                             <MenuItem value="Staff">
                                                 Staff
                                             </MenuItem>
-
                                         </Select>
                                     </FormControl>
                                     <Box mt={2}>
