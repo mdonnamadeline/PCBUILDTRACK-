@@ -101,4 +101,9 @@
     object-fit: cover;  
 }
 
-
+.searchBar {
+    position: fixed; 
+    top: 100px; 
+    left: 350px; 
+    width: 250px; 
+  }

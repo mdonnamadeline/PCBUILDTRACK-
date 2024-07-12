@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 import {
     Button,
@@ -16,6 +15,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import Navbar from "./Navbar";
 import "./Menu.css";
 
 const modalStyle = {
@@ -40,6 +40,7 @@ export default function Menu() {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [cartItemCount, setCartItemCount] = useState(0); // New state for cart item count
+    const [searchQuery, setSearchQuery] = useState(""); // New state for search query
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -110,15 +111,34 @@ export default function Menu() {
         setOpen(false);
     };
 
+    const handleSearchChange = (e) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const filteredMenuItems = dataList.filter((menu) =>
+        `${menu.name} ${menu.description} ${menu.price}`
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="menu">
             <Navbar cartItemCount={cartItemCount} />{" "}
-            {/* Pass cart item count to Navbar */}
+            <div className="searchBar">
+                <TextField
+                    label="Search Menu"
+                    variant="outlined"
+                    fullWidth
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    sx={{ marginBottom: 2 }}
+                />
+            </div>
             <div className="menu-main">
                 <h1 className="menu-Title">MENU</h1>
                 <div className="menu-list">
-                    {dataList.length > 0 ? (
-                        dataList
+                    {filteredMenuItems.length > 0 ? (
+                        filteredMenuItems
                             .filter((menu) => !menu.disabled)
                             .map((menu) => (
                                 <ProductCard
@@ -296,7 +316,7 @@ function ProductCard({ menu, user, handleOpen }) {
                     }}
                     onClick={() => handleOpen(menu)}
                 >
-                    {user ? "Add to Order" : "Order Now"}
+                    {user ? "Add to Order" : "Login to Order"}
                 </Button>
             </CardContent>
         </Card>
