@@ -89,6 +89,17 @@ export default function ManageUser() {
             [name]: value,
         }));
     };
+    
+    useEffect(() => {
+        fetchCredentials();
+    }, []);
+
+    const fetchCredentials = async () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            navigate("/login");
+        }
+    };
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);

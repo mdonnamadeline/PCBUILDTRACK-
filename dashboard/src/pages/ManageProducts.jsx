@@ -22,6 +22,7 @@ import {
     TextField,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function ManageProducts() {
     const initialData = {
@@ -35,24 +36,36 @@ export default function ManageProducts() {
     const [currentData, setCurrentData] = useState(initialData);
     const [dataList, setDataList] = useState([]);
     const [refreshDataList, setRefreshDataList] = useState(false);
-
     const [search, setSearch] = useState("");
     const [filterSearch, setFilterSearch] = useState("");
-
     const [modalState, setModalState] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-
     const [imageUrl, setImageUrl] = useState("");
+
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
     useEffect(() => {
-        fetchData();    
+        fetchData();
     }, [refreshDataList]);
-    
+
+    useEffect(() => {
+        fetchCredentials();
+    }, []);
+
+    const fetchCredentials = async () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            navigate("/login");
+        }
+    };
+
     const fetchData = async () => {
         try {
-            const response = await axios.get(`${VITE_REACT_APP_API_HOST}/viewmenu`);
+            const response = await axios.get(
+                `${VITE_REACT_APP_API_HOST}/viewmenu`
+            );
             if (response.data && Array.isArray(response.data.data)) {
                 setDataList(response.data.data);
             } else {
@@ -162,7 +175,11 @@ export default function ManageProducts() {
 
     const openModal = (dataTile = initialData, isEdit = false) => {
         setCurrentData(dataTile);
-        setImageUrl(dataTile.image ? `${VITE_REACT_APP_API_HOST}/uploads/${dataTile.image}` : "");
+        setImageUrl(
+            dataTile.image
+                ? `${VITE_REACT_APP_API_HOST}/uploads/${dataTile.image}`
+                : ""
+        );
         setIsEditMode(isEdit);
         setModalState(true);
     };
@@ -204,20 +221,42 @@ export default function ManageProducts() {
         if (!search) return true;
         if (!filterSearch) {
             return (
-                (data.name && data.name.toLowerCase().includes(search.toLowerCase())) ||
-                (data.description && data.description.toLowerCase().includes(search.toLowerCase())) ||
-                (data.price && String(data.price).toLowerCase().includes(search.toLowerCase())) ||
-                (data.disabled !== undefined && (data.disabled ? "yes" : "no").includes(search.toLowerCase()))
+                (data.name &&
+                    data.name.toLowerCase().includes(search.toLowerCase())) ||
+                (data.description &&
+                    data.description
+                        .toLowerCase()
+                        .includes(search.toLowerCase())) ||
+                (data.price &&
+                    String(data.price)
+                        .toLowerCase()
+                        .includes(search.toLowerCase())) ||
+                (data.disabled !== undefined &&
+                    (data.disabled ? "yes" : "no").includes(
+                        search.toLowerCase()
+                    ))
             );
         }
         if (filterSearch === "Name")
-            return data.name && data.name.toLowerCase().includes(search.toLowerCase());
+            return (
+                data.name &&
+                data.name.toLowerCase().includes(search.toLowerCase())
+            );
         if (filterSearch === "Description")
-            return data.description && data.description.toLowerCase().includes(search.toLowerCase());
+            return (
+                data.description &&
+                data.description.toLowerCase().includes(search.toLowerCase())
+            );
         if (filterSearch === "Price")
-            return data.price && String(data.price).toLowerCase().includes(search.toLowerCase());
+            return (
+                data.price &&
+                String(data.price).toLowerCase().includes(search.toLowerCase())
+            );
         if (filterSearch === "Disabled")
-            return data.disabled !== undefined && (data.disabled ? "yes" : "no").includes(search.toLowerCase());
+            return (
+                data.disabled !== undefined &&
+                (data.disabled ? "yes" : "no").includes(search.toLowerCase())
+            );
         return false;
     });
 
