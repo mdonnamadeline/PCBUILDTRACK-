@@ -22,7 +22,7 @@ import {
     TextField,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 
 export default function ManageProducts() {
     const initialData = {
@@ -42,7 +42,7 @@ export default function ManageProducts() {
     const [isEditMode, setIsEditMode] = useState(false);
     const [imageUrl, setImageUrl] = useState("");
 
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate(); 
 
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
@@ -264,7 +264,7 @@ export default function ManageProducts() {
         <div className="page">
             <Sidebar />
             <div className="page-content">
-                <h1>Manage Products</h1>
+                <h1>Product </h1>
 
                 <div className="column-gap">
                     <div className="search-filter">
