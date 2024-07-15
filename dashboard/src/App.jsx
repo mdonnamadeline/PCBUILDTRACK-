@@ -11,6 +11,7 @@ import Sidebar from "./pages/Sidebar";
 import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
 import Location from "./pages/Location";
+import Audit from "./pages/Audit";
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment" element={<Payment />} />
                 <Route path="/location" element={<Location />} />
+                <Route path="/audit" element={<Audit/>} />
             </Routes>
         </BrowserRouter>
     );
