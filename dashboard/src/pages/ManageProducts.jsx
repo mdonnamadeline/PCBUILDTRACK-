@@ -22,7 +22,7 @@ import {
     TextField,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 export default function ManageProducts() {
     const initialData = {
@@ -31,6 +31,7 @@ export default function ManageProducts() {
         image: "",
         price: "",
         disabled: false,
+        quantity: "",
     };
 
     const [currentData, setCurrentData] = useState(initialData);
@@ -42,7 +43,7 @@ export default function ManageProducts() {
     const [isEditMode, setIsEditMode] = useState(false);
     const [imageUrl, setImageUrl] = useState("");
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
@@ -196,6 +197,14 @@ export default function ManageProducts() {
         });
     };
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setCurrentData({
+            ...currentData,
+            [name]: value,
+        });
+    };
+
     const handleSwitch = (e) => {
         setCurrentData({
             ...currentData,
@@ -316,6 +325,7 @@ export default function ManageProducts() {
                                 <TableCell>Name</TableCell>
                                 <TableCell>Description</TableCell>
                                 <TableCell>Image</TableCell>
+                                <TableCell>Stocks</TableCell>
                                 <TableCell>Price</TableCell>
                                 <TableCell>Disabled</TableCell>
                                 <TableCell>Edit</TableCell>
@@ -328,6 +338,7 @@ export default function ManageProducts() {
                                     <TableCell>{data.name}</TableCell>
                                     <TableCell>{data.description}</TableCell>
                                     <TableCell>{data.image}</TableCell>
+                                    <TableCell>{data.quantity}</TableCell>
                                     <TableCell>{data.price}</TableCell>
                                     <TableCell>
                                         {data.disabled ? "Yes" : "No"}
@@ -437,6 +448,14 @@ export default function ManageProducts() {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                            />
+
+                            <TextField
+                                label="Quantity"
+                                name="quantity"
+                                type="number"
+                                value={currentData.quantity || ""} 
+                                onChange={handleInputChange}
                             />
 
                             <TextField
