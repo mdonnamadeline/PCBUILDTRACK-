@@ -27,10 +27,10 @@ export default function Sidebar() {
                     MANAGE USER
                 </Link>
                 <Link to="/manageproduct" className="sidebar-item">
-                    MANAGE PRODUCT
+                    PRODUCT INVENTORY
                 </Link>
-                <Link to="/accounting" className="sidebar-item">
-                    INVENTORY
+                <Link to="/audit" className="sidebar-item">
+                   AUDIT TRAILS
                 </Link>
                 <Link to="/login" className="sidebar-item">
                     LOGOUT
