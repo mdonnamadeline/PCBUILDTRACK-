@@ -30,9 +30,6 @@ export default function Sidebar() {
                 <Link to="/manageproduct" className="sidebar-item">
                     PRODUCT INVENTORY
                 </Link>
-                <Link to="/audit" className="sidebar-item">
-                   AUDIT TRAILS
-                </Link>
                 <Link to="/login" className="sidebar-item">
                     LOGOUT
                 </Link>

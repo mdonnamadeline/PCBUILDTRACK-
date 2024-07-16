@@ -31,7 +31,6 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment" element={<Payment />} />
                 <Route path="/location" element={<Location />} />
-                <Route path="/audit" element={<Audit/>} />
             </Routes>
         </BrowserRouter>
     );
