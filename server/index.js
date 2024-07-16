@@ -198,33 +198,30 @@ app.get("/viewmenu", async (req, res) => {
 });
 
 // Update Menu
-app.put("/updatemenu/:id", upload.single("image"), async (req, res) => {
-    const incomingData = req.body;
-
-    if (req.file) {
-        incomingData.image = req.file.filename;
-    }
-
+// Update Menu
+app.put('/updatemenu/:id', upload.single("image"), async (req, res) => {
     try {
-        const dataObject = await Menu.findById(req.params.id);
-        if (!dataObject) {
-            return res.status(404).json({ message: "Data not found" });
+        const { id } = req.params;
+        const updateData = req.body;
+
+        if (req.file) {
+            updateData.image = req.file.filename;
         }
 
-        if (req.file && dataObject.image && typeof dataObject.image === "string") {
-            const imageUrl = `${window.location.origin}/uploads/${menuItem.image}`;            if (fs.existsSync(imagePath)) {
-                fs.unlinkSync(imagePath);
-            }
+        // Find and update the menu item
+        const result = await Menu.findByIdAndUpdate(id, updateData, { new: true });
+
+        if (!result) {
+            return res.status(404).json({ success: false, message: 'Menu item not found' });
         }
 
-        Object.assign(dataObject, incomingData);
-        await dataObject.save();
-        res.json({ success: true, message: "Data updated successfully!" });
+        res.json({ success: true, message: 'Menu item updated successfully', data: result });
     } catch (error) {
-        console.error("Error updating data:", error);
-        res.status(500).json({ status: "error", message: error.message });
+        console.error('Error updating menu:', error);
+        res.status(500).json({ success: false, message: 'Failed to update menu item' });
     }
 });
+
 
 // Delete Menu
 app.delete("/deletemenu/:id", async (req, res) => {
