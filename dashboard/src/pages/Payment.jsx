@@ -64,7 +64,13 @@ export default function Payment() {
         );
         if (res?.data?.success) {
             setOpen(true);
+            clearCart();
         }
+    };
+
+    const clearCart = () => {
+        localStorage.removeItem("cartItems");
+        localStorage.setItem("cartCount", 0);
     };
 
     const handleClose = () => {
