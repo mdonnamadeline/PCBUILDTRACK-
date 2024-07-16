@@ -7,8 +7,6 @@ import {
     CardHeader,
     Typography,
     Divider,
-    Grid,
-    Icon,
 } from "@mui/material";
 import { TrendingUp } from "@mui/icons-material";
 import { PieChart, Pie, Cell, Label, Tooltip } from "recharts";
@@ -26,121 +24,109 @@ const totalVisitors = chartData.reduce((acc, curr) => acc + curr.visitors, 0);
 
 export default function Dashboard() {
     return (
-        <Box className="dashboard" sx={{ display: "flex" }}>
+        <Box className="dashboard">
             <Sidebar />
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Box component="main" className="main-content">
                 <Typography variant="h4" component="h1" gutterBottom>
-                 Dashboard
+                    Dashboard
                 </Typography>
 
-                <Grid container spacing={3}>
-                      {/* Total Visitors Card */}
-                      <Grid item xs={12} sm={4}>
-                        <Card>
-                            <CardHeader title="Total Visitors" />
-                            <CardContent>
-                                <PieChart width={250} height={250}>
-                                    <Pie
-                                        data={chartData}
-                                        dataKey="visitors"
-                                        nameKey="browser"
-                                        innerRadius={60}
-                                        outerRadius={80}
-                                        paddingAngle={5}
-                                        strokeWidth={5}
-                                    >
-                                        {chartData.map((entry, index) => (
-                                            <Cell
-                                                key={`cell-${index}`}
-                                                fill={entry.fill}
-                                            />
-                                        ))}
-                                        <Label
-                                            value={totalVisitors.toLocaleString()}
-                                            position="center"
-                                            style={{
-                                                fontSize: "24px",
-                                                fontWeight: "bold",
-                                            }}
-                                        />
-                                        <Label
-                                            value="Visitors"
-                                            position="centerBottom"
-                                            style={{
-                                                fontSize: "14px",
-                                                color: "#888",
-                                            }}
-                                        />
-                                    </Pie>
-                                    <Tooltip />
-                                </PieChart>
-                            </CardContent>
-                            <Divider />
-                            <CardContent
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                    align="center"
+                <div className="grid-container">
+                    {/* Total Visitors Card */}
+                    <Card className="card">
+                        <CardHeader title="Total Visitors" />
+                        <CardContent className="card-content">
+                            <PieChart width={250} height={250}>
+                                <Pie
+                                    data={chartData}
+                                    dataKey="visitors"
+                                    nameKey="browser"
+                                    innerRadius={60}
+                                    outerRadius={80}
+                                    paddingAngle={5}
+                                    strokeWidth={5}
                                 >
-                                    Trending up by 5.2% this month
-                                </Typography>
-                                <TrendingUp color="action" />
-                            </CardContent>
-                        </Card>
-                    </Grid>
+                                    {chartData.map((entry, index) => (
+                                        <Cell
+                                            key={`cell-${index}`}
+                                            fill={entry.fill}
+                                        />
+                                    ))}
+                                    <Label
+                                        value={totalVisitors.toLocaleString()}
+                                        position="center"
+                                        style={{
+                                            fontSize: "24px",
+                                            fontWeight: "bold",
+                                        }}
+                                    />
+                                    <Label
+                                        value="Visitors"
+                                        position="centerBottom"
+                                        style={{
+                                            fontSize: "14px",
+                                            color: "#888",
+                                        }}
+                                    />
+                                </Pie>
+                                <Tooltip />
+                            </PieChart>
+                        </CardContent>
+                        <Divider />
+                        <CardContent className="card-content">
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                align="center"
+                            >
+                                Trending up by 5.2% this month
+                            </Typography>
+                            <TrendingUp color="action" />
+                        </CardContent>
+                    </Card>
 
                     {/* Total Orders Card */}
-                    <Grid item xs={12} sm={4}>
-                        <Card>
-                            <CardHeader title="Total Orders" />
-                            <CardContent>
-                                <Typography
-                                    variant="h5"
-                                    component="div"
-                                    align="center"
-                                >
-                                    504
-                                </Typography>
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                    align="center"
-                                >
-                                    Total number of orders
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
+                    <Card className="card">
+                        <CardHeader title="Total Orders" />
+                        <CardContent className="card-content">
+                            <Typography
+                                variant="h5"
+                                component="div"
+                                align="center"
+                            >
+                                504
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                align="center"
+                            >
+                                Total number of orders
+                            </Typography>
+                        </CardContent>
+                    </Card>
 
                     {/* Total Sales Card */}
-                    <Grid item xs={12} sm={4}>
-                        <Card>
-                            <CardHeader title="Total Sales" />
-                            <CardContent>
-                                <Typography
-                                    variant="h5"
-                                    component="div"
-                                    align="center"
-                                >
-                                    $5678.90
-                                </Typography>
-                                <Typography
-                                    variant="body2"
-                                    color="text.secondary"
-                                    align="center"
-                                >
-                                    Total sales revenue
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid>
+                    <Card className="card">
+                        <CardHeader title="Total Sales" />
+                        <CardContent className="card-content">
+                            <Typography
+                                variant="h5"
+                                component="div"
+                                align="center"
+                            >
+                                $5678.90
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                align="center"
+                            >
+                                Total sales revenue
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                </div>
             </Box>
         </Box>
     );

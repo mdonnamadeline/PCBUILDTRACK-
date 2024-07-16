@@ -1,19 +1,61 @@
-body {
-    font-family: "Poppins", sans-serif;
-}
 
 .dashboard {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+    position: relative;
+  }
 
-.con {
+  .dashboard .main-content {
+    margin-left: 350px; 
+    padding: 1rem;
+    width: calc(100% - 350px); 
+    transition: margin-left 0.3s ease; 
+  }
+  
+  
+  .dashboard .main-content h1 {
+    margin-bottom: 2rem; 
+    text-align: center;
+  }
+  
+
+  .dashboard .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    align-items: start; 
+  }
+  
+  
+  .dashboard .card {
+    max-width: 100%;
+    width: 100%; 
+  }
+  
+  
+  .dashboard .card-content {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    padding: 1em;
-    height: 100%;
-    width: 100%;
-}
+  }
+  
+
+  .dashboard .recharts-tooltip-wrapper {
+    font-size: 12px;
+  }
+  
+  @media (max-width: 1200px) {
+    .dashboard .grid-container {
+      grid-template-columns: repeat(2, 1fr); 
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .dashboard .grid-container {
+      grid-template-columns: 1fr; 
+    }
+    .dashboard .main-content {
+      margin-left: 0; 
+      width: 100%; 
+    }
+  }
+  

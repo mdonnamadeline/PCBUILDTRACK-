@@ -2,11 +2,10 @@ body {
   margin: 0;
   font-family: "Unica One", sans-serif;
   font-size: larger;
-  /* background-image: "../images/KFC.jpg"; */
 }
 
 .loginForm {
-  background: #ffffff84;
+  background: #ffffffe0;
   display: flex;
   flex-direction: column;
   justify-content: center;

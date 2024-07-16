@@ -36,7 +36,6 @@ export default function Login() {
             const result = response.data;
             console.log(result);
             if (result.success) {
-                // Clear the previous user's cart and set new user data
                 localStorage.removeItem("cartItems");
                 localStorage.setItem("user", JSON.stringify(result.user));
               
