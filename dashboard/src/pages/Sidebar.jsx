@@ -4,6 +4,7 @@ import "./Sidebar.css";
 import logo from "../images/logo.png";
 
 export default function Sidebar() {
+
     const handleHome = () => {
         navigate("/home");
     };

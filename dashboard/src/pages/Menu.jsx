@@ -39,15 +39,15 @@ export default function Menu() {
     const [openAddToOrder, setOpenAddToOrder] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [cartItemCount, setCartItemCount] = useState(0); // New state for cart item count
-    const [searchQuery, setSearchQuery] = useState(""); // New state for search query
+    const [cartItemCount, setCartItemCount] = useState(0); 
+    const [searchQuery, setSearchQuery] = useState(""); 
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchData();
         const storedUser = JSON.parse(localStorage.getItem("user"));
         setUser(storedUser);
-        updateCartItemCount(); // Update cart item count on component mount
+        updateCartItemCount(); 
     }, []);
 
     const fetchData = async () => {
@@ -63,7 +63,7 @@ export default function Menu() {
 
     const updateCartItemCount = () => {
         const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-        setCartItemCount(cartItems.length); // Update cart item count based on local storage
+        setCartItemCount(cartItems.length); 
     };
 
     const handleOpenAddToOrder = (product) => {
@@ -72,7 +72,7 @@ export default function Menu() {
             setQuantity(1);
             setOpenAddToOrder(true);
         } else {
-            setOpen(true); // Open the sign up/login modal
+            setOpen(true); 
         }
     };
 
@@ -87,26 +87,41 @@ export default function Menu() {
         );
     };
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         if (user) {
-            const cartItems =
-                JSON.parse(localStorage.getItem("cartItems")) || [];
+            const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
             const newItem = {
                 ...selectedProduct,
                 quantity,
                 addedDate: new Date().toLocaleString(),
             };
-            const updatedCartItems = [...cartItems, newItem];
-            localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-            updateCartItemCount(); // Update cart item count after adding to cart
-
-            alert("Item added to cart!");
-            handleCloseAddToOrder();
+    
+            try {
+                console.log('Updating stock with:', {
+                    productId: selectedProduct._id,
+                    quantity: quantity,
+                });
+    
+                await axios.post(`${VITE_REACT_APP_API_HOST}/update-stock`, {
+                    productId: selectedProduct._id,
+                    quantity: quantity,
+                });
+    
+                const updatedCartItems = [...cartItems, newItem];
+                localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+                updateCartItemCount();
+    
+                alert("Item added to cart!");
+                handleCloseAddToOrder();
+            } catch (error) {
+                console.error("Error updating stock quantity:", error);
+                alert("There was an error adding the item to your cart.");
+            }
         } else {
             setOpen(true);
         }
     };
-
+    
     const handleClose = () => {
         setOpen(false);
     };
