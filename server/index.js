@@ -198,7 +198,6 @@ app.get("/viewmenu", async (req, res) => {
 });
 
 // Update Menu
-// Update Menu
 app.put('/updatemenu/:id', upload.single("image"), async (req, res) => {
     try {
         const { id } = req.params;
@@ -245,3 +244,29 @@ app.delete("/deletemenu/:id", async (req, res) => {
         res.status(500).json({ status: "error", message: error.message });
     }
 });
+
+//deduction of the product
+app.post('/update-stock', async (req, res) => {
+    const { productId, quantity } = req.body;
+
+    try {
+        const menuItem = await Menu.findById(productId);
+
+        if (!menuItem) {
+            return res.status(404).send('Product not found');
+        }
+
+        menuItem.quantity -= quantity;
+
+        if (menuItem.quantity < 0) {
+            return res.status(400).send('Insufficient stock');
+        }
+
+        await menuItem.save();
+        res.status(200).send('Stock updated successfully');
+    } catch (error) {
+        console.error('Error updating stock:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
