@@ -39,7 +39,6 @@ export default function Cart() {
     }, [navigate]);
 
     useEffect(() => {
-        // Update cart count in localStorage
         const cartCount = cartItems.reduce(
             (total, item) => total + item.quantity,
             0
