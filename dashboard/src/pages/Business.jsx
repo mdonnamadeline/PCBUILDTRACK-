@@ -1,24 +1,26 @@
 import React from 'react';
 import { Card, Grid } from "@mui/material";
 import Sidebar from "./Sidebar";
-import CAFE from "../logo/CafeReyes.png";
+import Cafe from "../logo/CafeReyes.png";
+import Ohmart from "../logo/Ohmart.png";
+import savemore from "../logo/savemore.png";
 import './Business.css';
 
 const data = [
   {
     id: 1,
     link: "http://192.168.10.18:3000",
-    imageUrl: CAFE,
+    imageUrl: Cafe,
   },
   {
     id: 2,
     link: "http://192.168.10.21",
-    imageUrl: CAFE,
+    imageUrl: Ohmart,
   },
   {
     id: 3,
     link: "https://192.168.10.25",
-    imageUrl: CAFE,
+    imageUrl: savemore,
   },
 ];
 
@@ -27,10 +29,13 @@ export default function Business() {
     <div className="flex-container">
       <Sidebar className="sidebar" />
       <div className="main-content">
-        <Grid container spacing={2}>
+        <div className="head-con">
+          YOU BILI DITO
+        </div>
+        <Grid container spacing={2} className="cards-container">
           {data.map((item) => (
             <Grid item xs={12} sm={6} md={4} lg={2.4} key={item.id}>
-              <Card>
+              <Card className="business-card">
                 <a href={item.link} target="_blank" rel="noopener noreferrer">
                   <img src={item.imageUrl} alt={`Item ${item.id}`} />
                 </a>
