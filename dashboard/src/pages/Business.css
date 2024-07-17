@@ -1,0 +1,29 @@
+/* Business.css */
+
+/* Flex container to hold the sidebar and main content */
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    background-color: #f5f5f5; /* Background color of the page */
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+  }
+  
+  /* Card styling */
+  .MuiCard-root {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  
