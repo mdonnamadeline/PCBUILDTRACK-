@@ -11,6 +11,7 @@ import Sidebar from "./pages/Sidebar";
 import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
 import Location from "./pages/Location";
+import Business from "./pages/Business";
 
 function App() {
     return (
@@ -29,6 +30,7 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment" element={<Payment />} />
                 <Route path="/location" element={<Location />} />
+                <Route path="/businesstobusiness" element={<Business />} />
             </Routes>
         </BrowserRouter>
     );

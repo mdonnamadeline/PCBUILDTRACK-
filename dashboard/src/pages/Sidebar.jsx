@@ -30,6 +30,9 @@ export default function Sidebar() {
                 <Link to="/manageproduct" className="sidebar-item">
                     PRODUCT INVENTORY
                 </Link>
+                <Link to="/businesstobusiness" className="sidebar-item">
+                    YOU BILI DITO
+                </Link>
                 <Link to="/login" className="sidebar-item">
                     LOGOUT
                 </Link>
