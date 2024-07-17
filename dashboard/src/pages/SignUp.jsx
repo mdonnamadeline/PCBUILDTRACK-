@@ -41,7 +41,6 @@ export default function SignUp() {
             const result = response.data;
 
             if (result.success) {
-                // Clear the cart and user data, and redirect to the homepage
                 localStorage.removeItem("cartItems");
                 localStorage.removeItem("user");
                 navigate("/");
@@ -54,7 +53,6 @@ export default function SignUp() {
         }
     };
 
-    // DISPLAY
     return (
         <div className="SignUpContainer">
             <div className="SignUpMain">
