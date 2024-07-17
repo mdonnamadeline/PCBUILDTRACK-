@@ -331,7 +331,7 @@ function ProductCard({ menu, user, handleOpen }) {
                     }}
                     onClick={() => handleOpen(menu)}
                 >
-                    {user ? "Add to Order" : "Login to Order"}
+                    {user ? "Add to Order" : "Order Now"}
                 </Button>
             </CardContent>
         </Card>
