@@ -4,7 +4,6 @@ import "./Sidebar.css";
 import logo from "../images/logo.png";
 
 export default function Sidebar() {
-
     const handleHome = () => {
         navigate("/home");
     };
@@ -32,6 +31,9 @@ export default function Sidebar() {
                 </Link>
                 <Link to="/businesstobusiness" className="sidebar-item">
                     YOU BILI DITO
+                </Link>
+                <Link to="/reports" className="sidebar-item">
+                    REPORTS
                 </Link>
                 <Link to="/login" className="sidebar-item">
                     LOGOUT

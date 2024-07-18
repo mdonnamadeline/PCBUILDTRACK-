@@ -10,8 +10,8 @@ import ManageProducts from "./pages/ManageProducts";
 import Sidebar from "./pages/Sidebar";
 import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
-import Location from "./pages/Location";
 import Business from "./pages/Business";
+import Reports from "./pages/Reports";
 
 function App() {
     return (
@@ -29,8 +29,8 @@ function App() {
                 <Route path="/manageproduct" element={<ManageProducts />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/payment" element={<Payment />} />
-                <Route path="/location" element={<Location />} />
                 <Route path="/businesstobusiness" element={<Business />} />
+                <Route path="/reports" element={<Reports />} />
             </Routes>
         </BrowserRouter>
     );
