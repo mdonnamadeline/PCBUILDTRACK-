@@ -95,6 +95,12 @@ export default function Menu() {
                 quantity,
                 addedDate: new Date().toLocaleString(),
             };
+
+            //new:check stock availability
+            if (newItem.quantity > selectedProduct.quantity) {
+                alert("Insufficient stock! Only " + selectedProduct.quantity + "items available.");
+                return;
+            }
     
             try {
                 console.log('Updating stock with:', {
@@ -320,19 +326,34 @@ function ProductCard({ menu, user, handleOpen }) {
                 >
                     {menu.description}
                 </Typography>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    style={{
-                        marginTop: "10px",
-                        width: "300px",
-                        color: "white",
-                        backgroundColor: "red",
-                    }}
-                    onClick={() => handleOpen(menu)}
-                >
-                    {user ? "Add to Order" : "Order Now"}
-                </Button>
+                {menu.quantity > 0 ? (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{
+                            marginTop: "10px",
+                            width: "300px",
+                            color: "white",
+                            backgroundColor: "red",
+                        }}
+                        onClick={() => handleOpen(menu)}
+                    >
+                        {user ? "Add to Order" : "Order Now"}
+                    </Button>
+                ) : (
+                    <Button
+                        variant="contained"
+                        disabled
+                        style={{
+                            marginTop: "10px",
+                            width: "300px",
+                            color: "white",
+                            backgroundColor: "grey",
+                        }}
+                    >
+                        Not Available
+                    </Button>
+                )}
             </CardContent>
         </Card>
     );
