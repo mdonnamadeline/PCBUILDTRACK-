@@ -35,9 +35,17 @@ exports.viewMenu = async (req, res) => {
 exports.updateMenu = async (req, res) => {
     try {
         const { id } = req.params;
+        const oldData = await Menu.findById(id);
         const updateData = req.body;
 
         if (req.file) {
+            if (oldData.image) {
+                try {
+                    await deleteImage(oldData.image);
+                } catch (err) {
+                    console.error("Error deleting old image:", err);
+                }
+            }
             updateData.image = req.file.filename;
         }
 
