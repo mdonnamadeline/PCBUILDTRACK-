@@ -19,7 +19,7 @@ const data = [
   },
   {
     id: 3,
-    link: "https://192.168.10.25",
+    link: "http://192.168.10.25",
     imageUrl: savemore,
   },
 ];
