@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
+const collectionName = "users";
+
+const dataModel = new mongoose.Schema({
   firstname: { type: String, required: true },
   lastname: { type: String, required: true },
   middlename: { type: String },
@@ -9,6 +11,4 @@ const userSchema = new mongoose.Schema({
   role: { type: String, default: 'Customer' }
 });
 
-const User = mongoose.model("User", userSchema);
-
-module.exports = User;
+module.exports = mongoose.model("User", dataModel);
