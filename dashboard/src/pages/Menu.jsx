@@ -108,7 +108,7 @@ export default function Menu() {
                     quantity: quantity,
                 });
     
-                await axios.post(`${VITE_REACT_APP_API_HOST}/api/menu/update-stock`, {
+                await axios.put(`${VITE_REACT_APP_API_HOST}/api/menu/update-stock`, {
                     productId: selectedProduct._id,
                     quantity: quantity,
                 });
