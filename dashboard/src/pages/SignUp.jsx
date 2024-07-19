@@ -103,9 +103,7 @@ export default function SignUp() {
                         variant="outlined"
                         value={user.email}
                         onChange={handleChange}
-                        inputProps={{
-                            pattern: "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$",
-                        }}
+                        type="email"
                     />
                     <TextField
                         id="password"
