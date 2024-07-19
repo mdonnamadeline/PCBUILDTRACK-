@@ -35,7 +35,7 @@ export default function SignUp() {
         e.preventDefault();
         try {
             const response = await axios.post(
-                `${VITE_REACT_APP_API_HOST}/signup`,
+                `${VITE_REACT_APP_API_HOST}/api/users/signup`,
                 user
             );
             const result = response.data;

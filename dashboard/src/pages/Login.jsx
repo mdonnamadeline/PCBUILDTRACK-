@@ -27,7 +27,7 @@ export default function Login() {
         e.preventDefault();
         try {
             const response = await axios.post(
-                `${VITE_REACT_APP_API_HOST}/signin`,
+                `${VITE_REACT_APP_API_HOST}/api/users/signin`,
                 user
             );
     

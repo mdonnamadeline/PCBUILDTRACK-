@@ -56,7 +56,7 @@ export default function Reports() {
         const fetchTransactions = async () => {
             try {
                 const response = await axios.get(
-                    `${VITE_REACT_APP_API_HOST}/get-transactions`
+                    `${VITE_REACT_APP_API_HOST}/api/reports`
                 );
                 setTransactions(response.data);
             } catch (error) {
@@ -90,7 +90,7 @@ export default function Reports() {
     const handleDelete = async () => {
         try {
             const res = await axios.delete(
-                `${VITE_REACT_APP_API_HOST}/delete-transaction/${selectedTransactionId}`
+                `${VITE_REACT_APP_API_HOST}/api/reports/${selectedTransactionId}`
             );
             if (res.data.success) {
                 alert(res.data.message);

@@ -53,7 +53,7 @@ export default function Menu() {
     const fetchData = async () => {
         try {
             const response = await axios.get(
-                `${VITE_REACT_APP_API_HOST}/viewmenu`
+                `${VITE_REACT_APP_API_HOST}/api/menu`
             );
             setDataList(response.data.data || []);
         } catch (error) {
@@ -108,7 +108,7 @@ export default function Menu() {
                     quantity: quantity,
                 });
     
-                await axios.post(`${VITE_REACT_APP_API_HOST}/update-stock`, {
+                await axios.post(`${VITE_REACT_APP_API_HOST}/api/menu/update-stock`, {
                     productId: selectedProduct._id,
                     quantity: quantity,
                 });

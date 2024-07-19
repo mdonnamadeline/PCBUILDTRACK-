@@ -73,7 +73,7 @@ export default function ManageUser() {
 
     useEffect(() => {
         axios
-            .get(`${VITE_REACT_APP_API_HOST}/viewusers`)
+            .get(`${VITE_REACT_APP_API_HOST}/api/users`)
             .then((response) => {
                 setUsers(response.data);
             })
@@ -118,7 +118,7 @@ export default function ManageUser() {
 
         try {
             const response = await axios.put(
-                `${VITE_REACT_APP_API_HOST}/updateuser/${currentUser._id}`,
+                `${VITE_REACT_APP_API_HOST}/api/users/${currentUser._id}`,
                 currentUser
             );
 
@@ -154,7 +154,7 @@ export default function ManageUser() {
 
         try {
             await axios.delete(
-                `${VITE_REACT_APP_API_HOST}/deleteuser/${userToDelete}`
+                `${VITE_REACT_APP_API_HOST}/api/users/${userToDelete}`
             );
             setUsers((prevUsers) =>
                 prevUsers.filter((user) => user._id !== userToDelete)
@@ -171,7 +171,7 @@ export default function ManageUser() {
 
         try {
             const response = await axios.post(
-                `${VITE_REACT_APP_API_HOST}/adduser`,
+                `${VITE_REACT_APP_API_HOST}/api/users`,
                 currentUser
             );
 
