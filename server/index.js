@@ -6,6 +6,7 @@ const fs = require("fs");
 const mongoose = require("mongoose");
 const User = require("./models/user.model");
 const Menu = require("./models/menu.model");
+const Report = require("./models/report.model");
 const multer = require('multer');
 const path = require('path');
 
@@ -273,3 +274,54 @@ app.post('/update-stock', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+//MARK:REPORTS
+// Save transaction route
+app.post('/save-transaction', async (req, res) => {
+    try {
+      const { productName, quantity, price, date, bank } = req.body;
+      const newTransaction = new Report({
+        productName,
+        quantity,
+        price,
+        date,
+        bank
+      });
+  
+      await newTransaction.save();
+      res.status(200).json({ status: 'ok', message: 'Transaction saved successfully' });
+    } catch (error) {
+      console.error('Error saving transaction:', error);
+      res.status(500).json({ status: 'error', message: 'Failed to save transaction' });
+    }
+  });
+  
+  // Get transactions route
+  app.get('/get-transactions', async (req, res) => {
+    try {
+      const transactions = await Report.find();
+      res.json(transactions);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      res.status(500).json({ status: 'error', message: 'Failed to fetch transactions' });
+    }
+  });
+
+  // Delete transaction route
+app.delete('/delete-transaction/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await Report.findByIdAndDelete(id);
+
+        if (result) {
+            res.status(200).json({ success: true, message: 'Transaction deleted successfully' });
+        } else {
+            res.status(404).json({ success: false, error: 'Transaction not found' });
+        }
+    } catch (error) {
+        console.error('Error deleting transaction:', error);
+        res.status(500).json({ success: false, error: 'Failed to delete transaction' });
+    }
+});
+
+  

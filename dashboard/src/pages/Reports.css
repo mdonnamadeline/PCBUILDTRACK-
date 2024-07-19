@@ -1,0 +1,28 @@
+.container {
+    margin-top: 8rem;
+}
+
+.total-sales {
+    margin-top: 1rem;
+    text-align: right;
+}
+
+.error-message {
+    color: red;
+}
+
+.table-container {
+    margin-top: 2rem;
+}
+
+.delete-icon {
+    cursor: pointer;
+}
+
+.dialog-title {
+    font-size: 1.5rem;
+}
+
+.dialog-content-text {
+    font-size: 1rem;
+}

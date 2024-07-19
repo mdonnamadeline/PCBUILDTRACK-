@@ -35,6 +35,8 @@ export default function Payment() {
         amount: totalAmount,
     });
 
+    const { VITE_REACT_APP_API_HOST } = import.meta.env;
+
     useEffect(() => {
         fetchCredentials();
     }, []);
@@ -52,22 +54,51 @@ export default function Payment() {
 
     const handleCheckout = async () => {
         const token =
-            "$2b$10$utpivAVbFbcbRTDsX96OEuyk7a1iZJVjQSXglpwNtH6n72dReGD0i";
-        const res = await axios.post(
+          "$2b$10$utpivAVbFbcbRTDsX96OEuyk7a1iZJVjQSXglpwNtH6n72dReGD0i";
+      
+        // Prepare transaction data
+        const transactionData = {
+          productName: 'Sample Product', 
+          quantity: cartItems.length, 
+          price: totalAmount, 
+          date: new Date().toISOString(),
+          bank: bank 
+        };
+      
+        // Save transaction
+        try {
+          await axios.post(`${VITE_REACT_APP_API_HOST}/save-transaction`, transactionData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        } catch (error) {
+          console.error('Error saving transaction:', error);
+          return; // Stop further execution if there's an error
+        }
+      
+        // Handle payment processing
+        try {
+          const res = await axios.post(
             `http://192.168.10.14:3001/api/unionbank/transfertransaction`,
             values,
             {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
             }
-        );
-        if (res?.data?.success) {
+          );
+      
+          if (res?.data?.success) {
             setOpen(true);
             clearCart();
+          }
+        } catch (error) {
+          console.error('Error during payment:', error);
         }
-    };
-
+      };
+      
+      
     const clearCart = () => {
         localStorage.removeItem("cartItems");
         localStorage.setItem("cartCount", 0);
