@@ -11,12 +11,14 @@ export default function Sidebar() {
     return (
         <div className="sidebar">
             <div className="sidebar-items">
+                <Link to="/dashboard">
                 <img
                     src={logo}
                     alt="Logo"
                     style={{ marginRight: "auto" }}
                     onClick={handleHome}
                 />
+                </Link>
                 <Link to="/home" className="sidebar-item">
                     Home
                 </Link>
