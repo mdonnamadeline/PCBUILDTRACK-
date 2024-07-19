@@ -1,5 +1,18 @@
 const User = require("../models/user.model");
 
+exports.addUser = async (req, res) => {
+    const incomingData = req.body;
+
+    try {
+        const dataObject = new User(incomingData);
+        await dataObject.save();
+        res.json({ success: true, message: "User added successfully!" });
+    } catch (error) {
+        console.error("Error adding User:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
 exports.signup = async (req, res) => {
     const { firstname, lastname, middlename, email, password } = req.body;
 
@@ -47,19 +60,6 @@ exports.signin = async (req, res) => {
     } catch (error) {
         console.error("Error during sign-in:", error);
         res.status(500).json({ success: false, message: "Server error" });
-    }
-};
-
-exports.addUser = async (req, res) => {
-    const incomingData = req.body;
-
-    try {
-        const dataObject = new User(incomingData);
-        await dataObject.save();
-        res.json({ success: true, message: "User added successfully!" });
-    } catch (error) {
-        console.error("Error adding User:", error);
-        res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
