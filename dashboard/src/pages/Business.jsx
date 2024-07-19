@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 import Cafe from "../logo/CafeReyes.png";
 import Ohmart from "../logo/Ohmart.png";
 import savemore from "../logo/savemore.png";
-import './Business.css';
+import '..styles/Business.css';
 
 const data = [
   {

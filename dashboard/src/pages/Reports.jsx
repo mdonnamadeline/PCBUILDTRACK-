@@ -20,7 +20,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import Sidebar from "./Sidebar";
 import { styled } from "@mui/system";
-import "./Reports.css";
+import "../styles/Reports.css";
 
 const StyledTableCell = styled(TableCell)({
     fontWeight: "bold",

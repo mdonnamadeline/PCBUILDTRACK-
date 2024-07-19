@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from './Navbar';
 import Zinger from '../images/zinger.jpg'
 import Dasurv from '../images/dasurv.jpg'
-import './Home.css'
+import '../styles/Home.css'
 
 export default function Home() {
   return (

@@ -18,7 +18,7 @@ import {
     DialogTitle,
 } from "@mui/material";
 import Navbar from "./Navbar";
-import "./Payment.css";
+import "../styles/Payment.css";
 import axios from "axios";
 
 export default function Payment() {

@@ -3,7 +3,7 @@ import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./SignUp.css";
+import "../styles/SignUp.css";
 const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
 export default function SignUp() {

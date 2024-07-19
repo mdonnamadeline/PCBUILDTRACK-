@@ -22,7 +22,7 @@ import axios from "axios";
 import { Delete, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import "./ManageUser.css";
+import "../styles/ManageUser.css";
 
 const style = {
     position: "absolute",

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./ManageProducts.css";
+import "../styles/ManageProducts.css";
 import Sidebar from "./Sidebar";
 import {
     Box,
