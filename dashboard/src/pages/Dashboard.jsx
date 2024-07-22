@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { TrendingUp } from "@mui/icons-material";
 import { PieChart, Pie, Cell, Label, Tooltip } from "recharts";
-import "./Dashboard.css";
+import "../styles/Dashboard.css";
 
 const chartData = [
     { browser: "Orders", visitors: 275, fill: "#e21d48" },

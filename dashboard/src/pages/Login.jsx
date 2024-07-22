@@ -1,4 +1,4 @@
-import "./Login.css";
+import "../styles/Login.css";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -27,7 +27,7 @@ export default function Login() {
         e.preventDefault();
         try {
             const response = await axios.post(
-                `${VITE_REACT_APP_API_HOST}/signin`,
+                `${VITE_REACT_APP_API_HOST}/api/users/signin`,
                 user
             );
     
@@ -64,9 +64,7 @@ export default function Login() {
                     variant="outlined"
                     value={user.email}
                     onChange={handleChange}
-                    inputProps={{
-                        pattern: "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-                    }}
+                    type="email"
                 />
                 <TextField
                     id="password"

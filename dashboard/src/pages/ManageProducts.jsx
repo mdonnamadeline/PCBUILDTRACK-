@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./ManageProducts.css";
+import "../styles/ManageProducts.css";
 import Sidebar from "./Sidebar";
 import {
     Box,
@@ -65,7 +65,7 @@ export default function ManageProducts() {
     const fetchData = async () => {
         try {
             const response = await axios.get(
-                `${VITE_REACT_APP_API_HOST}/viewmenu`
+                `${VITE_REACT_APP_API_HOST}/api/menu`
             );
             if (response.data && Array.isArray(response.data.data)) {
                 setDataList(response.data.data);
@@ -87,7 +87,7 @@ export default function ManageProducts() {
 
         try {
             const response = await axios.post(
-                `${VITE_REACT_APP_API_HOST}/addmenu`,
+                `${VITE_REACT_APP_API_HOST}/api/menu`,
                 formData,
                 {
                     headers: {
@@ -122,7 +122,7 @@ export default function ManageProducts() {
 
         try {
             const response = await axios.put(
-                `${VITE_REACT_APP_API_HOST}/updatemenu/${currentData._id}`,
+                `${VITE_REACT_APP_API_HOST}/api/menu/${currentData._id}`,
                 formData,
                 {
                     headers: {
@@ -158,7 +158,7 @@ export default function ManageProducts() {
 
         try {
             const response = await axios.delete(
-                `${VITE_REACT_APP_API_HOST}/deletemenu/${data._id}`
+                `${VITE_REACT_APP_API_HOST}/api/menu/${data._id}`
             );
 
             const result = response.data;

@@ -16,8 +16,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import Navbar from './Navbar';
 import DeleteIcon from "@mui/icons-material/Delete";
-import "./Navbar.css";
-import "./Cart.css";
+import "../styles/Navbar.css";
+import "../styles/Cart.css";
 
 export default function Cart() {
     const [cartItems, setCartItems] = useState([]);

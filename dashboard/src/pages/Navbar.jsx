@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Navbar.css";
+import "../styles/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../images/logo.png";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";

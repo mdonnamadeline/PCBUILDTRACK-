@@ -3,7 +3,7 @@ import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./SignUp.css";
+import "../styles/SignUp.css";
 const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
 export default function SignUp() {
@@ -35,7 +35,7 @@ export default function SignUp() {
         e.preventDefault();
         try {
             const response = await axios.post(
-                `${VITE_REACT_APP_API_HOST}/signup`,
+                `${VITE_REACT_APP_API_HOST}/api/users/signup`,
                 user
             );
             const result = response.data;
@@ -103,9 +103,7 @@ export default function SignUp() {
                         variant="outlined"
                         value={user.email}
                         onChange={handleChange}
-                        inputProps={{
-                            pattern: "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$",
-                        }}
+                        type="email"
                     />
                     <TextField
                         id="password"

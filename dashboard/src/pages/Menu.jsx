@@ -16,7 +16,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import Navbar from "./Navbar";
-import "./Menu.css";
+import "../styles/Menu.css";
 
 const modalStyle = {
     position: "absolute",
@@ -53,7 +53,7 @@ export default function Menu() {
     const fetchData = async () => {
         try {
             const response = await axios.get(
-                `${VITE_REACT_APP_API_HOST}/viewmenu`
+                `${VITE_REACT_APP_API_HOST}/api/menu`
             );
             setDataList(response.data.data || []);
         } catch (error) {
@@ -108,7 +108,7 @@ export default function Menu() {
                     quantity: quantity,
                 });
     
-                await axios.post(`${VITE_REACT_APP_API_HOST}/update-stock`, {
+                await axios.put(`${VITE_REACT_APP_API_HOST}/api/menu/update-stock`, {
                     productId: selectedProduct._id,
                     quantity: quantity,
                 });
