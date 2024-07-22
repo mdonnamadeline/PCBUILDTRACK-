@@ -127,8 +127,3 @@ exports.updateStock = async (req, res) => {
     }
 };
 
-// app.post("/addmenu", upload.single("image"), async (req, res) => {
-// app.get("/viewmenu", async (req, res) => {
-// app.put("/updatemenu/:id", upload.single("image"), async (req, res) => {
-// app.delete("/deletemenu/:id", async (req, res) => {
-// app.post("/update-stock", async (req, res) => {

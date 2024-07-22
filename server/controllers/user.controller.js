@@ -119,9 +119,3 @@ exports.deleteUser = async (req, res) => {
     }
 };
 
-//app.post("/signup", async (req, res) => {
-//app.post("/signin", async (req, res) => {
-//app.post("/adduser", async (req, res) => {
-//app.get("/viewusers", async (req, res) => {
-//app.put("/updateuser/:id", async (req, res) => {
-//app.delete("/deleteuser/:id", async (req, res) => {

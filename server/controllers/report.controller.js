@@ -64,6 +64,4 @@ exports.deleteTransaction = async (req, res) => {
 };
 
 
-// app.post("/save-transaction", async (req, res) => {
-// app.get("/get-transactions", async (req, res) => {
-// app.delete("/delete-transaction/:id", async (req, res) => {
+
