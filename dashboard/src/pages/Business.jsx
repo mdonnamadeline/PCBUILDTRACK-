@@ -11,7 +11,7 @@ export default function Business() {
         const fetchProjects = async () => {
             try {
                 const projectsResponse = await axios.get(
-                    "http://192.168.10.18:1337/api/projects"
+                    "http://192.168.10.18:1337/api/projects/KFC"
                 );
                 setProjects(projectsResponse.data);
             } catch (error) {
