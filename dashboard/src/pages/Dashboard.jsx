@@ -13,16 +13,6 @@ import Sidebar from "./Sidebar";
 import "../styles/Dashboard.css";
 import axios from "axios";
 
-const chartData = [
-    { browser: "Orders", visitors: 275, fill: "#e21d48" },
-    { browser: "Sales", visitors: 200, fill: "#e9536f" },
-    { browser: "Sessions", visitors: 287, fill: "#f17e92" },
-    { browser: "Visitor", visitors: 173, fill: "#f7abb6" },
-    { browser: "Other", visitors: 190, fill: "#fbd5da" },
-];
-
-const totalVisitors = chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-
 export default function Dashboard() {
     const [totalSales, setTotalSales] = useState(0);
     const [totalOrders, setTotalOrders] = useState(0);
@@ -43,6 +33,13 @@ export default function Dashboard() {
             const orders = ordersResponse.data.totalOrders || 0;
             setTotalOrders(orders);
             localStorage.setItem("totalOrders", orders);
+
+            const quantityResponse = await axios.get(
+                `${import.meta.env.VITE_REACT_APP_API_HOST}/api/orders/quantity`
+            );
+            const quantity = quantityResponse.data.totalQuantity || 0;
+            setTotalQuantity(quantity);
+            localStorage.setItem("totalQuantity", quantity);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -63,7 +60,21 @@ export default function Dashboard() {
         if (storedQuantity) {
             setTotalQuantity(parseInt(storedQuantity, 10));
         }
+
+        fetchData();
     }, []);
+
+    const chartData = [
+        { name: "Orders", value: totalOrders, fill: "#d32f2f" },
+        { name: "Sales", value: totalSales, fill: "#e9536f" },
+        { name: "Total Quantity", value: totalQuantity, fill: "#ffa726" },
+        { name: "Other", value: 190, fill: "#fbd5da" },
+    ];
+
+    const totalVisitors = chartData.reduce(
+        (acc, curr) => acc + curr.value,
+        0
+    );
 
     return (
         <Box className="dashboard">
@@ -95,9 +106,30 @@ export default function Dashboard() {
                         </CardContent>
                     </Card>
 
-                    {/* Total Quantity Card */}
+                    {/* Total Orders Card */}
                     <Card className="card">
                         <CardHeader title="Total Orders" />
+                        <CardContent className="card-content">
+                            <Typography
+                                variant="h5"
+                                component="div"
+                                align="center"
+                            >
+                                {totalOrders}
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                align="center"
+                            >
+                                Total number of orders
+                            </Typography>
+                        </CardContent>
+                    </Card>
+
+                    {/* Total Quantity Card */}
+                    <Card className="card">
+                        <CardHeader title="Total Quantity" />
                         <CardContent className="card-content">
                             <Typography
                                 variant="h5"
@@ -111,20 +143,20 @@ export default function Dashboard() {
                                 color="text.secondary"
                                 align="center"
                             >
-                                Total quantity of orders
+                                Total quantity of items ordered
                             </Typography>
                         </CardContent>
                     </Card>
 
-                    {/* Other cards */}
+                    {/* Visitors Card */}
                     <Card className="card">
                         <CardHeader title="Total Visitors" />
                         <CardContent className="card-content">
                             <PieChart width={250} height={250}>
                                 <Pie
                                     data={chartData}
-                                    dataKey="visitors"
-                                    nameKey="browser"
+                                    dataKey="value"
+                                    nameKey="name"
                                     innerRadius={60}
                                     outerRadius={80}
                                     paddingAngle={5}
@@ -142,14 +174,6 @@ export default function Dashboard() {
                                         style={{
                                             fontSize: "24px",
                                             fontWeight: "bold",
-                                        }}
-                                    />
-                                    <Label
-                                        value="Visitors"
-                                        position="centerBottom"
-                                        style={{
-                                            fontSize: "14px",
-                                            color: "#888",
                                         }}
                                     />
                                 </Pie>
