@@ -26,34 +26,44 @@ const totalVisitors = chartData.reduce((acc, curr) => acc + curr.visitors, 0);
 export default function Dashboard() {
     const [totalSales, setTotalSales] = useState(0);
     const [totalOrders, setTotalOrders] = useState(0);
+    const [totalQuantity, setTotalQuantity] = useState(0);
 
     const fetchData = async () => {
         try {
-            const salesResponse = await axios.get(`${import.meta.env.VITE_REACT_APP_API_HOST}/api/sales/total`);
+            const salesResponse = await axios.get(
+                `${import.meta.env.VITE_REACT_APP_API_HOST}/api/sales/total`
+            );
             const sales = salesResponse.data.totalSales || 0;
             setTotalSales(sales);
-            localStorage.setItem("totalSales", sales); 
-    
-            const ordersResponse = await axios.get(`${import.meta.env.VITE_REACT_APP_API_HOST}/api/orders/total`);
+            localStorage.setItem("totalSales", sales);
+
+            const ordersResponse = await axios.get(
+                `${import.meta.env.VITE_REACT_APP_API_HOST}/api/orders/total`
+            );
             const orders = ordersResponse.data.totalOrders || 0;
             setTotalOrders(orders);
-            localStorage.setItem("totalOrders", orders); 
+            localStorage.setItem("totalOrders", orders);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
-    
+
     useEffect(() => {
         const storedSales = localStorage.getItem("totalSales");
         if (storedSales) {
             setTotalSales(parseFloat(storedSales));
         }
+
         const storedOrders = localStorage.getItem("totalOrders");
         if (storedOrders) {
             setTotalOrders(parseInt(storedOrders, 10));
         }
+
+        const storedQuantity = localStorage.getItem("totalQuantity");
+        if (storedQuantity) {
+            setTotalQuantity(parseInt(storedQuantity, 10));
+        }
     }, []);
-    
 
     return (
         <Box className="dashboard">
@@ -85,7 +95,7 @@ export default function Dashboard() {
                         </CardContent>
                     </Card>
 
-                    {/* Total Orders Card */}
+                    {/* Total Quantity Card */}
                     <Card className="card">
                         <CardHeader title="Total Orders" />
                         <CardContent className="card-content">
@@ -94,14 +104,14 @@ export default function Dashboard() {
                                 component="div"
                                 align="center"
                             >
-                                {totalOrders}
+                                {totalQuantity}
                             </Typography>
                             <Typography
                                 variant="body2"
                                 color="text.secondary"
                                 align="center"
                             >
-                                Total number of orders
+                                Total quantity of orders
                             </Typography>
                         </CardContent>
                     </Card>
