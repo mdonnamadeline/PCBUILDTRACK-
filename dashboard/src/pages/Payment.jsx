@@ -54,7 +54,7 @@ export default function Payment() {
 
     const getCustomerId = () => {
         const user = JSON.parse(localStorage.getItem("user"));
-        return user ? user._id : null; // Use _id as the customerId
+        return user ? user._id : null; 
     };
 
     const handleCheckout = async () => {
@@ -62,28 +62,27 @@ export default function Payment() {
         
         console.log(JSON.stringify(cartItems));
     
-        // Replace this with actual method to get customer ID
+    
         const customerId = getCustomerId(); 
     
         if (!customerId) {
             console.error("Customer ID is required");
-            return; // Stop further execution if customer ID is not available
+            return; 
         }
-        
-        // Extract product names from cartItems
+      
         const productNames = cartItems.map(item => item.name).join(', ');
         
-        // Prepare transaction data
+   
         const transactionData = {
             customerId,
-            productName: productNames, // Use actual product names
+            productName: productNames, 
             quantity: cartItems.length,
             price: totalAmount,
             date: new Date().toISOString(),
             bank: bank,
         };
         
-        // Save transaction
+       
         try {
             await axios.post(
                 `${VITE_REACT_APP_API_HOST}/api/reports`,
@@ -96,10 +95,10 @@ export default function Payment() {
             );
         } catch (error) {
             console.error("Error saving transaction:", error);
-            return; // Stop further execution if there's an error
+            return; 
         }
         
-        // Handle payment processing
+ 
         try {
             const res = await axios.post(
                 `http://192.168.10.14:3001/api/unionbank/transfertransaction`,
