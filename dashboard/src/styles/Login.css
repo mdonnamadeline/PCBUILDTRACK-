@@ -4,55 +4,134 @@ body {
   font-size: larger;
 }
 
-.loginForm {
-  background: #ffffffe0;
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('../images/friedChicken.png');
+  background-size: cover;
+  background-position: center;
+  padding: 10px; 
+}
+
+.loginContent {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 300px;
-  height: auto; 
-  margin-top: 20px;
+  align-items: center;
+  width: 90%;
+  max-width: 1200px;
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(9, 9, 9, 0.5);
-  gap: 1rem;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
 }
 
+.loginImage {
+  display: none; 
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.loginImage img {
+  width: 100%;
+  height: auto;
+  max-width: 500px;
+  border-radius: 10px;
+}
+
+.loginFormContainer {
+  width: 100%;
+  padding: 20px;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
+  border-radius: 10px;
+  gap: 1rem;
+}
 
 .loginForm .MuiTextField-root {
   width: 100%;
 }
 
-.loginForm h2, .loginForm p {
+.loginForm h2,
+.loginForm p {
   text-align: center;
   margin: 10px 0;
 }
+
 .loginForm p {
   text-align: center;
   margin: 10px 0;
   font-size: 12px;
 }
 
-.loginContainer {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .btnGroup {
   display: flex;
-  flex-direction: row;
+  flex-direction: column; 
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 10px; 
 }
 
 .redButton {
   background-color: rgb(161, 27, 27) !important;
   color: white !important;
+  width: 100%; 
+  text-align: center;
 }
 
 .redButton:hover {
   background-color: rgb(120, 20, 20) !important;
+}
+
+@media (min-width: 768px) {
+  .loginContent {
+    flex-direction: row;
+  }
+
+  .loginImage {
+    display: flex; 
+    flex: 1;
+  }
+
+  .loginFormContainer {
+    flex: 1;
+  }
+
+  .btnGroup {
+    flex-direction: row; 
+    gap: 20px; 
+  }
+}
+
+@media (max-width: 767px) {
+  .loginContainer {
+    padding: 10px;
+  }
+
+  .loginFormContainer {
+    padding: 10px;
+  }
+
+  .loginForm h2 {
+    font-size: 1.5rem;
+  }
+
+  .loginForm p {
+    font-size: 0.9rem;
+  }
+
+  .btnGroup {
+    flex-direction: column; 
+    gap: 10px; 
+  }
 }

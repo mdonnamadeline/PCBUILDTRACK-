@@ -6,19 +6,47 @@ body {
     font-size: larger;
 }
 
+.SignUpContainer {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('../images/friedChicken.png');
+    background-size: cover;
+    background-position: center;
+    padding: 10px;
+}
+
 .SignUpMain {
-    background: #ffffffa7;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 300px;
-    height: 600px;
-    margin-top: 20px;
-    margin: 0 auto;
+    width: 90%;
+    max-width: 1200px;
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
-    padding: 20px;
     box-shadow: 0px 0px 10px rgba(9, 9, 9, 0.5);
+    overflow: hidden;
+}
+
+.signupImage {
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.signupImage img {
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+    border-radius: 10px;
+}
+
+.signupFormContainer {
+    width: 100%;
+    padding: 20px;
 }
 
 .signupForm {
@@ -33,26 +61,62 @@ body {
     margin-bottom: 10px;
 }
 
-.SignUpContainer {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .btnGroup {
     display: flex;
-    flex-direction: row;
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 10px; 
 }
 
 .btnGroup button {
     background-color: rgb(161, 27, 27) !important;
-  color: white !important;
+    color: white !important;
 }
 
 .btnGroup button:hover {
     background-color: rgb(120, 20, 20) !important;
+}
+
+@media (min-width: 768px) {
+    .SignUpMain {
+        flex-direction: row;
+    }
+
+    .signupImage {
+        display: flex; 
+        flex: 1;
+    }
+
+    .signupFormContainer {
+        flex: 1;
+    }
+
+    .btnGroup {
+        flex-direction: row; /* Changed back to row for larger screens */
+        gap: 20px; /* Adjusted gap for larger screens */
+    }
+}
+
+@media (max-width: 767px) {
+    .SignUpMain {
+        padding: 10px;
+    }
+
+    .signupFormContainer {
+        padding: 10px;
+    }
+
+    .signupForm h6 {
+        font-size: 1.5rem;
+    }
+
+    .signupForm p {
+        font-size: 0.9rem;
+    }
+
+    .btnGroup {
+        flex-direction: column; /* Changed to column for smaller screens */
+        gap: 10px; /* Adjusted gap for smaller screens */
+    }
 }

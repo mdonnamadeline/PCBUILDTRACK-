@@ -68,7 +68,7 @@ export default function Dashboard() {
         { name: "Orders", value: totalOrders, fill: "#d32f2f" },
         { name: "Sales", value: totalSales, fill: "#e9536f" },
         { name: "Total Quantity", value: totalQuantity, fill: "#ffa726" },
-        { name: "Other", value: 190, fill: "#fbd5da" },
+        { name: "Other", value: 580, fill: "#fbd5da" },
     ];
 
     const totalVisitors = chartData.reduce(
@@ -150,7 +150,7 @@ export default function Dashboard() {
 
                     {/* Visitors Card */}
                     <Card className="card">
-                        <CardHeader title="Total Visitors" />
+                        <CardHeader title="Overall" />
                         <CardContent className="card-content">
                             <PieChart width={250} height={250}>
                                 <Pie
