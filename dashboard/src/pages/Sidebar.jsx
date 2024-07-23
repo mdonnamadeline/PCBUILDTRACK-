@@ -41,7 +41,7 @@ export default function Sidebar() {
                         PRODUCT INVENTORY
                     </Link>
                     <Link to="/businesstobusiness" className="sidebar-item">
-                        YOU BILI DITO
+                        PARTNERS
                     </Link>
                     <Link to="/reports" className="sidebar-item">
                         REPORTS
