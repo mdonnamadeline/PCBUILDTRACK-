@@ -4,11 +4,9 @@ import "../styles/Sidebar.css";
 import logo from "../images/logo.png";
 
 export default function Sidebar() {
-    // Retrieve user data from localStorage
     const userData = JSON.parse(localStorage.getItem("user"));
     const userRole = userData ? userData.role : null;
 
-    // Function to determine which links to display based on the user role
     const renderLinks = () => {
         if (userRole === "Staff") {
             return (
@@ -28,7 +26,6 @@ export default function Sidebar() {
                 </>
             );
         } else {
-            // Default to showing all links for Admins or other roles
             return (
                 <>
                     <Link to="/home" className="sidebar-item">
