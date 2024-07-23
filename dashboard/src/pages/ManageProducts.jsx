@@ -329,7 +329,7 @@ export default function ManageProducts() {
                         variant="contained"
                         onClick={() => openModal(initialData, false)}
                         style={{
-                            backgroundColor: "#aa0f0f", 
+                            backgroundColor: "#aa0f0f",
                         }}
                     >
                         ADD PRODUCT
@@ -354,7 +354,9 @@ export default function ManageProducts() {
                             {filteredDataList.map((data) => (
                                 <TableRow key={data._id}>
                                     <TableCell>{data.name}</TableCell>
-                                    <TableCell>{data.description}</TableCell>
+                                    <TableCell className="description-cell">
+                                        {data.description}
+                                    </TableCell>
                                     <TableCell>
                                         {data.image && (
                                             <img
@@ -528,6 +530,10 @@ export default function ManageProducts() {
                                 className="tablebutton"
                                 variant="contained"
                                 type="submit"
+                                style={{
+                                    backgroundColor: "#aa0f0f",
+                                    width: "100px",
+                                }}
                             >
                                 {isEditMode ? "UPDATE" : "ADD"}
                             </Button>
@@ -543,7 +549,7 @@ export default function ManageProducts() {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                    }} // Ensure flex alignment
+                    }}
                 >
                     <Box className="view-image-modal">
                         <Box className="modal-content">
