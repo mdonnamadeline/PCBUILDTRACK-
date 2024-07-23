@@ -57,7 +57,7 @@ export default function Reports() {
                 const response = await axios.get(
                     `${VITE_REACT_APP_API_HOST}/api/reports`
                 );
-                console.log("API Response:", response.data); // Check the structure here
+                console.log("API Response:", response.data); 
                 setTransactions(response.data);
             } catch (error) {
                 console.error("Error fetching transactions:", error);
@@ -70,14 +70,14 @@ export default function Reports() {
 
     useEffect(() => {
         let total = 0;
-        let orderCount = transactions.length; // Assuming each transaction is an order
+        let orderCount = transactions.length; 
         transactions.forEach((transaction) => {
             const price = parseFloat(transaction.price) || 0;
             total += price;
         });
         setTotalSales(total);
-        localStorage.setItem("totalSales", total); // Store total sales in localStorage
-        localStorage.setItem("totalOrders", orderCount); // Store total orders in localStorage
+        localStorage.setItem("totalSales", total); 
+        localStorage.setItem("totalOrders", orderCount); 
     }, [transactions]);
     
     const handleClickOpen = (id) => {
