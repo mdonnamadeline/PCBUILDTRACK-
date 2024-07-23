@@ -42,6 +42,7 @@ export default function ManageProducts() {
     const [modalState, setModalState] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [imageUrl, setImageUrl] = useState("");
+    const [viewImageModal, setViewImageModal] = useState(false);
 
     const navigate = useNavigate();
 
@@ -226,6 +227,21 @@ export default function ManageProducts() {
         setFilterSearch(event.target.value);
     };
 
+    const handleImageClick = () => {
+        setViewImageModal(true);
+    };
+
+    const closeImageModal = () => {
+        setViewImageModal(false);
+    };
+
+    // Close the modal when clicking outside the image
+    const handleModalClick = (e) => {
+        if (e.target.classList.contains("view-image-modal")) {
+            closeImageModal();
+        }
+    };
+
     const filteredDataList = dataList.filter((data) => {
         if (!search) return true;
         if (!filterSearch) {
@@ -312,7 +328,9 @@ export default function ManageProducts() {
                         className="tablebutton"
                         variant="contained"
                         onClick={() => openModal(initialData, false)}
-                        style={{ backgroundColor: "#aa0f0f" }}
+                        style={{
+                            backgroundColor: "#aa0f0f", 
+                        }}
                     >
                         ADD PRODUCT
                     </Button>
@@ -337,7 +355,26 @@ export default function ManageProducts() {
                                 <TableRow key={data._id}>
                                     <TableCell>{data.name}</TableCell>
                                     <TableCell>{data.description}</TableCell>
-                                    <TableCell>{data.image}</TableCell>
+                                    <TableCell>
+                                        {data.image && (
+                                            <img
+                                                src={`${VITE_REACT_APP_API_HOST}/uploads/${data.image}`}
+                                                alt={data.name}
+                                                style={{
+                                                    width: "50px",
+                                                    height: "50px",
+                                                    objectFit: "cover",
+                                                    cursor: "pointer",
+                                                }}
+                                                onClick={() => {
+                                                    setImageUrl(
+                                                        `${VITE_REACT_APP_API_HOST}/uploads/${data.image}`
+                                                    );
+                                                    setViewImageModal(true);
+                                                }}
+                                            />
+                                        )}
+                                    </TableCell>
                                     <TableCell>{data.quantity}</TableCell>
                                     <TableCell>{data.price}</TableCell>
                                     <TableCell>
@@ -384,7 +421,9 @@ export default function ManageProducts() {
                                             width: "300px",
                                             height: "194px",
                                             objectFit: "cover",
+                                            cursor: "pointer",
                                         }}
+                                        onClick={handleImageClick}
                                     />
                                 </div>
                             ) : typeof currentData.image === "string" &&
@@ -397,7 +436,9 @@ export default function ManageProducts() {
                                             width: "300px",
                                             height: "194px",
                                             objectFit: "cover",
+                                            cursor: "pointer",
                                         }}
+                                        onClick={handleImageClick}
                                     />
                                 </div>
                             ) : (
@@ -454,7 +495,7 @@ export default function ManageProducts() {
                                 label="Quantity"
                                 name="quantity"
                                 type="number"
-                                value={currentData.quantity || ""} 
+                                value={currentData.quantity || ""}
                                 onChange={handleInputChange}
                             />
 
@@ -491,6 +532,23 @@ export default function ManageProducts() {
                                 {isEditMode ? "UPDATE" : "ADD"}
                             </Button>
                         </form>
+                    </Box>
+                </Modal>
+
+                <Modal
+                    open={viewImageModal}
+                    onClose={closeImageModal}
+                    onClick={handleModalClick}
+                    sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                    }} // Ensure flex alignment
+                >
+                    <Box className="view-image-modal">
+                        <Box className="modal-content">
+                            <img src={imageUrl} alt="Full Size" />
+                        </Box>
                     </Box>
                 </Modal>
             </div>
