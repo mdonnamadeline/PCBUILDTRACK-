@@ -39,7 +39,7 @@ export default function Login() {
                 localStorage.removeItem("cartItems");
                 localStorage.setItem("user", JSON.stringify(result.user));
               
-                if (["Admin", "Owner"].includes(result.user.role)) {
+                if (["Admin", "Owner", "Staff"].includes(result.user.role)) {
                     navigate("/dashboard"); 
                 } else {
                     navigate("/home"); 
