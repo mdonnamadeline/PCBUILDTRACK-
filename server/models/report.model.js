@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const collectionName = "sales-report";
 
 const dataModel = new mongoose.Schema({
+    customerId: { type: String, required: true },
     productName: { type: String, required: true },
     quantity: { type: Number, required: true, min: 0 },
     price: { type: Number, required: true, min: 0 },

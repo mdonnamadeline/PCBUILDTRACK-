@@ -1,5 +1,4 @@
-import React from "react";
-import Sidebar from "./Sidebar";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Card,
@@ -10,7 +9,9 @@ import {
 } from "@mui/material";
 import { TrendingUp } from "@mui/icons-material";
 import { PieChart, Pie, Cell, Label, Tooltip } from "recharts";
+import Sidebar from "./Sidebar";
 import "../styles/Dashboard.css";
+import axios from "axios";
 
 const chartData = [
     { browser: "Orders", visitors: 275, fill: "#e21d48" },
@@ -23,6 +24,37 @@ const chartData = [
 const totalVisitors = chartData.reduce((acc, curr) => acc + curr.visitors, 0);
 
 export default function Dashboard() {
+    const [totalSales, setTotalSales] = useState(0);
+
+    const fetchTotalSales = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_HOST}/api/sales/total`);
+            const sales = response.data.totalSales || 0;
+            setTotalSales(sales);
+            localStorage.setItem("totalSales", sales); // Update localStorage
+        } catch (error) {
+            console.error("Error fetching total sales:", error);
+        }
+    };
+
+    useEffect(() => {
+        // Initial fetch
+        fetchTotalSales();
+
+        // Polling every 5 seconds
+        const intervalId = setInterval(fetchTotalSales, 5000);
+
+        // Clean up interval on component unmount
+        return () => clearInterval(intervalId);
+    }, []);
+
+    useEffect(() => {
+        const storedSales = localStorage.getItem("totalSales");
+        if (storedSales) {
+            setTotalSales(parseFloat(storedSales));
+        }
+    }, []);
+
     return (
         <Box className="dashboard">
             <Sidebar />
@@ -32,7 +64,28 @@ export default function Dashboard() {
                 </Typography>
 
                 <div className="grid-container">
-                    {/* Total Visitors Card */}
+                    {/* Total Sales Card */}
+                    <Card className="card">
+                        <CardHeader title="Total Sales" />
+                        <CardContent className="card-content">
+                            <Typography
+                                variant="h5"
+                                component="div"
+                                align="center"
+                            >
+                                ₱{totalSales.toFixed(2)}
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                align="center"
+                            >
+                                Total sales revenue
+                            </Typography>
+                        </CardContent>
+                    </Card>
+
+                    {/* Other cards */}
                     <Card className="card">
                         <CardHeader title="Total Visitors" />
                         <CardContent className="card-content">
@@ -102,27 +155,6 @@ export default function Dashboard() {
                                 align="center"
                             >
                                 Total number of orders
-                            </Typography>
-                        </CardContent>
-                    </Card>
-
-                    {/* Total Sales Card */}
-                    <Card className="card">
-                        <CardHeader title="Total Sales" />
-                        <CardContent className="card-content">
-                            <Typography
-                                variant="h5"
-                                component="div"
-                                align="center"
-                            >
-                                $5678.90
-                            </Typography>
-                            <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                align="center"
-                            >
-                                Total sales revenue
                             </Typography>
                         </CardContent>
                     </Card>

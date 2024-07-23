@@ -2,8 +2,17 @@ const Report = require("../models/report.model");
 
 exports.createTransaction = async (req, res) => {
     try {
-        const { productName, quantity, price, date, bank } = req.body;
+        const { customerId, productName, quantity, price, date, bank } = req.body;
+
+        if (!customerId) {
+            return res.status(400).json({
+                status: "error",
+                message: "Customer ID is required",
+            });
+        }
+
         const newTransaction = new Report({
+            customerId,
             productName,
             quantity,
             price,
@@ -37,6 +46,7 @@ exports.getTransactions = async (req, res) => {
         });
     }
 };
+
 
 exports.deleteTransaction = async (req, res) => {
     try {

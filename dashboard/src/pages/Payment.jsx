@@ -52,19 +52,37 @@ export default function Payment() {
         setBank(event.target.value);
     };
 
-    const handleCheckout = async () => {
-        const token =
-            "$2b$10$utpivAVbFbcbRTDsX96OEuyk7a1iZJVjQSXglpwNtH6n72dReGD0i";
+    const getCustomerId = () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        return user ? user._id : null; // Use _id as the customerId
+    };
 
+    const handleCheckout = async () => {
+        const token = "$2b$10$utpivAVbFbcbRTDsX96OEuyk7a1iZJVjQSXglpwNtH6n72dReGD0i";
+        
+        console.log(JSON.stringify(cartItems));
+    
+        // Replace this with actual method to get customer ID
+        const customerId = getCustomerId(); 
+    
+        if (!customerId) {
+            console.error("Customer ID is required");
+            return; // Stop further execution if customer ID is not available
+        }
+        
+        // Extract product names from cartItems
+        const productNames = cartItems.map(item => item.name).join(', ');
+        
         // Prepare transaction data
         const transactionData = {
-            productName: "Sample Product",
+            customerId,
+            productName: productNames, // Use actual product names
             quantity: cartItems.length,
             price: totalAmount,
             date: new Date().toISOString(),
             bank: bank,
         };
-
+        
         // Save transaction
         try {
             await axios.post(
@@ -80,7 +98,7 @@ export default function Payment() {
             console.error("Error saving transaction:", error);
             return; // Stop further execution if there's an error
         }
-
+        
         // Handle payment processing
         try {
             const res = await axios.post(
@@ -92,7 +110,7 @@ export default function Payment() {
                     },
                 }
             );
-
+    
             if (res?.data?.success) {
                 setOpen(true);
                 clearCart();
@@ -101,7 +119,9 @@ export default function Payment() {
             console.error("Error during payment:", error);
         }
     };
-
+    
+    
+    
     const clearCart = () => {
         localStorage.removeItem("cartItems");
         localStorage.setItem("cartCount", 0);

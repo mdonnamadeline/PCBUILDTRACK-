@@ -27,22 +27,21 @@ const StyledTableCell = styled(TableCell)({
 });
 
 const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); 
-  const year = date.getFullYear();
-  
-  let hours = date.getHours();
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const seconds = String(date.getSeconds()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12; 
-  hours = String(hours).padStart(2, '0');
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
 
-  return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
+    let hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    hours = String(hours).padStart(2, "0");
+
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
 };
-
 
 export default function Reports() {
     const [transactions, setTransactions] = useState([]);
@@ -58,6 +57,7 @@ export default function Reports() {
                 const response = await axios.get(
                     `${VITE_REACT_APP_API_HOST}/api/reports`
                 );
+                console.log("API Response:", response.data); // Check the structure here
                 setTransactions(response.data);
             } catch (error) {
                 console.error("Error fetching transactions:", error);
@@ -71,11 +71,11 @@ export default function Reports() {
     useEffect(() => {
         let total = 0;
         transactions.forEach((transaction) => {
-            total +=
-                parseFloat(transaction.quantity) *
-                parseFloat(transaction.price);
+            const price = parseFloat(transaction.price) || 0;
+            total += price;
         });
         setTotalSales(total);
+        localStorage.setItem("totalSales", total); // Store total sales in localStorage
     }, [transactions]);
 
     const handleClickOpen = (id) => {
@@ -131,11 +131,12 @@ export default function Reports() {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <StyledTableCell>Date and Time</StyledTableCell>
+                                <StyledTableCell>Customer ID</StyledTableCell>
                                 <StyledTableCell>Product Name</StyledTableCell>
                                 <StyledTableCell>Quantity</StyledTableCell>
                                 <StyledTableCell>Price</StyledTableCell>
                                 <StyledTableCell>Bank</StyledTableCell>
+                                <StyledTableCell>Date and Time</StyledTableCell>
                                 <StyledTableCell>Action</StyledTableCell>
                             </TableRow>
                         </TableHead>
@@ -143,18 +144,25 @@ export default function Reports() {
                             {transactions.map((transaction) => (
                                 <TableRow key={transaction._id}>
                                     <TableCell>
-                                        {formatDate(transaction.date)}
+                                        {transaction.customerId}
                                     </TableCell>
                                     <TableCell>
-                                        {transaction.productName}
+                                        {transaction.productName ||
+                                            "Unknown Product"}
                                     </TableCell>
                                     <TableCell>
                                         {transaction.quantity}
                                     </TableCell>
                                     <TableCell>
-                                        ₱{transaction.price.toFixed(2)}
+                                        ₱
+                                        {parseFloat(transaction.price).toFixed(
+                                            2
+                                        )}
                                     </TableCell>
                                     <TableCell>{transaction.bank}</TableCell>
+                                    <TableCell>
+                                        {formatDate(transaction.date)}
+                                    </TableCell>
                                     <TableCell>
                                         <DeleteIcon
                                             onClick={() =>
