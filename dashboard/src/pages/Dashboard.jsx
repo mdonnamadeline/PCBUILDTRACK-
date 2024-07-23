@@ -25,35 +25,35 @@ const totalVisitors = chartData.reduce((acc, curr) => acc + curr.visitors, 0);
 
 export default function Dashboard() {
     const [totalSales, setTotalSales] = useState(0);
+    const [totalOrders, setTotalOrders] = useState(0);
 
-    const fetchTotalSales = async () => {
+    const fetchData = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_REACT_APP_API_HOST}/api/sales/total`);
-            const sales = response.data.totalSales || 0;
+            const salesResponse = await axios.get(`${import.meta.env.VITE_REACT_APP_API_HOST}/api/sales/total`);
+            const sales = salesResponse.data.totalSales || 0;
             setTotalSales(sales);
-            localStorage.setItem("totalSales", sales); // Update localStorage
+            localStorage.setItem("totalSales", sales); 
+    
+            const ordersResponse = await axios.get(`${import.meta.env.VITE_REACT_APP_API_HOST}/api/orders/total`);
+            const orders = ordersResponse.data.totalOrders || 0;
+            setTotalOrders(orders);
+            localStorage.setItem("totalOrders", orders); 
         } catch (error) {
-            console.error("Error fetching total sales:", error);
+            console.error("Error fetching data:", error);
         }
     };
-
-    useEffect(() => {
-        // Initial fetch
-        fetchTotalSales();
-
-        // Polling every 5 seconds
-        const intervalId = setInterval(fetchTotalSales, 5000);
-
-        // Clean up interval on component unmount
-        return () => clearInterval(intervalId);
-    }, []);
-
+    
     useEffect(() => {
         const storedSales = localStorage.getItem("totalSales");
         if (storedSales) {
             setTotalSales(parseFloat(storedSales));
         }
+        const storedOrders = localStorage.getItem("totalOrders");
+        if (storedOrders) {
+            setTotalOrders(parseInt(storedOrders, 10));
+        }
     }, []);
+    
 
     return (
         <Box className="dashboard">
@@ -81,6 +81,27 @@ export default function Dashboard() {
                                 align="center"
                             >
                                 Total sales revenue
+                            </Typography>
+                        </CardContent>
+                    </Card>
+
+                    {/* Total Orders Card */}
+                    <Card className="card">
+                        <CardHeader title="Total Orders" />
+                        <CardContent className="card-content">
+                            <Typography
+                                variant="h5"
+                                component="div"
+                                align="center"
+                            >
+                                {totalOrders}
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                color="text.secondary"
+                                align="center"
+                            >
+                                Total number of orders
                             </Typography>
                         </CardContent>
                     </Card>
@@ -135,27 +156,6 @@ export default function Dashboard() {
                                 Trending up by 5.2% this month
                             </Typography>
                             <TrendingUp color="action" />
-                        </CardContent>
-                    </Card>
-
-                    {/* Total Orders Card */}
-                    <Card className="card">
-                        <CardHeader title="Total Orders" />
-                        <CardContent className="card-content">
-                            <Typography
-                                variant="h5"
-                                component="div"
-                                align="center"
-                            >
-                                504
-                            </Typography>
-                            <Typography
-                                variant="body2"
-                                color="text.secondary"
-                                align="center"
-                            >
-                                Total number of orders
-                            </Typography>
                         </CardContent>
                     </Card>
                 </div>

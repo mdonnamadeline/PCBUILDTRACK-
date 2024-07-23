@@ -47,7 +47,6 @@ exports.getTransactions = async (req, res) => {
     }
 };
 
-
 exports.deleteTransaction = async (req, res) => {
     try {
         const { id } = req.params;

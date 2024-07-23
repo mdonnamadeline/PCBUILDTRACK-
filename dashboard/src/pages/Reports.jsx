@@ -70,14 +70,16 @@ export default function Reports() {
 
     useEffect(() => {
         let total = 0;
+        let orderCount = transactions.length; // Assuming each transaction is an order
         transactions.forEach((transaction) => {
             const price = parseFloat(transaction.price) || 0;
             total += price;
         });
         setTotalSales(total);
         localStorage.setItem("totalSales", total); // Store total sales in localStorage
+        localStorage.setItem("totalOrders", orderCount); // Store total orders in localStorage
     }, [transactions]);
-
+    
     const handleClickOpen = (id) => {
         setSelectedTransactionId(id);
         setOpen(true);
