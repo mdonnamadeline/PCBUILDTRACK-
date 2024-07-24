@@ -58,7 +58,7 @@ export default function Payment() {
     };
 
     const handleCheckout = async () => {
-        const token = "$2b$10$utpivAVbFbcbRTDsX96OEuyk7a1iZJVjQSXglpwNtH6n72dReGD0i";
+        const token = "$2b$10$fCD5jNB2FFCFxnffg5I5oeSdQfohV11Fu4tczH1ccTYXIMmD2Ltuy";
         
         console.log(JSON.stringify(cartItems));
     
