@@ -22,7 +22,7 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate("/");
+        navigate("/login");
     };
 
     const handleChange = (e) => {
