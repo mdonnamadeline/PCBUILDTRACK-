@@ -28,12 +28,12 @@ export default function Sidebar() {
         } else {
             return (
                 <>
-                    <Link to="/home" className="sidebar-item">
+                    {/* <Link to="/home" className="sidebar-item">
                         Home
                     </Link>
                     <Link to="/menu" className="sidebar-item">
                         Menu
-                    </Link>
+                    </Link> */}
                     <Link to="/manageuser" className="sidebar-item">
                         MANAGE USER
                     </Link>
