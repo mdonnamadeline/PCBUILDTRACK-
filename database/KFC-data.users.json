@@ -1,0 +1,96 @@
+[{
+  "_id": {
+    "$oid": "6683680013e8c3d6f611c10b"
+  },
+  "firstname": "admin",
+  "lastname": "admin",
+  "middlename": "admin",
+  "email": "admin",
+  "password": "admin",
+  "role": "Admin",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66906defac01074524161828"
+  },
+  "firstname": "customer",
+  "lastname": "customer",
+  "middlename": "customer",
+  "email": "customer@gmail.com",
+  "password": "customer",
+  "role": "Costumer",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6695bc238ce7172d6a6fb6b5"
+  },
+  "firstname": "admin",
+  "lastname": "admin",
+  "middlename": "admin",
+  "email": "admin@gmail.com",
+  "password": "admin",
+  "role": "Admin",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66970b10ac1b09990aa826b3"
+  },
+  "firstname": "user",
+  "lastname": "user",
+  "middlename": "user",
+  "email": "user@gmail.com",
+  "password": "user",
+  "role": "Costumer",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6699b0c6cd54c2821bddddfa"
+  },
+  "firstname": "Ken",
+  "lastname": "Quiambao",
+  "middlename": "N",
+  "email": "knqmbao@gmail.com",
+  "password": "user",
+  "role": "Customer",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669eeba481bad5266dd5fa75"
+  },
+  "firstname": "staff",
+  "lastname": "staff",
+  "middlename": "staff",
+  "email": "staff@gmail.com",
+  "password": "staff",
+  "role": "Staff",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669f143f09785cf656ea31cc"
+  },
+  "firstname": "sean",
+  "lastname": "sean",
+  "middlename": "sean",
+  "email": "sean@gmail.com",
+  "password": "sean",
+  "role": "Costumer",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669f743a7f9a9ff2767a1d51"
+  },
+  "firstname": "lele",
+  "lastname": "lele",
+  "middlename": "lele",
+  "email": "lele@gmail.com",
+  "password": "lele",
+  "role": "Customer",
+  "__v": 0
+}]

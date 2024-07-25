@@ -1,0 +1,335 @@
+[{
+  "_id": {
+    "$oid": "6685f5e32d35259d1b8ba0a0"
+  },
+  "name": "DADS",
+  "price": 805,
+  "description": "free coke",
+  "image": "image-1720055267338-843076775.png",
+  "__v": 0,
+  "disabled": false,
+  "quantity": 41
+},
+{
+  "_id": {
+    "$oid": "668c7871015b50a913f86e82"
+  },
+  "name": "6-PC BUCKET MEAL",
+  "price": 635,
+  "description": "6-PC BUCKET MEALA smart choice for a group of 3! Comes with 6 pieces of our signature KFC chicken, 3 classic fixins, 3 rice and 3 reg. drinks.",
+  "image": "image-1720481905859-924323534.png",
+  "__v": 0,
+  "quantity": 83
+},
+{
+  "_id": {
+    "$oid": "668c78d1015b50a913f86e93"
+  },
+  "name": "Creamy Spinach Zinger",
+  "price": 190,
+  "description": "Creamy Spinach Zinger, which includes Zinger fillet, creamy spinach sauce, and sliced cheese between soft buns.",
+  "image": "image-1720482001478-687367884.png",
+  "__v": 0,
+  "quantity": 83
+},
+{
+  "_id": {
+    "$oid": "66906fa6ac01074524161830"
+  },
+  "name": "Unsweetened Iced Tea Large",
+  "price": 85,
+  "description": "Our House Blend Iced Tea is UNSWEETENED. Kindly add syrup at your desired sweetness level.",
+  "image": "image-1720741798695-362193794.png",
+  "disabled": false,
+  "__v": 0,
+  "quantity": 295
+},
+{
+  "_id": {
+    "$oid": "66906fcfac01074524161833"
+  },
+  "name": "Large Coke Zero",
+  "price": 79,
+  "description": "Large Coke Zero Drink",
+  "image": "image-1720741839574-902142963.png",
+  "disabled": false,
+  "__v": 0,
+  "quantity": 295
+},
+{
+  "_id": {
+    "$oid": "66906ff5ac01074524161836"
+  },
+  "name": "Large Sprite",
+  "price": 80,
+  "description": "Large Sprite Drink",
+  "image": "image-1720741877962-76369603.png",
+  "disabled": false,
+  "__v": 0,
+  "quantity": 295
+},
+{
+  "_id": {
+    "$oid": "6690700dac01074524161839"
+  },
+  "name": "Large Royal ",
+  "price": 80,
+  "description": "Large Royal Drink",
+  "image": "image-1720741901045-803451684.png",
+  "disabled": false,
+  "__v": 0,
+  "quantity": 296
+},
+{
+  "_id": {
+    "$oid": "6690705fac0107452416183c"
+  },
+  "name": "Junior Bucket of Fries",
+  "price": 130,
+  "description": "Our signature thick-cut, flavored fries served in a mini bucket",
+  "image": "image-1720741983415-759680165.png",
+  "disabled": false,
+  "__v": 0,
+  "quantity": 290
+},
+{
+  "_id": {
+    "$oid": "6690777b44f6275386e8b7f7"
+  },
+  "name": "Famous Bowl",
+  "price": 75,
+  "description": "KFC snack favorite, Famous bowl, filled with all your KFC favorites",
+  "image": "image-1720743803770-317377636.png",
+  "disabled": false,
+  "__v": 0,
+  "quantity": 198
+},
+{
+  "_id": {
+    "$oid": "669077da44f6275386e8b7fa"
+  },
+  "name": "Creamy Spinach Corn",
+  "price": 105,
+  "description": "Creamy Spinach Corn, featuring a blend creamy spinach sauce, buttered corn, and shredded cheese",
+  "image": "image-1720743898344-618693609.png",
+  "disabled": false,
+  "__v": 0,
+  "quantity": 192
+},
+{
+  "_id": {
+    "$oid": "6690782044f6275386e8b7fd"
+  },
+  "name": "Large Mashed Potato ",
+  "price": 85,
+  "description": "A large serving of our creamy mashed potato topped with our signature gravy.",
+  "image": "image-1720743968330-928834216.png",
+  "disabled": false,
+  "__v": 0,
+  "quantity": 200
+},
+{
+  "_id": {
+    "$oid": "6690784c44f6275386e8b800"
+  },
+  "name": "Large Buttered Corn",
+  "price": 85,
+  "description": "A large serving of our sweet buttered corn",
+  "image": "image-1720744012206-155908981.png",
+  "disabled": false,
+  "__v": 0,
+  "quantity": 197
+},
+{
+  "_id": {
+    "$oid": "66909ae98871b51f4269ea0d"
+  },
+  "name": "Large Mashed Potato",
+  "price": 70,
+  "description": "Potato",
+  "image": "image-1720752873041-866132579.png",
+  "disabled": false,
+  "category": "Sides",
+  "__v": 0,
+  "quantity": 182
+},
+{
+  "_id": {
+    "$oid": "6699a846cd54c2821bddddc2"
+  },
+  "name": "testing",
+  "price": 60,
+  "description": "try",
+  "image": "image-1721346118940-534088678.png",
+  "disabled": false,
+  "quantity": 10,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a03eaa1ce0e33532acc121"
+  },
+  "name": "Ala king zinger Steak Bucket Meal",
+  "price": 550,
+  "description": "Ala King Zinger Steak for sharing! It's KFC's signature Hot & Crispy Zinger fillet topped with a flavorful ala king sauce, paired with a chicken butter rice and a regular drink",
+  "image": "1721777834835-AKZSBUCKETML.png",
+  "disabled": false,
+  "quantity": 50,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a03ee11ce0e33532acc124"
+  },
+  "name": "Zinger Steak Fully Loaded Meal",
+  "price": 265,
+  "description": "Load up with this new epic hunger buster meal. It includes 1 piece of our signature Original Recipe chicken, Zinger Steak with Ala King sauce, Mushroom Soup, Mashed Potato, served with steamed rice and your choice of drink.",
+  "image": "1721777889717-AKZSBUCKETML.png",
+  "disabled": false,
+  "quantity": 50,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a03f261ce0e33532acc127"
+  },
+  "name": "A.M. or Pandesal Combo",
+  "price": 160,
+  "description": "Our signature a.m. sandwich made with original recipe chicken fillet, scrambled egg, cheese, plain mayonnaise, all sandwiched in our soft, pandesal bread & best paired with our brewed coffee",
+  "image": "1721777958622-AMORSWICHML.png",
+  "disabled": false,
+  "quantity": 50,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a03fc91ce0e33532acc12e"
+  },
+  "name": "Ala King Zinger Steak Meal With Buttered Corn",
+  "price": 180,
+  "description": "Zinger fillet drenched in Ala King sauce, with Chicken Butter Rice, buttered Corn and your choice of drink.",
+  "image": "1721778121814-AKZSMBCORNCBO.png",
+  "disabled": false,
+  "quantity": 50,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a040211ce0e33532acc131"
+  },
+  "name": "Ala King Rice Bowl",
+  "price": 140,
+  "description": "A bowl with 2 original Recipe fillets drenched with creamy ala king sauce and corn on the side, paired with steamed rice ",
+  "image": "1721778209856-RBALAK.png",
+  "disabled": false,
+  "quantity": 50,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a0408d1ce0e33532acc134"
+  },
+  "name": "Classic Cup Vanilla",
+  "price": 11,
+  "description": "Enjoy a cup of your favorite vanilla sundae",
+  "image": "1721778317480-CUPVANILLA.png",
+  "disabled": false,
+  "quantity": 100,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a040cc1ce0e33532acc137"
+  },
+  "name": "Chocolate Sundae",
+  "price": 50,
+  "description": "Our signature French Vanilla ice cream drizzled with rich chocolate syrup",
+  "image": "1721778380658-SUNDAECHOC.png",
+  "disabled": false,
+  "quantity": 100,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a041291ce0e33532acc13a"
+  },
+  "name": "Caramel Sundae",
+  "price": 50,
+  "description": "Our signature French Vanilla ice cream drizzled with sweet caramel syrup.",
+  "image": "1721778473952-SUNDAECARML.png",
+  "disabled": false,
+  "quantity": 100,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a041671ce0e33532acc13d"
+  },
+  "name": "Strawberry Sundae",
+  "price": 50,
+  "description": "Our signature French Vanilla ice cream drizzled with strawberry pulp syrup.",
+  "image": "1721778535676-SUNDAESTRWBERRY.png",
+  "disabled": false,
+  "quantity": 100,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a041ab1ce0e33532acc140"
+  },
+  "name": "Coke Float",
+  "price": 55,
+  "description": "Coke drink topped with creamy Vanilla ice cream and rich chocolate syrup.",
+  "image": "1721778603618-COKEFLOAT.png",
+  "disabled": false,
+  "quantity": 200,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a041ef1ce0e33532acc143"
+  },
+  "name": "Coke Zero Float",
+  "price": 55,
+  "description": "Coke Zero Drink topped with creamy Vanilla ice cream.",
+  "image": "1721778671735-COKEZEROFLOAT.png",
+  "disabled": false,
+  "quantity": 200,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a0421d1ce0e33532acc146"
+  },
+  "name": "Royal Coke Float",
+  "price": 55,
+  "description": "Royal drink topped with creamy Vanilla ice creams",
+  "image": "1721778717045-ROYALFLOAT.png",
+  "disabled": false,
+  "quantity": 200,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a0425d1ce0e33532acc149"
+  },
+  "name": "Sprite Float",
+  "price": 55,
+  "description": "Sprite drink topped with creamy vanilla ice creams",
+  "image": "1721778781182-SPRITEFLOAT.png",
+  "disabled": false,
+  "quantity": 200,
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a042cb1ce0e33532acc151"
+  },
+  "name": "Bottled Water",
+  "price": 39,
+  "description": "Bottled Water Drink",
+  "image": "1721778891201-BTLWATER.png",
+  "disabled": false,
+  "quantity": 10,
+  "__v": 0
+}]

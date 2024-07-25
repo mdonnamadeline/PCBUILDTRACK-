@@ -1,0 +1,168 @@
+[{
+  "_id": {
+    "$oid": "669f1f1e86e8725eb9f27426"
+  },
+  "customerId": "669f143f09785cf656ea31cc",
+  "productName": "Large Royal , Junior Bucket of Fries, Creamy Spinach Corn",
+  "quantity": 3,
+  "price": 315,
+  "date": {
+    "$date": "2024-07-23T03:10:22.981Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669f24074aa09f0d0a726106"
+  },
+  "customerId": "669f143f09785cf656ea31cc",
+  "productName": "6-PC BUCKET MEAL, Large Sprite",
+  "quantity": 2,
+  "price": 715,
+  "date": {
+    "$date": "2024-07-23T03:31:19.225Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669f3570ca02e2eaaef4fb32"
+  },
+  "customerId": "669f143f09785cf656ea31cc",
+  "productName": "Large Coke Zero, Large Sprite, Famous Bowl, Creamy Spinach Corn, Large Mashed Potato, Creamy Spinach Zinger",
+  "quantity": 6,
+  "price": 599,
+  "date": {
+    "$date": "2024-07-23T04:45:36.009Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669f38ccca02e2eaaef4fb40"
+  },
+  "customerId": "669f143f09785cf656ea31cc",
+  "productName": "Junior Bucket of Fries",
+  "quantity": 1,
+  "price": 130,
+  "date": {
+    "$date": "2024-07-23T04:59:56.860Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669f74547f9a9ff2767a1d58"
+  },
+  "customerId": "669f743a7f9a9ff2767a1d51",
+  "productName": "Creamy Spinach Zinger",
+  "quantity": 1,
+  "price": 190,
+  "date": {
+    "$date": "2024-07-23T09:13:56.476Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669f74557f9a9ff2767a1d5a"
+  },
+  "customerId": "669f743a7f9a9ff2767a1d51",
+  "productName": "Creamy Spinach Zinger",
+  "quantity": 1,
+  "price": 190,
+  "date": {
+    "$date": "2024-07-23T09:13:57.795Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669f74587f9a9ff2767a1d5c"
+  },
+  "customerId": "669f743a7f9a9ff2767a1d51",
+  "productName": "Creamy Spinach Zinger",
+  "quantity": 1,
+  "price": 190,
+  "date": {
+    "$date": "2024-07-23T09:14:00.724Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a03dbd1ce0e33532acc110"
+  },
+  "customerId": "66906defac01074524161828",
+  "productName": "Junior Bucket of Fries, Large Coke Zero, Creamy Spinach Corn",
+  "quantity": 3,
+  "price": 314,
+  "date": {
+    "$date": "2024-07-23T23:33:17.049Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a03dbe1ce0e33532acc112"
+  },
+  "customerId": "66906defac01074524161828",
+  "productName": "Junior Bucket of Fries, Large Coke Zero, Creamy Spinach Corn",
+  "quantity": 3,
+  "price": 314,
+  "date": {
+    "$date": "2024-07-23T23:33:18.593Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a042f91ce0e33532acc159"
+  },
+  "customerId": "66906defac01074524161828",
+  "productName": "testing",
+  "quantity": 1,
+  "price": 180,
+  "date": {
+    "$date": "2024-07-23T23:55:37.351Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a05046db32bc3984a6e767"
+  },
+  "customerId": "66906defac01074524161828",
+  "productName": "Creamy Spinach Zinger, Junior Bucket of Fries, Creamy Spinach Corn",
+  "quantity": 3,
+  "price": 425,
+  "date": {
+    "$date": "2024-07-24T00:52:22.370Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a09b273c59b59f87f55f47"
+  },
+  "customerId": "66906defac01074524161828",
+  "productName": "testing",
+  "quantity": 1,
+  "price": 300,
+  "date": {
+    "$date": "2024-07-24T06:11:41.231Z"
+  },
+  "bank": "Union Bank",
+  "__v": 0
+}]
