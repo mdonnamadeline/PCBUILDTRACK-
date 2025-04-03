@@ -9,7 +9,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url('../images/friedChicken.png');
+  background-color: rgb(255, 255, 255); ;
   background-size: cover;
   background-position: center;
   padding: 10px; 
@@ -66,6 +66,7 @@ body {
 .loginForm p {
   text-align: center;
   margin: 10px 0;
+  color: rgb(50, 50, 110);
 }
 
 .loginForm p {
@@ -83,14 +84,14 @@ body {
 }
 
 .redButton {
-  background-color: rgb(161, 27, 27) !important;
+  background-color: rgb(20, 20, 120) !important;
   color: white !important;
   width: 100%; 
   text-align: center;
 }
 
 .redButton:hover {
-  background-color: rgb(120, 20, 20) !important;
+  background-color: rgb(20, 20, 120) !important;
 }
 
 @media (min-width: 768px) {

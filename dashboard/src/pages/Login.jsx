@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import friedChickenImage from '../images/friedChicken.png';
+import pclogo from '../images/loginimage.jpg';
 
 export default function Login() {
     const [user, setUser] = useState({
@@ -55,14 +55,14 @@ export default function Login() {
     };
 
     return (
-        <div className="loginContainer" style={{ backgroundImage: `url(${friedChickenImage})` }}>
+        <div className="loginContainer">
             <div className="loginContent">
                 <div className="loginImage">
-                    <img src={friedChickenImage} alt="Fried Chicken" />
+                    <img src={pclogo} alt="PC logo" />
                 </div>
                 <div className="loginFormContainer">
                     <form className="loginForm" onSubmit={handleLogin}>
-                        <h2>Hello, Welcome to KFC!</h2>
+                        <h2>Welcome! PCBuild Track</h2>
                         <TextField
                             required
                             name="email"
