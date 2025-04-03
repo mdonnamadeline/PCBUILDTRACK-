@@ -7,7 +7,7 @@ const path = require("path");
 
 const port = 1337;
 const host = "0.0.0.0";
-const dbName = "KFC-data";
+const dbName = "PBT-data";
 
 const app = express();
 app.use(cors());

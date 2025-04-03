@@ -14,7 +14,7 @@ export default function Home() {
         const fetchProjects = async () => {
             try {
                 const projectsResponse = await axios.get(
-                    "http://192.168.10.18:1337/api/projects/KFC"
+                    "http://localhost:1337/api/projects/KFC"
                 );
                 setProjects(projectsResponse.data);
             } catch (error) {
@@ -28,41 +28,14 @@ export default function Home() {
     return (
         <div className="home">
             <Navbar />
+            <div className="">
+                {/* //add contegories */}
+           
             <div className="homecon">
                 <img src={Zinger} alt="Zinger" />
                 <img src={Dasurv} alt="Dasurv" />
+            </div>    
             </div>
-            <div className="flex-container">
-                <div className="main-content">
-                    <div className="head-con">PARTNERS</div>
-                    <Grid container spacing={2} className="cards-container">
-                        {projects.map((item) => {
-                            const imageUrl = `http://192.168.10.18:1337/uploads/${item.image}`;
-
-                            return (
-                                <Grid
-                                    item
-                                    xs={12}
-                                    sm={6}
-                                    md={4}
-                                    lg={2.4}
-                                    key={item._id}
-                                >
-                                    <Card className="business-card">
-                                        <a
-                                            href={item.link}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            <img src={imageUrl} alt={item.name} />
-                                        </a>
-                                    </Card>
-                                </Grid>
-                            );
-                        })}
-                    </Grid>
-                </div>
             </div>
-        </div>
     );
 }

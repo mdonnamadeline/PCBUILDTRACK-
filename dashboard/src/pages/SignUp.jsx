@@ -4,7 +4,6 @@ import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/SignUp.css";
-import bgimage from "../images/friedChicken.png"; 
 
 const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
@@ -59,60 +58,71 @@ export default function SignUp() {
             <div className="SignUpMain">
                 <div className="signupFormContainer">
                     <form className="signupForm" onSubmit={handleSignup}>
-                        <h6>REGISTER HERE!</h6>
-                        <TextField
-                            required
-                            id="firstname"
-                            label="First Name"
-                            variant="outlined"
-                            value={user.firstname}
-                            onChange={handleChange}
-                            inputProps={{
-                                pattern: "^[A-Za-z ]+$",
-                                title: "Only letters and spaces are allowed.",
-                            }}
-                        />
+                        <h6>PCBUILD TRACK</h6>
 
-                        <TextField
-                            required
-                            id="lastname"
-                            label="Last Name"
-                            variant="outlined"
-                            value={user.lastname}
-                            onChange={handleChange}
-                            inputProps={{
-                                pattern: "^[A-Za-z ]+$",
-                                title: "Only letters and spaces are allowed.",
-                            }}
-                        />
+                        {/* First Name & Last Name in one row */}
+                        <div className="inputRow">
+                            <TextField
+                                required
+                                id="firstname"
+                                label="First Name"
+                                variant="filled"
+                                value={user.firstname}
+                                onChange={handleChange}
+                                inputProps={{
+                                    pattern: "^[A-Za-z ]+$",
+                                    title: "Only letters and spaces are allowed.",
+                                }}
+                                fullWidth
+                            />
+                            <TextField
+                                required
+                                id="lastname"
+                                label="Last Name"
+                                variant="filled"
+                                value={user.lastname}
+                                onChange={handleChange}
+                                inputProps={{
+                                    pattern: "^[A-Za-z ]+$",
+                                    title: "Only letters and spaces are allowed.",
+                                }}
+                                fullWidth
+                            />
+                        </div>
 
-                        <TextField
-                            id="middlename"
-                            label="Middle Name"
-                            variant="outlined"
-                            value={user.middlename}
-                            onChange={handleChange}
-                            inputProps={{
-                                pattern: "^[A-Za-z ]+$",
-                                title: "Only letters and spaces are allowed.",
-                            }}
-                        />
+                        {/* Middle Name & Email in one row */}
+                        <div className="inputRow">
+                            <TextField
+                                id="middlename"
+                                label="Middle Name"
+                                variant="filled"
+                                value={user.middlename}
+                                onChange={handleChange}
+                                inputProps={{
+                                    pattern: "^[A-Za-z ]+$",
+                                    title: "Only letters and spaces are allowed.",
+                                }}
+                                fullWidth
+                            />
+                            <TextField
+                                required
+                                name="email"
+                                label="Email"
+                                variant="filled"
+                                value={user.email}
+                                onChange={handleChange}
+                                type="email"
+                                fullWidth
+                            />
+                        </div>
 
-                        <TextField
-                            required
-                            name="email"
-                            label="Email"
-                            variant="outlined"
-                            value={user.email}
-                            onChange={handleChange}
-                            type="email"
-                        />
+                        {/* Password Field */}
                         <TextField
                             id="password"
                             required
                             label="Password"
                             type={showPassword ? "text" : "password"}
-                            variant="outlined"
+                            variant="filled"
                             value={user.password}
                             onChange={handleChange}
                             InputProps={{
@@ -131,7 +141,10 @@ export default function SignUp() {
                                     </InputAdornment>
                                 ),
                             }}
+                            fullWidth
                         />
+
+                        {/* Button Group */}
                         <div className="btnGroup">
                             <Button variant="contained" type="submit">
                                 SignUp
@@ -141,9 +154,6 @@ export default function SignUp() {
                             </Button>
                         </div>
                     </form>
-                </div>
-                <div className="signupImage">
-                    <img src={bgimage} alt="Sign Up" />
                 </div>
             </div>
         </div>

@@ -14,9 +14,6 @@ export default function Sidebar() {
                     <Link to="/manageproduct" className="sidebar-item">
                         PRODUCT INVENTORY
                     </Link>
-                    <Link to="/businesstobusiness" className="sidebar-item">
-                        PARTNERS
-                    </Link>
                     <Link to="/reports" className="sidebar-item">
                         REPORTS
                     </Link>

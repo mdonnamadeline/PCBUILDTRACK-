@@ -1,122 +1,108 @@
-@import url("https://fonts.googleapis.com/css2?family=Unica+One&display=swap");
 
 body {
     margin: 0;
-    font-family: "Unica One", sans-serif;
-    font-size: larger;
-}
-
-.SignUpContainer {
-    height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #0f172a; 
     display: flex;
-    align-items: center;
     justify-content: center;
-    background-image: url('../images/friedChicken.png');
-    background-size: cover;
-    background-position: center;
-    padding: 10px;
+    align-items: center;
+    height: 100vh; 
 }
 
 .SignUpMain {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    max-width: 1200px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgb(21, 36, 72);
+    padding: 30px;
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(9, 9, 9, 0.5);
-    overflow: hidden;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%; 
+    margin: auto; 
 }
 
-.signupImage {
-    display: none; 
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+.SignUpMain h6 {
+    color:white;
 }
 
-.signupImage img {
+
+.SignUpMain h2 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1F56D8; 
+    margin-bottom: 15px;
+}
+
+
+.SignUpMain label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+.SignUpMain input {
+    width: 90%; 
+    padding: 15px;
+    border-radius: 8px;
+    border: none;
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    outline: none;
+    margin: 10px auto; 
+    display: block; 
+    box-sizing: border-box; 
+}
+
+.SignUpMain input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+.SignUpMain .terms {
+    font-size: 14px;
+    color: #1F56D8;
+    font-weight: bold;
+}
+
+.SignUpMain .MuiIconButton-root {
+    color: inherit;
+    background-color: transparent; 
+    border: none; 
+    padding: 0; 
+    box-shadow: none; 
+}
+
+
+.SignUpMain button {
     width: 100%;
-    height: auto;
-    max-width: 500px;
-    border-radius: 10px;
-}
-
-.signupFormContainer {
-    width: 100%;
-    padding: 20px;
-}
-
-.signupForm {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.signupForm h6 {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #1F56D8;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
     margin-top: 10px;
-    font-size: 30px;
-    margin-bottom: 10px;
 }
 
-.btnGroup {
-    display: flex;
-    flex-direction: column; 
-    align-items: center;
-    justify-content: center;
-    gap: 10px; 
+.SignUpMain button:hover {
+    background-color: #1544A0;
 }
 
-.btnGroup button {
-    background-color: rgb(161, 27, 27) !important;
-    color: white !important;
+.SignUpMain .login-link {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
 }
 
-.btnGroup button:hover {
-    background-color: rgb(120, 20, 20) !important;
+.SignUpMain .login-link a {
+    font-weight: bold;
+    color: #1F56D8;
+    text-decoration: none;
 }
 
-@media (min-width: 768px) {
-    .SignUpMain {
-        flex-direction: row;
-    }
-
-    .signupImage {
-        display: flex; 
-        flex: 1;
-    }
-
-    .signupFormContainer {
-        flex: 1;
-    }
-
-    .btnGroup {
-        flex-direction: row; /* Changed back to row for larger screens */
-        gap: 20px; /* Adjusted gap for larger screens */
-    }
-}
-
-@media (max-width: 767px) {
-    .SignUpMain {
-        padding: 10px;
-    }
-
-    .signupFormContainer {
-        padding: 10px;
-    }
-
-    .signupForm h6 {
-        font-size: 1.5rem;
-    }
-
-    .signupForm p {
-        font-size: 0.9rem;
-    }
-
-    .btnGroup {
-        flex-direction: column; /* Changed to column for smaller screens */
-        gap: 10px; /* Adjusted gap for smaller screens */
-    }
+.SignUpMain .login-link a:hover {
+    text-decoration: underline;
 }

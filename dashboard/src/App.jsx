@@ -8,7 +8,6 @@ import Menu from "./pages/Menu";
 import ManageProducts from "./pages/ManageProducts";
 import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
-import Business from "./pages/Business";
 import Reports from "./pages/Reports";
 
 function App() {
@@ -25,7 +24,6 @@ function App() {
                 <Route path="/manageproduct" Component={ManageProducts} />
                 <Route path="/cart" Component={Cart} />
                 <Route path="/payment" Component={Payment} />
-                <Route path="/businesstobusiness" Component={Business} />
                 <Route path="/reports" Component={Reports} />
             </Routes>
         </BrowserRouter>
