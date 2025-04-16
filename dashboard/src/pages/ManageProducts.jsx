@@ -32,6 +32,7 @@ export default function ManageProducts() {
         price: "",
         disabled: false,
         quantity: "",
+        category: "", // New field for category
     };
 
     const [currentData, setCurrentData] = useState(initialData);
@@ -47,6 +48,17 @@ export default function ManageProducts() {
     const navigate = useNavigate();
 
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
+
+    const categories = [
+        "Processor",
+        "GPU",
+        "Motherboard",
+        "RAM",
+        "Monitor",
+        "Case",
+        "Laptop",
+        "Storage",
+    ];
 
     useEffect(() => {
         fetchData();
@@ -235,7 +247,6 @@ export default function ManageProducts() {
         setViewImageModal(false);
     };
 
-    // Close the modal when clicking outside the image
     const handleModalClick = (e) => {
         if (e.target.classList.contains("view-image-modal")) {
             closeImageModal();
@@ -467,7 +478,6 @@ export default function ManageProducts() {
                                 label="Name"
                                 value={currentData.name}
                                 onChange={handleChange}
-                                disabled={isEditMode}
                             />
 
                             <TextField
@@ -511,6 +521,25 @@ export default function ManageProducts() {
                                 onChange={handleChange}
                                 inputProps={{ className: "hide-arrows" }}
                             />
+
+                            {/* Category Dropdown */}
+                            <FormControl fullWidth>
+                                <InputLabel id="category-label">Category</InputLabel>
+                                <Select
+                                    labelId="category-label"
+                                    id="category"
+                                    name="category"
+                                    value={currentData.category}
+                                    onChange={handleInputChange}
+                                    required
+                                >
+                                    {categories.map((category) => (
+                                        <MenuItem key={category} value={category}>
+                                            {category}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
 
                             <FormControlLabel
                                 control={

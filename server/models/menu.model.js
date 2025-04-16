@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const collectionName = "menu-data";
+const collectionName = "product-data";
 
 const dataModel = new mongoose.Schema({
     name: { type: String, required: true },
@@ -9,6 +9,11 @@ const dataModel = new mongoose.Schema({
     image: { type: String, required: true },
     disabled: { type: Boolean, required: false },
     quantity: { type: Number, required: true, min: 0 },
+    category: { 
+        type: String, 
+        required: true, 
+        enum: ["Processor", "GPU", "Motherboard", "RAM", "Monitor", "Case", "Laptop", "Storage"] 
+    },
 });
 
 module.exports = mongoose.model(collectionName, dataModel);

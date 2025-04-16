@@ -89,7 +89,7 @@ export default function ManageUser() {
             [name]: value,
         }));
     };
-    
+
     useEffect(() => {
         fetchCredentials();
     }, []);
@@ -200,8 +200,8 @@ export default function ManageUser() {
                                 variant="contained"
                                 onClick={() => handleOpen(null, false)}
                                 style={{
-                                    backgroundColor: "darkred",
-                                    color: "white",
+                                    backgroundColor: "#b893fd", // Updated button color
+                                    color: "white", // Ensure text is readable
                                 }}
                             >
                                 ADD USER
@@ -252,8 +252,8 @@ export default function ManageUser() {
                                                     }
                                                     style={{
                                                         backgroundColor:
-                                                            "darkred",
-                                                        color: "white",
+                                                            "#b893fd", // Updated button color
+                                                        color: "white", // Ensure text is readable
                                                     }}
                                                 >
                                                     EDIT
@@ -395,6 +395,10 @@ export default function ManageUser() {
                                             variant="contained"
                                             color="primary"
                                             type="submit"
+                                            style={{
+                                                backgroundColor: "#b893fd", // Updated button color
+                                                color: "white", // Ensure text is readable
+                                            }}
                                         >
                                             {isEditMode ? "Update" : "Add"}
                                         </Button>
