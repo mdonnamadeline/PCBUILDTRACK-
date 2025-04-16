@@ -35,50 +35,93 @@ export default function Menu() {
 
     const [dataList, setDataList] = useState([]);
     const [user, setUser] = useState(null);
-    const [open, setOpen] = useState(false);
     const [openAddToOrder, setOpenAddToOrder] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
-    const [cartItemCount, setCartItemCount] = useState(0); 
-    const [searchQuery, setSearchQuery] = useState(""); 
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState(""); // New state for category filter
     const navigate = useNavigate();
+    const [cartCount, setCartCount] = useState(0); // State for cart count
+
+
+    const categories = [
+        "Processor",
+        "GPU",
+        "Motherboard",
+        "RAM",
+        "Monitor",
+        "Case",
+        "Laptop",
+        "Storage",
+    ];
 
     useEffect(() => {
         fetchData();
         const storedUser = JSON.parse(localStorage.getItem("user"));
         setUser(storedUser);
-        updateCartItemCount(); 
+    
+        // Load cart count from localStorage
+        const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+        const userCartItems = storedUser
+            ? cartItems.filter((item) => item.userId === storedUser.id)
+            : [];
+        const count = userCartItems.reduce((total, item) => total + item.quantity, 0);
+        setCartCount(count);
     }, []);
-
+    
     const fetchData = async () => {
         try {
-            const response = await axios.get(
-                `${VITE_REACT_APP_API_HOST}/api/menu`
-            );
+            const response = await axios.get(`${VITE_REACT_APP_API_HOST}/api/menu`);
             setDataList(response.data.data || []);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     };
 
-    const updateCartItemCount = () => {
-        const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-        setCartItemCount(cartItems.length); 
+    const handleCloseAddToOrder = () => {
+        setOpenAddToOrder(false); // Close the modal
+        setSelectedProduct(null); // Clear the selected product
     };
+
+   const handleAddToCart = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        navigate("/login");
+        return;
+    }
+
+    const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const existingItemIndex = cartItems.findIndex(
+        (item) => item.id === selectedProduct._id && item.userId === user.id
+    );
+
+    if (existingItemIndex !== -1) {
+        cartItems[existingItemIndex].quantity += quantity;
+    } else {
+        cartItems.push({
+            id: selectedProduct._id,
+            name: selectedProduct.name,
+            price: selectedProduct.price,
+            quantity: quantity,
+            addedDate: new Date().toISOString(),
+            userId: user.id,
+        });
+    }
+
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+    // Update cart count
+    const newCartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+    setCartCount(newCartCount);
+
+    setOpenAddToOrder(false);
+    alert("Item added to cart successfully!");
+};
 
     const handleOpenAddToOrder = (product) => {
-        if (user) {
-            setSelectedProduct(product);
-            setQuantity(1);
-            setOpenAddToOrder(true);
-        } else {
-            setOpen(true); 
-        }
-    };
-
-    const handleCloseAddToOrder = () => {
-        setOpenAddToOrder(false);
-        setSelectedProduct(null);
+        setSelectedProduct(product);
+        setQuantity(1); // Reset quantity to 1 when opening the modal
+        setOpenAddToOrder(true);
     };
 
     const handleQuantityChange = (operation) => {
@@ -87,217 +130,142 @@ export default function Menu() {
         );
     };
 
-    const handleAddToCart = async () => {
-        if (user) {
-            const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-            const newItem = {
-                ...selectedProduct,
-                quantity,
-                addedDate: new Date().toLocaleString(),
-            };
-
-            //new:check stock availability
-            if (newItem.quantity > selectedProduct.quantity) {
-                alert("Insufficient stock! Only " + selectedProduct.quantity + "items available.");
-                return;
-            }
-    
-            try {
-                console.log('Updating stock with:', {
-                    productId: selectedProduct._id,
-                    quantity: quantity,
-                });
-    
-                await axios.put(`${VITE_REACT_APP_API_HOST}/api/menu/update-stock`, {
-                    productId: selectedProduct._id,
-                    quantity: quantity,
-                });
-    
-                const updatedCartItems = [...cartItems, newItem];
-                localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-                updateCartItemCount();
-    
-                alert("Item added to cart!");
-                handleCloseAddToOrder();
-            } catch (error) {
-                console.error("Error updating stock quantity:", error);
-                alert("There was an error adding the item to your cart.");
-            }
-        } else {
-            setOpen(true);
-        }
-    };
-    
-    const handleClose = () => {
-        setOpen(false);
-    };
-
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
     };
 
-    const filteredMenuItems = dataList.filter((menu) =>
-        `${menu.name} ${menu.description} ${menu.price}`
+    const handleCategoryClick = (category) => {
+        setSelectedCategory(category === selectedCategory ? "" : category);
+    };
+
+    const filteredMenuItems = dataList.filter((menu) => {
+        const matchesSearch = `${menu.name} ${menu.description} ${menu.price}`
             .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-    );
+            .includes(searchQuery.toLowerCase());
+        const matchesCategory =
+            !selectedCategory || menu.category === selectedCategory;
+        return matchesSearch && matchesCategory;
+    });
 
     return (
         <div className="menu">
-            <Navbar cartItemCount={cartItemCount} />{" "}
-            <div className="searchBar">
+            <Navbar cartItemCount={cartCount} />
+            <div className="menu-header">
+                <div className="categories-navbar">
+                    {categories.map((category) => (
+                        <Button
+                            key={category}
+                            variant={
+                                selectedCategory === category
+                                    ? "contained"
+                                    : "outlined"
+                            }
+                            onClick={() => handleCategoryClick(category)}
+                            className="category-button"
+                        >
+                            {category}
+                        </Button>
+                    ))}
+                </div>
                 <TextField
-                    label="Search Menu"
+                    label="Search"
                     variant="outlined"
-                    fullWidth
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    sx={{ marginBottom: 2 }}
+                    className="searchBar"
                 />
             </div>
             <div className="menu-main">
-                <h1 className="menu-Title">MENU</h1>
                 <div className="menu-list">
                     {filteredMenuItems.length > 0 ? (
-                        filteredMenuItems
-                            .filter((menu) => !menu.disabled)
-                            .map((menu) => (
-                                <ProductCard
-                                    key={menu._id}
-                                    menu={menu}
-                                    user={user}
-                                    handleOpen={handleOpenAddToOrder}
-                                />
-                            ))
+                        filteredMenuItems.map((menu) => (
+                            <ProductCard
+                                key={menu._id}
+                                menu={menu}
+                                handleOpen={handleOpenAddToOrder}
+                            />
+                        ))
                     ) : (
                         <p>No menu items available.</p>
                     )}
                 </div>
             </div>
             {/* Modal for Add to Order */}
-            {user && (
-                <Modal
-                    open={openAddToOrder}
-                    onClose={handleCloseAddToOrder}
-                    aria-labelledby="modal-title"
-                    aria-describedby="modal-description"
-                >
-                    <Box sx={modalStyle}>
-                        {selectedProduct && (
-                            <>
-                                <Typography
-                                    id="modal-title"
-                                    variant="h6"
-                                    component="h2"
-                                >
-                                    {selectedProduct.name}
-                                </Typography>
-                                <CardMedia
-                                    component="img"
-                                    height="140"
-                                    image={`${VITE_REACT_APP_API_HOST}/uploads/${selectedProduct.image}`}
-                                    alt={selectedProduct.name}
-                                    sx={{ mt: 2, mb: 2, objectFit: "contain" }}
-                                />
-                                <Typography
-                                    id="modal-description"
-                                    sx={{ mt: 2 }}
-                                >
-                                    {selectedProduct.description}
-                                </Typography>
-                                <Typography sx={{ mt: 2 }}>
-                                    ₱{selectedProduct.price} x {quantity} = ₱
-                                    {selectedProduct.price * quantity}
-                                </Typography>
-                                <div
-                                    className="quantity-control"
-                                    style={{ marginTop: "16px" }}
-                                >
-                                    <IconButton
-                                        onClick={() =>
-                                            handleQuantityChange("-")
-                                        }
-                                    >
-                                        <RemoveIcon />
-                                    </IconButton>
-                                    <TextField
-                                        value={quantity}
-                                        inputProps={{
-                                            readOnly: true,
-                                            style: { textAlign: "center" },
-                                        }}
-                                        sx={{ width: "60px", mx: 2 }}
-                                    />
-                                    <IconButton
-                                        onClick={() =>
-                                            handleQuantityChange("+")
-                                        }
-                                    >
-                                        <AddIcon />
-                                    </IconButton>
-                                </div>
-                                <Button
-                                    variant="contained"
-                                    onClick={handleAddToCart}
-                                    sx={{
-                                        mt: 2,
-                                        backgroundColor: "rgb(161,27,27)",
-                                        "&:hover": {
-                                            backgroundColor: "rgb(135,22,22)",
-                                        },
-                                    }}
-                                >
-                                    Add to Cart
-                                </Button>
-                            </>
-                        )}
-                    </Box>
-                </Modal>
-            )}
-            {/* Modal for Sign Up/Login */}
             <Modal
-                open={open}
-                onClose={handleClose}
+                open={openAddToOrder}
+                onClose={handleCloseAddToOrder} // Use the defined function here
                 aria-labelledby="modal-title"
                 aria-describedby="modal-description"
             >
                 <Box sx={modalStyle}>
-                    <Typography id="modal-title" variant="h6" component="h2">
-                        Register first!
-                    </Typography>
-                    <Typography id="modal-description" sx={{ mt: 2 }}>
-                        You need to sign up or login to place an order.
-                    </Typography>
-                    <Button
-                        variant="contained"
-                        onClick={() => navigate("/signup")}
-                        sx={{
-                            mt: 2,
-                            mr: 2,
-                            backgroundColor: "rgb(161,27,27)",
-                            "&:hover": { backgroundColor: "rgb(135,22,22)" },
-                        }}
-                    >
-                        Sign Up
-                    </Button>
-                    <Button
-                        variant="contained"
-                        onClick={() => navigate("/login")}
-                        sx={{
-                            mt: 2,
-                            backgroundColor: "rgb(161,27,27)",
-                            "&:hover": { backgroundColor: "rgb(135,22,22)" },
-                        }}
-                    >
-                        Login
-                    </Button>
+                    {selectedProduct && (
+                        <>
+                            <Typography
+                                id="modal-title"
+                                variant="h6"
+                                component="h2"
+                            >
+                                {selectedProduct.name}
+                            </Typography>
+                            <CardMedia
+                                component="img"
+                                height="140"
+                                image={`${VITE_REACT_APP_API_HOST}/uploads/${selectedProduct.image}`}
+                                alt={selectedProduct.name}
+                                sx={{ mt: 2, mb: 2, objectFit: "contain" }}
+                            />
+                            <Typography id="modal-description" sx={{ mt: 2 }}>
+                                {selectedProduct.description}
+                            </Typography>
+                            <Typography sx={{ mt: 2 }}>
+                                ₱{selectedProduct.price} x {quantity} = ₱
+                                {selectedProduct.price * quantity}
+                            </Typography>
+                            <div
+                                className="quantity-control"
+                                style={{ marginTop: "16px" }}
+                            >
+                                <IconButton
+                                    onClick={() => handleQuantityChange("-")}
+                                >
+                                    <RemoveIcon />
+                                </IconButton>
+                                <TextField
+                                    value={quantity}
+                                    inputProps={{
+                                        readOnly: true,
+                                        style: { textAlign: "center" },
+                                    }}
+                                    sx={{ width: "60px", mx: 2 }}
+                                />
+                                <IconButton
+                                    onClick={() => handleQuantityChange("+")}
+                                >
+                                    <AddIcon />
+                                </IconButton>
+                            </div>
+                            <Button
+                                variant="contained"
+                                onClick={handleAddToCart}
+                                sx={{
+                                    mt: 2,
+                                    backgroundColor: "rgb(161,27,27)",
+                                    "&:hover": {
+                                        backgroundColor: "rgb(41, 122, 51)",
+                                    },
+                                }}
+                            >
+                                Add to Cart
+                            </Button>
+                        </>
+                    )}
                 </Box>
             </Modal>
         </div>
     );
 }
 
-function ProductCard({ menu, user, handleOpen }) {
+function ProductCard({ menu, handleOpen }) {
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
     const imageUrl = `${VITE_REACT_APP_API_HOST}/uploads/${menu.image}`;
 
@@ -326,34 +294,19 @@ function ProductCard({ menu, user, handleOpen }) {
                 >
                     {menu.description}
                 </Typography>
-                {menu.quantity > 0 ? (
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        style={{
-                            marginTop: "10px",
-                            width: "300px",
-                            color: "white",
-                            backgroundColor: "red",
-                        }}
-                        onClick={() => handleOpen(menu)}
-                    >
-                        {user ? "Add to Order" : "Order Now"}
-                    </Button>
-                ) : (
-                    <Button
-                        variant="contained"
-                        disabled
-                        style={{
-                            marginTop: "10px",
-                            width: "300px",
-                            color: "white",
-                            backgroundColor: "grey",
-                        }}
-                    >
-                        Not Available
-                    </Button>
-                )}
+                <Button
+                    variant="contained"
+                    color="primary"
+                    style={{
+                        marginTop: "10px",
+                        width: "100%",
+                        color: "white",
+                        backgroundColor: "#b893fd", // Corrected color value
+                    }}
+                    onClick={() => handleOpen(menu)}
+                >
+                    Add to Order
+                </Button>
             </CardContent>
         </Card>
     );
