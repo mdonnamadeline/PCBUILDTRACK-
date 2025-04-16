@@ -20,28 +20,36 @@ export default function Dashboard() {
 
     const fetchData = async () => {
         try {
-            const salesResponse = await axios.get(
-                `${import.meta.env.VITE_REACT_APP_API_HOST}/api/sales/total`
+            // Fetch all transactions from the /api/reports endpoint
+            const response = await axios.get(
+                `${import.meta.env.VITE_REACT_APP_API_HOST}/api/reports`
             );
-            const sales = salesResponse.data.totalSales || 0;
-            setTotalSales(sales);
-            localStorage.setItem("totalSales", sales);
-
-            const ordersResponse = await axios.get(
-                `${import.meta.env.VITE_REACT_APP_API_HOST}/api/orders/total`
-            );
-            const orders = ordersResponse.data.totalOrders || 0;
-            setTotalOrders(orders);
-            localStorage.setItem("totalOrders", orders);
-
-            const quantityResponse = await axios.get(
-                `${import.meta.env.VITE_REACT_APP_API_HOST}/api/orders/quantity`
-            );
-            const quantity = quantityResponse.data.totalQuantity || 0;
-            setTotalQuantity(quantity);
-            localStorage.setItem("totalQuantity", quantity);
+            const transactions = response.data;
+    
+            // Calculate totals from the transaction data
+            let totalSales = 0;
+            let totalOrders = transactions.length;
+            let totalQuantity = 0;
+    
+            transactions.forEach((transaction) => {
+                totalSales += parseFloat(transaction.price) || 0;
+                totalQuantity += transaction.quantity || 0;
+            });
+    
+            // Update state with calculated totals
+            setTotalSales(totalSales);
+            setTotalOrders(totalOrders);
+            setTotalQuantity(totalQuantity);
+    
+            // Optionally store totals in localStorage
+            localStorage.setItem("totalSales", totalSales);
+            localStorage.setItem("totalOrders", totalOrders);
+            localStorage.setItem("totalQuantity", totalQuantity);
         } catch (error) {
-            console.error("Error fetching data:", error);
+            console.error("Error fetching transactions:", error);
+            setTotalSales(0);
+            setTotalOrders(0);
+            setTotalQuantity(0);
         }
     };
 
