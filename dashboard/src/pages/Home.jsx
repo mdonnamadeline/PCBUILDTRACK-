@@ -13,7 +13,7 @@ export default function Home() {
         const fetchProjects = async () => {
             try {
                 const projectsResponse = await axios.get(
-                    "http://localhost:1337/api/projects/KFC"
+                    "http://localhost:1337"
                 );
                 setProjects(projectsResponse.data);
             } catch (error) {

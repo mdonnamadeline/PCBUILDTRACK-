@@ -29,11 +29,6 @@ export default function Payment() {
     const location = useLocation();
     const cartItems = location.state?.cartItems || [];
     const totalAmount = location.state?.totalAmount || 0;
-    const [values, setValues] = useState({
-        debitAccount: "",
-        creditAccount: "000000015",
-        amount: totalAmount,
-    });
 
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
 
@@ -54,73 +49,40 @@ export default function Payment() {
 
     const getCustomerId = () => {
         const user = JSON.parse(localStorage.getItem("user"));
-        return user ? user._id : null; 
+        return user ? user._id : null;
     };
 
     const handleCheckout = async () => {
-        const token = "$2b$10$fCD5jNB2FFCFxnffg5I5oeSdQfohV11Fu4tczH1ccTYXIMmD2Ltuy";
-        
-        console.log(JSON.stringify(cartItems));
-    
-    
-        const customerId = getCustomerId(); 
-    
+        const customerId = getCustomerId();
+
         if (!customerId) {
             console.error("Customer ID is required");
-            return; 
+            return;
         }
-      
-        const productNames = cartItems.map(item => item.name).join(', ');
-        
-   
+
+        const productNames = cartItems.map((item) => item.name).join(", ");
+
         const transactionData = {
             customerId,
-            productName: productNames, 
+            productName: productNames,
             quantity: cartItems.length,
             price: totalAmount,
             date: new Date().toISOString(),
             bank: bank,
         };
-        
-       
+
         try {
-            await axios.post(
-                `${VITE_REACT_APP_API_HOST}/api/reports`,
-                transactionData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            // Save transaction to the database
+            await axios.post(`${VITE_REACT_APP_API_HOST}/api/reports`, transactionData);
+
+            // Simulate payment success
+            setOpen(true);
+            clearCart();
         } catch (error) {
             console.error("Error saving transaction:", error);
-            return; 
-        }
-        
- 
-        try {
-            const res = await axios.post(
-                `http://192.168.10.14:3001/api/unionbank/transfertransaction`,
-                values,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-    
-            if (res?.data?.success) {
-                setOpen(true);
-                clearCart();
-            }
-        } catch (error) {
-            console.error("Error during payment:", error);
         }
     };
-    
-    
-    
+
     const clearCart = () => {
         localStorage.removeItem("cartItems");
         localStorage.setItem("cartCount", 0);
@@ -141,10 +103,7 @@ export default function Payment() {
                 <Card className="payment-form">
                     <CardContent>
                         <FormControl component="fieldset">
-                            <RadioGroup
-                                value={bank}
-                                onChange={handleBankChange}
-                            >
+                            <RadioGroup value={bank} onChange={handleBankChange}>
                                 <FormControlLabel
                                     value="Union Bank"
                                     control={<Radio />}
@@ -162,13 +121,8 @@ export default function Payment() {
                             variant="outlined"
                             margin="normal"
                             label="Account Number"
-                            value={values?.debitAccount}
-                            onChange={(e) => {
-                                setValues((prev) => ({
-                                    ...prev,
-                                    debitAccount: e.target.value,
-                                }));
-                            }}
+                            value={accountNumber}
+                            onChange={(e) => setAccountNumber(e.target.value)}
                         />
                         <Typography
                             className="payment-summary-text"
