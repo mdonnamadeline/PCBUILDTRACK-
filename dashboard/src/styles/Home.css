@@ -1,10 +1,57 @@
-
-.homecon{
-    display: flex; 
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
-    height: 100vh; 
+.homecon {
+    display: flex;
+    flex-direction: column; /* Stack images and footer vertically */
+    justify-content: flex-start; /* Align items at the top */
+    align-items: center; /* Center content horizontally */
     width: 100%;
-    gap:20px;
+    gap: 20px; /* Add spacing between images and footer */
+}
+
+.imageContainer {
+    display: flex;
+    flex-direction: column; /* Stack images vertically */
+    gap: 20px; /* Add spacing between images */
+    align-items: center; /* Center the images horizontally */
+}
+
+.landscapeImage {
+    width: 800px; /* Set a fixed width */
+    height: 400px; /* Set a fixed height for landscape orientation */
+    object-fit: cover; /* Ensure the image fills the container */
+    border-radius: 10px; /* Optional: Add rounded corners */
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #1e1a3d; /* Dark background */
+    color: #fff; /* White text */
+    padding: 20px;
+    border-radius: 10px; /* Optional: Rounded corners */
+    width: 100%; /* Ensure the footer spans the full width */
+}
+
+.footerSection {
+    flex: 1;
+    margin: 0 10px;
+}
+
+.footerSection h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.footerSection p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #ccc; /* Slightly lighter text for contrast */
+}
+
+.footerCopyright {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #aaa; /* Light gray text */
 }
