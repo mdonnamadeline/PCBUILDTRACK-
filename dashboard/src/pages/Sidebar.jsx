@@ -25,20 +25,11 @@ export default function Sidebar() {
         } else {
             return (
                 <>
-                    {/* <Link to="/home" className="sidebar-item">
-                        Home
-                    </Link>
-                    <Link to="/menu" className="sidebar-item">
-                        Menu
-                    </Link> */}
                     <Link to="/manageuser" className="sidebar-item">
                         MANAGE USER
                     </Link>
                     <Link to="/manageproduct" className="sidebar-item">
                         PRODUCT INVENTORY
-                    </Link>
-                    <Link to="/businesstobusiness" className="sidebar-item">
-                        PARTNERS
                     </Link>
                     <Link to="/reports" className="sidebar-item">
                         REPORTS
