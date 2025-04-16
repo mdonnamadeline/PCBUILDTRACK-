@@ -83,40 +83,52 @@ export default function Menu() {
         setSelectedProduct(null); // Clear the selected product
     };
 
-   const handleAddToCart = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
-        navigate("/login");
-        return;
-    }
-
-    const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-    const existingItemIndex = cartItems.findIndex(
-        (item) => item.id === selectedProduct._id && item.userId === user.id
-    );
-
-    if (existingItemIndex !== -1) {
-        cartItems[existingItemIndex].quantity += quantity;
-    } else {
-        cartItems.push({
-            id: selectedProduct._id,
-            name: selectedProduct.name,
-            price: selectedProduct.price,
-            quantity: quantity,
-            addedDate: new Date().toISOString(),
-            userId: user.id,
-        });
-    }
-
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-
-    // Update cart count
-    const newCartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
-    setCartCount(newCartCount);
-
-    setOpenAddToOrder(false);
-    alert("Item added to cart successfully!");
-};
+    const handleAddToCart = () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+    
+        // Check if requested quantity exceeds available stock
+        if (quantity > selectedProduct.quantity) {
+            alert(`Not enough stock available. Only ${selectedProduct.quantity} items left.`);
+            return;
+        }
+    
+        const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+        const existingItemIndex = cartItems.findIndex(
+            (item) => item.id === selectedProduct._id && item.userId === user.id
+        );
+    
+        // If the item is already in cart, check if total quantity would exceed stock
+        if (existingItemIndex !== -1) {
+            const newTotalQuantity = cartItems[existingItemIndex].quantity + quantity;
+            if (newTotalQuantity > selectedProduct.quantity) {
+                alert(`Cannot add ${quantity} more. You already have ${cartItems[existingItemIndex].quantity} in cart and only ${selectedProduct.quantity} are available.`);
+                return;
+            }
+            cartItems[existingItemIndex].quantity += quantity;
+        } else {
+            cartItems.push({
+                id: selectedProduct._id,
+                name: selectedProduct.name,
+                price: selectedProduct.price,
+                quantity: quantity,
+                addedDate: new Date().toISOString(),
+                userId: user.id,
+            });
+        }
+    
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    
+        // Update cart count
+        const newCartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+        setCartCount(newCartCount);
+    
+        setOpenAddToOrder(false);
+        alert("Item added to cart successfully!");
+    };
 
     const handleOpenAddToOrder = (product) => {
         setSelectedProduct(product);
@@ -125,6 +137,11 @@ export default function Menu() {
     };
 
     const handleQuantityChange = (operation) => {
+        if (operation === "+" && quantity >= selectedProduct.quantity) {
+            alert(`Cannot add more. Only ${selectedProduct.quantity} items available in stock.`);
+            return;
+        }
+        
         setQuantity((prevQuantity) =>
             operation === "+" ? prevQuantity + 1 : Math.max(1, prevQuantity - 1)
         );
@@ -294,19 +311,38 @@ function ProductCard({ menu, handleOpen }) {
                 >
                     {menu.description}
                 </Typography>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    style={{
-                        marginTop: "10px",
-                        width: "100%",
-                        color: "white",
-                        backgroundColor: "#b893fd", // Corrected color value
-                    }}
-                    onClick={() => handleOpen(menu)}
-                >
-                    Add to Order
-                </Button>
+                {menu.quantity <= 0 ? (
+                    <Button 
+                        variant="contained"
+                        disabled
+                        sx={{
+                            marginTop: "10px",
+                            width: "100%",
+                            backgroundColor: "#d3d3d3",
+                            color: "#666",
+                            "&.Mui-disabled": { 
+                                backgroundColor: "#d3d3d3",
+                                color: "#666"
+                            }
+                        }}
+                    >
+                        Not Available
+                    </Button>
+                ) : (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        style={{
+                            marginTop: "10px",
+                            width: "100%",
+                            color: "white",
+                            backgroundColor: "#b893fd",
+                        }}
+                        onClick={() => handleOpen(menu)}
+                    >
+                        Add to Order
+                    </Button>
+                )}
             </CardContent>
         </Card>
     );

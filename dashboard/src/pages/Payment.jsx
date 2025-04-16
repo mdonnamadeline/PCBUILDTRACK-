@@ -7,7 +7,6 @@ import {
     FormControlLabel,
     Radio,
     RadioGroup,
-    TextField,
     Typography,
     Card,
     CardContent,
@@ -23,8 +22,9 @@ import axios from "axios";
 
 export default function Payment() {
     const [bank, setBank] = useState("");
-    const [accountNumber, setAccountNumber] = useState("");
     const [open, setOpen] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [isProcessing, setIsProcessing] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const cartItems = location.state?.cartItems || [];
@@ -53,13 +53,24 @@ export default function Payment() {
     };
 
     const handleCheckout = async () => {
-        const customerId = getCustomerId();
-    
-        if (!customerId) {
-            console.error("Customer ID is required");
+        // Clear any previous error
+        setErrorMessage("");
+        
+        // Validate inputs
+        if (!bank) {
+            setErrorMessage("Please select a bank.");
             return;
         }
-    
+
+        const customerId = getCustomerId();
+        if (!customerId) {
+            setErrorMessage("Customer ID is required. Please login again.");
+            return;
+        }
+
+        // Start processing
+        setIsProcessing(true);
+        
         const productNames = cartItems.map((item) => item.name).join(", ");
     
         const transactionData = {
@@ -68,13 +79,15 @@ export default function Payment() {
             quantity: cartItems.length,
             price: totalAmount,
             date: new Date().toISOString(),
-            bank: bank,
+            bank: bank
         };
     
         try {
+            console.log("Saving transaction...", transactionData);
             // Save transaction to the database
             await axios.post(`${VITE_REACT_APP_API_HOST}/api/reports`, transactionData);
             
+            console.log("Updating stock quantities...");
             // Update stock quantities for each purchased item
             await Promise.all(
                 cartItems.map(async (item) => {
@@ -93,7 +106,10 @@ export default function Payment() {
             setOpen(true);
             clearCart();
         } catch (error) {
-            console.error("Error saving transaction:", error);
+            console.error("Error during checkout:", error);
+            setErrorMessage("Payment failed. Please try again.");
+        } finally {
+            setIsProcessing(false);
         }
     };
     
@@ -117,6 +133,9 @@ export default function Payment() {
                 <Card className="payment-form">
                     <CardContent>
                         <FormControl component="fieldset">
+                            <Typography variant="subtitle1" gutterBottom>
+                                Select Bank
+                            </Typography>
                             <RadioGroup value={bank} onChange={handleBankChange}>
                                 <FormControlLabel
                                     value="Union Bank"
@@ -130,28 +149,35 @@ export default function Payment() {
                                 />
                             </RadioGroup>
                         </FormControl>
-                        <TextField
-                            fullWidth
-                            variant="outlined"
-                            margin="normal"
-                            label="Account Number"
-                            value={accountNumber}
-                            onChange={(e) => setAccountNumber(e.target.value)}
-                        />
+                        
+                        {errorMessage && (
+                            <Typography 
+                                variant="body2" 
+                                color="error" 
+                                style={{ marginTop: '8px' }}
+                            >
+                                {errorMessage}
+                            </Typography>
+                        )}
+                        
                         <Typography
                             className="payment-summary-text"
                             variant="h6"
                             gutterBottom
+                            style={{ marginTop: '16px' }}
                         >
                             Total Amount: ₱{totalAmount}
                         </Typography>
+                        
                         <Button
                             className="payment-button"
                             variant="contained"
                             color="primary"
                             onClick={handleCheckout}
+                            disabled={isProcessing}
+                            style={{ marginTop: '16px' }}
                         >
-                            Checkout
+                            {isProcessing ? "Processing..." : "Checkout"}
                         </Button>
                     </CardContent>
                 </Card>
