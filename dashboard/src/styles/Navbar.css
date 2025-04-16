@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: space-between;
     height: 90px;
-    background-color: rgb(161, 27, 27);
+    background-color: rgb(20, 20, 120) !important;
     font-size: 18px;
     position: sticky;
     top: 0;
@@ -46,7 +46,7 @@ a {
 }
 
 .navbar a:hover {
-    color: #ff9e01;
+    color: rgb(184, 147, 253) !important;
 }
 
 .navbar-items-section {
