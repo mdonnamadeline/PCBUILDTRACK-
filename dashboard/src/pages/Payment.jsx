@@ -54,14 +54,14 @@ export default function Payment() {
 
     const handleCheckout = async () => {
         const customerId = getCustomerId();
-
+    
         if (!customerId) {
             console.error("Customer ID is required");
             return;
         }
-
+    
         const productNames = cartItems.map((item) => item.name).join(", ");
-
+    
         const transactionData = {
             customerId,
             productName: productNames,
@@ -70,11 +70,25 @@ export default function Payment() {
             date: new Date().toISOString(),
             bank: bank,
         };
-
+    
         try {
             // Save transaction to the database
             await axios.post(`${VITE_REACT_APP_API_HOST}/api/reports`, transactionData);
-
+            
+            // Update stock quantities for each purchased item
+            await Promise.all(
+                cartItems.map(async (item) => {
+                    try {
+                        await axios.put(`${VITE_REACT_APP_API_HOST}/api/menu/update-stock`, {
+                            productId: item.id,
+                            quantity: item.quantity
+                        });
+                    } catch (error) {
+                        console.error(`Error updating stock for product ${item.name}:`, error);
+                    }
+                })
+            );
+    
             // Simulate payment success
             setOpen(true);
             clearCart();
@@ -82,7 +96,7 @@ export default function Payment() {
             console.error("Error saving transaction:", error);
         }
     };
-
+    
     const clearCart = () => {
         localStorage.removeItem("cartItems");
         localStorage.setItem("cartCount", 0);
