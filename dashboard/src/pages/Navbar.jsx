@@ -36,7 +36,8 @@ export default function Navbar({ cartItemCount }) {
 
     const handleLogout = () => {
         console.log("Logging out...");
-        localStorage.removeItem("user");
+        localStorage.clear();
+        window.location.href = "/login";
         setUser(null);
         setCartCount(0);
         navigate("/home");

@@ -1,6 +1,6 @@
 import "../styles/Login.css";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,25 @@ export default function Login() {
     const handleClickShowPassword = () => setShowPassword(!showPassword);
     const navigate = useNavigate();
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
+
+    // Clear form fields and localStorage on component mount
+    useEffect(() => {
+        // Clear any stored credentials
+        localStorage.removeItem("tempUserEmail");
+        
+        // Reset form fields
+        setUser({
+            email: "",
+            password: "",
+        });
+        
+        // Reset any browser autofill
+        const emailInput = document.querySelector('input[name="email"]');
+        const passwordInput = document.querySelector('input[name="password"]');
+        
+        if (emailInput) emailInput.value = "";
+        if (passwordInput) passwordInput.value = "";
+    }, []);
 
     const handleChange = (e) => {
         setUser({
@@ -61,7 +80,7 @@ export default function Login() {
                     <img src={pclogo} alt="PC logo" />
                 </div>
                 <div className="loginFormContainer">
-                    <form className="loginForm" onSubmit={handleLogin}>
+                    <form className="loginForm" onSubmit={handleLogin} autoComplete="off">
                         <h2>Welcome! PCBuild Track</h2>
                         <TextField
                             required
@@ -71,6 +90,13 @@ export default function Login() {
                             value={user.email}
                             onChange={handleChange}
                             type="email"
+                            autoComplete="off"
+                            inputProps={{
+                                autoComplete: "new-password", 
+                                form: {
+                                    autoComplete: "off",
+                                },
+                            }}
                         />
                         <TextField
                             id="password"
@@ -81,6 +107,13 @@ export default function Login() {
                             variant="outlined"
                             value={user.password}
                             onChange={handleChange}
+                            autoComplete="off"
+                            inputProps={{
+                                autoComplete: "new-password",
+                                form: {
+                                    autoComplete: "off",
+                                },
+                            }}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
