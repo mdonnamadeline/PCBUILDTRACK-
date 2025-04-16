@@ -340,7 +340,7 @@ export default function ManageProducts() {
                         variant="contained"
                         onClick={() => openModal(initialData, false)}
                         style={{
-                            backgroundColor: "#aa0f0f",
+                            backgroundColor: "#b893fd",
                         }}
                     >
                         ADD PRODUCT
@@ -560,7 +560,7 @@ export default function ManageProducts() {
                                 variant="contained"
                                 type="submit"
                                 style={{
-                                    backgroundColor: "#aa0f0f",
+                                    backgroundColor: "#b893fd",
                                     width: "100px",
                                 }}
                             >
