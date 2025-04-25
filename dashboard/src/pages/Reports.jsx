@@ -72,18 +72,17 @@ export default function Reports() {
     useEffect(() => {
         let total = 0;
         let orderCount = transactions.length; 
-        let totalQuantity = 0; // Add this line to track total quantity
-    
+        let totalQuantity = 0; 
         transactions.forEach((transaction) => {
             const price = parseFloat(transaction.price) || 0;
             total += price;
-            totalQuantity += transaction.quantity || 0; // Add this line to accumulate quantity
+            totalQuantity += transaction.quantity || 0; 
         });
     
         setTotalSales(total);
         localStorage.setItem("totalSales", total);
         localStorage.setItem("totalOrders", orderCount);
-        localStorage.setItem("totalQuantity", totalQuantity); // Store total quantity
+        localStorage.setItem("totalQuantity", totalQuantity); 
     }, [transactions]);
     
     
