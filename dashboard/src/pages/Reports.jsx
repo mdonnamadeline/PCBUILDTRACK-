@@ -21,6 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Sidebar from "./Sidebar";
 import { styled } from "@mui/system";
 import "../styles/Reports.css";
+import { useNavigate } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)({
     fontWeight: "bold",
@@ -50,7 +51,15 @@ export default function Reports() {
     const [open, setOpen] = useState(false);
     const [selectedTransactionId, setSelectedTransactionId] = useState(null);
     const { VITE_REACT_APP_API_HOST } = import.meta.env;
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        // If no user or not admin, redirect to login
+        if (!user || user.role !== "Admin") {
+            navigate("/login");
+        }
+    }, [navigate]);
 
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -58,16 +67,13 @@ export default function Reports() {
                 const response = await axios.get(
                     `${VITE_REACT_APP_API_HOST}/api/reports`
                 );
-                console.log("API Response:", response.data); 
                 setTransactions(response.data);
             } catch (error) {
-                console.error("Error fetching transactions:", error);
                 setError("Failed to fetch transactions");
             }
         };
-
         fetchTransactions();
-    }, []);
+    }, [VITE_REACT_APP_API_HOST]);
 
     useEffect(() => {
         let total = 0;
