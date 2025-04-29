@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; // Removed useMemo
 import axios from "axios";
 import {
     Container,
@@ -38,7 +38,7 @@ const formatDate = (dateString) => {
     const seconds = String(date.getSeconds()).padStart(2, "0");
     const ampm = hours >= 12 ? "PM" : "AM";
     hours = hours % 12;
-    hours = hours ? hours : 12;
+    hours = hours ? hours : 12; // Handle midnight (0) as 12 AM
     hours = String(hours).padStart(2, "0");
 
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${ampm}`;
@@ -55,7 +55,6 @@ export default function Reports() {
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
-        // If no user or not admin, redirect to login
         if (!user || user.role !== "Admin") {
             navigate("/login");
         }
@@ -67,31 +66,42 @@ export default function Reports() {
                 const response = await axios.get(
                     `${VITE_REACT_APP_API_HOST}/api/reports`
                 );
-                setTransactions(response.data);
+                console.log("Raw API response:", response.data);
+                // Ensure transactions is always an array
+                setTransactions(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
+                console.error("Failed to fetch transactions:", error);
                 setError("Failed to fetch transactions");
+                setTransactions([]); // Set to empty array on error
             }
         };
         fetchTransactions();
     }, [VITE_REACT_APP_API_HOST]);
 
+    // REMOVED groupedTransactions useMemo hook
+
+    // Calculate totals based on individual transactions
     useEffect(() => {
         let total = 0;
-        let orderCount = transactions.length; 
-        let totalQuantity = 0; 
+        let orderCount = transactions.length; // Count each transaction as an order line item
+        let totalQuantitySum = 0;
+
         transactions.forEach((transaction) => {
-            const price = parseFloat(transaction.price) || 0;
-            total += price;
-            totalQuantity += transaction.quantity || 0; 
+            const itemPrice = parseFloat(transaction.price) || 0;
+            const itemQuantity = parseInt(transaction.quantity, 10) || 1; // Default quantity to 1 if invalid
+            // Assuming each transaction has a 'price' field representing the total for that line
+            // If 'price' is unit price, calculate total: itemPrice * itemQuantity
+            // Adjust based on your data structure. If 'price' already means total price for the quantity in that row:
+            total += itemPrice; // Or total += itemPrice * itemQuantity if 'price' is unit price
+            totalQuantitySum += itemQuantity;
         });
-    
+
         setTotalSales(total);
         localStorage.setItem("totalSales", total);
-        localStorage.setItem("totalOrders", orderCount);
-        localStorage.setItem("totalQuantity", totalQuantity); 
-    }, [transactions]);
-    
-    
+        localStorage.setItem("totalOrders", orderCount); // Now represents total transaction line items
+        localStorage.setItem("totalQuantity", totalQuantitySum);
+    }, [transactions]); // Depends on raw transactions now
+
     const handleClickOpen = (id) => {
         setSelectedTransactionId(id);
         setOpen(true);
@@ -116,11 +126,12 @@ export default function Reports() {
                 );
                 setOpen(false);
             } else {
-                alert(res.data.error);
+                alert(res.data.error || "Failed to delete transaction");
             }
         } catch (error) {
             console.error("Error deleting transaction:", error);
             setError("Failed to delete transaction");
+            alert("An error occurred while deleting the transaction.");
         }
     };
 
@@ -134,11 +145,12 @@ export default function Reports() {
                 </Typography>
 
                 <Typography variant="h6" gutterBottom className="total-sales">
-                    Total Sales: ₱{totalSales.toFixed(2)}
+                    {/* Ensure totalSales is a number before calling toFixed */}
+                    Total Sales: ₱{typeof totalSales === 'number' ? totalSales.toFixed(2) : '0.00'}
                 </Typography>
 
                 {error && (
-                    <Typography className="error-message">{error}</Typography>
+                    <Typography color="error" className="error-message">{error}</Typography>
                 )}
 
                 <TableContainer component={Paper} className="table-container">
@@ -148,42 +160,43 @@ export default function Reports() {
                                 <StyledTableCell>Customer ID</StyledTableCell>
                                 <StyledTableCell>Product Name</StyledTableCell>
                                 <StyledTableCell>Quantity</StyledTableCell>
-                                <StyledTableCell>Price</StyledTableCell>
+                                <StyledTableCell>Price</StyledTableCell> {/* Changed from Unit Price / Total Price */}
                                 <StyledTableCell>Bank</StyledTableCell>
                                 <StyledTableCell>Date and Time</StyledTableCell>
                                 <StyledTableCell>Action</StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
+                            {/* Map over raw transactions */}
                             {transactions.map((transaction) => (
+                                // Use the unique _id from the database as the key
                                 <TableRow key={transaction._id}>
                                     <TableCell>
                                         {transaction.customerId}
                                     </TableCell>
                                     <TableCell>
-                                        {transaction.productName ||
-                                            "Unknown Product"}
+                                        {transaction.productName || "Unknown Product"}
                                     </TableCell>
                                     <TableCell>
-                                        {transaction.quantity}
+                                        {/* Display the quantity from the individual transaction */}
+                                        <strong>{parseInt(transaction.quantity, 10) || 1}</strong>
                                     </TableCell>
                                     <TableCell>
-                                        ₱
-                                        {parseFloat(transaction.price).toFixed(
-                                            2
-                                        )}
+                                        {/* Display the price from the individual transaction */}
+                                        {/* Adjust if 'price' is unit price vs total price for the row */}
+                                        ₱{(parseFloat(transaction.price) || 0).toFixed(2)}
                                     </TableCell>
                                     <TableCell>{transaction.bank}</TableCell>
                                     <TableCell>
                                         {formatDate(transaction.date)}
                                     </TableCell>
                                     <TableCell>
+                                        {/* Pass the _id of the specific transaction for deletion */}
                                         <DeleteIcon
-                                            onClick={() =>
-                                                handleClickOpen(transaction._id)
-                                            }
+                                            onClick={() => handleClickOpen(transaction._id)}
                                             color="error"
                                             className="delete-icon"
+                                            style={{ cursor: 'pointer' }}
                                         />
                                     </TableCell>
                                 </TableRow>
@@ -199,18 +212,12 @@ export default function Reports() {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle
-                        id="alert-dialog-title"
-                        className="dialog-title"
-                    >
+                    <DialogTitle id="alert-dialog-title" className="dialog-title">
                         {"Confirm Deletion"}
                     </DialogTitle>
                     <DialogContent>
-                        <DialogContentText
-                            id="alert-dialog-description"
-                            className="dialog-content-text"
-                        >
-                            Are you sure you want to delete this transaction?
+                        <DialogContentText id="alert-dialog-description" className="dialog-content-text">
+                            Are you sure you want to delete this transaction record?
                             This action cannot be undone.
                         </DialogContentText>
                     </DialogContent>
@@ -218,11 +225,7 @@ export default function Reports() {
                         <Button onClick={handleClose} color="primary">
                             Cancel
                         </Button>
-                        <Button
-                            onClick={handleDelete}
-                            color="secondary"
-                            autoFocus
-                        >
+                        <Button onClick={handleDelete} color="secondary" autoFocus>
                             Delete
                         </Button>
                     </DialogActions>

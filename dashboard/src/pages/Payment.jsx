@@ -55,7 +55,7 @@ export default function Payment() {
     const handleCheckout = async () => {
         // Clear any previous error
         setErrorMessage("");
-        
+
         // Validate inputs
         if (!bank) {
             setErrorMessage("Please select a bank.");
@@ -70,44 +70,63 @@ export default function Payment() {
 
         // Start processing
         setIsProcessing(true);
-        
-        const productNames = cartItems.map((item) => item.name).join(", ");
-    
-        const transactionData = {
-            customerId,
-            productName: productNames,
-            quantity: cartItems.length,
-            price: totalAmount,
-            date: new Date().toISOString(),
-            bank: bank
-        };
-    
+
         try {
-            console.log("Saving transaction...", transactionData);
-            // Save transaction to the database
-            await axios.post(`${VITE_REACT_APP_API_HOST}/api/reports`, transactionData);
-            
+            // --- MODIFICATION START ---
+            // Process each cart item individually
+            for (const item of cartItems) {
+                const transactionData = {
+                    customerId,
+                    productName: item.name, // Use individual item name
+                    quantity: item.quantity, // Use individual item quantity
+                    price: item.price * item.quantity, // Calculate price for this item line
+                    date: new Date().toISOString(),
+                    bank: bank,
+                };
+
+                console.log("Saving transaction for item:", item.name, transactionData);
+                // Save individual transaction to the database
+                await axios.post(
+                    `${VITE_REACT_APP_API_HOST}/api/reports`,
+                    transactionData
+                );
+            }
+            // --- MODIFICATION END ---
+
             console.log("Updating stock quantities...");
-            // Update stock quantities for each purchased item
+            // Update stock quantities for each purchased item (this part remains the same)
             await Promise.all(
                 cartItems.map(async (item) => {
                     try {
-                        await axios.put(`${VITE_REACT_APP_API_HOST}/api/menu/update-stock`, {
-                            productId: item.id,
-                            quantity: item.quantity
-                        });
+                        await axios.put(
+                            `${VITE_REACT_APP_API_HOST}/api/menu/update-stock`,
+                            {
+                                productId: item.id,
+                                quantity: item.quantity, // Send the quantity purchased to decrease stock
+                            }
+                        );
                     } catch (error) {
-                        console.error(`Error updating stock for product ${item.name}:`, error);
+                        // Consider more specific error handling for stock updates
+                        console.error(
+                            `Error updating stock for product ${item.name}:`,
+                            error.response?.data || error.message
+                        );
+                        // Optionally: Collect these errors and inform the user,
+                        // or decide if the whole checkout should fail if stock update fails.
                     }
                 })
             );
-    
-            // Simulate payment success
+
+            // Payment success simulation
             setOpen(true);
             clearCart();
         } catch (error) {
             console.error("Error during checkout:", error);
-            setErrorMessage("Payment failed. Please try again.");
+            // Provide more specific feedback if possible
+            const errorMsg =
+                error.response?.data?.message ||
+                "Payment failed. Please try again.";
+            setErrorMessage(errorMsg);
         } finally {
             setIsProcessing(false);
         }

@@ -14,7 +14,7 @@ import {
     Box,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Navbar from './Navbar';
+import Navbar from "./Navbar";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "../styles/Navbar.css";
 import "../styles/Cart.css";
@@ -113,11 +113,11 @@ export default function Cart() {
                                 </TableHead>
                                 <TableBody>
                                     {cartItems.map((item, index) => (
-                                        <TableRow key={index}>
+                                        <TableRow key={item.id || index}>
                                             <TableCell>
                                                 <Checkbox
-                                                    checked={selectedItems.includes(
-                                                        item
+                                                    checked={selectedItems.some(
+                                                        (i) => i.id === item.id
                                                     )}
                                                     onChange={() =>
                                                         handleSelectItem(item)
