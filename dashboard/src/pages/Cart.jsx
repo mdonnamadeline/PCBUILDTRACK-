@@ -22,54 +22,84 @@ import "../styles/Cart.css";
 export default function Cart() {
     const [cartItems, setCartItems] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
-    const [cartItemCount, setCartItemCount] = useState(0);
+    const [cartItemCount, setCartItemCount] = useState(0); // Keep this for Navbar display
     const navigate = useNavigate();
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
-        if (!user) {
+        if (!user || !user._id) { // Check for user and user._id
             navigate("/login");
             return;
         }
 
         const storedCartItems =
             JSON.parse(localStorage.getItem("cartItems")) || [];
-        setCartItems(storedCartItems.filter((item) => item.userId === user.id));
-        updateCartItemCount(storedCartItems);
-    }, [navigate]);
 
+        // Filter items specifically for the logged-in user using user._id
+        const userCartItems = storedCartItems.filter((item) => item.userId === user._id); // FIX: Use user._id
+        setCartItems(userCartItems);
+
+        // Update count based only on the current user's items
+        updateCartItemCount(userCartItems);
+
+    }, [navigate]); // Only run on mount and when navigate changes
+
+    // This useEffect updates the count whenever the user's cartItems state changes (e.g., after deletion)
     useEffect(() => {
-        const cartCount = cartItems.reduce(
+        const count = cartItems.reduce(
             (total, item) => total + item.quantity,
             0
         );
-        localStorage.setItem("cartCount", cartCount);
-        setCartItemCount(cartCount);
+        setCartItemCount(count);
+        // Note: We don't need to update localStorage count here,
+        // as the primary source is cartItems state derived from localStorage initially.
+        // The count is mainly for display in Navbar.
     }, [cartItems]);
 
+    // Helper function to update count state
     const updateCartItemCount = (items) => {
         const count = items.reduce((total, item) => total + item.quantity, 0);
         setCartItemCount(count);
-        localStorage.setItem("cartCount", count);
+        // No need to set localStorage count here, it's derived
     };
 
     const handleSelectItem = (item) => {
-        setSelectedItems((prevSelectedItems) =>
-            prevSelectedItems.includes(item)
-                ? prevSelectedItems.filter((i) => i !== item)
-                : [...prevSelectedItems, item]
-        );
+        // Use item.id for comparison as it's the product's unique ID
+        const itemId = item.id;
+        setSelectedItems((prevSelectedItems) => {
+            const isSelected = prevSelectedItems.some(selected => selected.id === itemId);
+            if (isSelected) {
+                return prevSelectedItems.filter((i) => i.id !== itemId);
+            } else {
+                return [...prevSelectedItems, item];
+            }
+        });
     };
 
-    const handleDeleteItem = (item) => {
-        const updatedCartItems = cartItems.filter((i) => i !== item);
-        setCartItems(updatedCartItems);
-        localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-        updateCartItemCount(updatedCartItems);
-        if (selectedItems.includes(item)) {
-            setSelectedItems(selectedItems.filter((i) => i !== item));
-        }
+    const handleDeleteItem = (itemToDelete) => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || !user._id) return; // Safety check
+
+        const itemIdToDelete = itemToDelete.id;
+
+        // Update component state first for immediate UI feedback
+        const updatedCartItemsState = cartItems.filter((i) => i.id !== itemIdToDelete);
+        setCartItems(updatedCartItemsState);
+
+        // Update selected items if the deleted item was selected
+        setSelectedItems((prevSelected) => prevSelected.filter(i => i.id !== itemIdToDelete));
+
+        // Update localStorage by filtering ALL stored items
+        const allStoredCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+        const updatedLocalStorageItems = allStoredCartItems.filter(
+            (item) => !(item.id === itemIdToDelete && item.userId === user._id) // Remove only the specific item for this user
+        );
+        localStorage.setItem("cartItems", JSON.stringify(updatedLocalStorageItems));
+
+        // Recalculate and update count based on the new state
+        updateCartItemCount(updatedCartItemsState);
     };
+
 
     const handleProceedToPayment = () => {
         if (selectedItems.length > 0) {
@@ -88,6 +118,18 @@ export default function Cart() {
             0
         );
     };
+
+    // Format date string for display
+    const formatDate = (dateString) => {
+        if (!dateString) return 'N/A';
+        try {
+            const date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        } catch (e) {
+            return 'Invalid Date';
+        }
+    };
+
 
     return (
         <>
@@ -112,11 +154,11 @@ export default function Cart() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {cartItems.map((item, index) => (
-                                        <TableRow key={item.id || index}>
+                                    {cartItems.map((item) => ( // Use item.id as key
+                                        <TableRow key={item.id}>
                                             <TableCell>
                                                 <Checkbox
-                                                    checked={selectedItems.some(
+                                                    checked={selectedItems.some( // Check based on item.id
                                                         (i) => i.id === item.id
                                                     )}
                                                     onChange={() =>
@@ -128,12 +170,12 @@ export default function Cart() {
                                             <TableCell>
                                                 {item.quantity}
                                             </TableCell>
-                                            <TableCell>₱{item.price}</TableCell>
+                                            <TableCell>₱{item.price.toFixed(2)}</TableCell>
                                             <TableCell>
-                                                {item.addedDate}
+                                                {formatDate(item.addedDate)} {/* Format date */}
                                             </TableCell>
                                             <TableCell>
-                                                ₱{item.price * item.quantity}
+                                                ₱{(item.price * item.quantity).toFixed(2)} {/* Format total */}
                                             </TableCell>
                                             <TableCell>
                                                 <IconButton
@@ -149,15 +191,16 @@ export default function Cart() {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <Box mt={2}>
+                        <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
                             <Typography variant="h6" gutterBottom>
-                                Total Amount: ₱{getTotalAmount()}
+                                Total Amount (Selected): ₱{getTotalAmount().toFixed(2)} {/* Format total */}
                             </Typography>
                             <Button
                                 variant="contained"
                                 color="primary"
                                 onClick={handleProceedToPayment}
                                 className="proceed-to-payment-button"
+                                disabled={selectedItems.length === 0} // Disable if nothing selected
                             >
                                 Proceed to Payment
                             </Button>
@@ -165,9 +208,7 @@ export default function Cart() {
                     </>
                 ) : (
                     <Typography variant="body1" color="textSecondary">
-                        Your cart is empty. <br />
-                        Please <a href="/login">log in</a> or{" "}
-                        <a href="/signup">sign up</a> to add items to your cart.
+                        Your cart is empty.
                     </Typography>
                 )}
             </div>
