@@ -43,7 +43,6 @@ export default function Menu() {
     const navigate = useNavigate();
     const [cartCount, setCartCount] = useState(0); // State for cart count
 
-
     const categories = [
         "Processor",
         "GPU",
@@ -59,19 +58,24 @@ export default function Menu() {
         fetchData();
         const storedUser = JSON.parse(localStorage.getItem("user"));
         setUser(storedUser);
-    
+
         // Load cart count from localStorage
         const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
         const userCartItems = storedUser
             ? cartItems.filter((item) => item.userId === storedUser._id) // Changed storedUser.id to storedUser._id
             : [];
-        const count = userCartItems.reduce((total, item) => total + item.quantity, 0);
+        const count = userCartItems.reduce(
+            (total, item) => total + item.quantity,
+            0
+        );
         setCartCount(count);
     }, []);
-    
+
     const fetchData = async () => {
         try {
-            const response = await axios.get(`${VITE_REACT_APP_API_HOST}/api/menu`);
+            const response = await axios.get(
+                `${VITE_REACT_APP_API_HOST}/api/menu`
+            );
             setDataList(response.data.data || []);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -82,33 +86,46 @@ export default function Menu() {
         setOpenAddToOrder(false); // Close the modal
         setSelectedProduct(null); // Clear the selected product
     };
-
+    // ...existing code...
     const handleAddToCart = () => {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {
             navigate("/login");
             return;
         }
-    
+
         // Check if requested quantity exceeds available stock
         if (quantity > selectedProduct.quantity) {
-            alert(`Not enough stock available. Only ${selectedProduct.quantity} items left.`);
+            alert(
+                `Not enough stock available. Only ${selectedProduct.quantity} items left.`
+            );
             return;
         }
-    
+
         const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
         const existingItemIndex = cartItems.findIndex(
-            (item) => item.id === selectedProduct._id && item.userId === user._id // Changed user.id to user._id
+            (item) =>
+                item.id === selectedProduct._id && item.userId === user._id
         );
-    
-        // If the item is already in cart, check if total quantity would exceed stock
+
         if (existingItemIndex !== -1) {
-            const newTotalQuantity = cartItems[existingItemIndex].quantity + quantity;
-            if (newTotalQuantity > selectedProduct.quantity) {
-                alert(`Cannot add ${quantity} more. You already have ${cartItems[existingItemIndex].quantity} in cart and only ${selectedProduct.quantity} are available.`);
+            const currentCartQuantity = cartItems[existingItemIndex].quantity;
+            const maxStock =
+                cartItems[existingItemIndex].maxStock ||
+                selectedProduct.quantity;
+            const newTotalQuantity = currentCartQuantity + quantity;
+
+            if (newTotalQuantity > maxStock) {
+                alert(
+                    `Cannot add ${quantity} more. You already have ${currentCartQuantity} in cart and only ${maxStock} are available in total.`
+                );
                 return;
             }
-            cartItems[existingItemIndex].quantity += quantity;
+            cartItems[existingItemIndex].quantity = newTotalQuantity;
+            if (!cartItems[existingItemIndex].maxStock) {
+                cartItems[existingItemIndex].maxStock =
+                    selectedProduct.quantity;
+            }
         } else {
             cartItems.push({
                 id: selectedProduct._id,
@@ -116,18 +133,28 @@ export default function Menu() {
                 price: selectedProduct.price,
                 quantity: quantity,
                 addedDate: new Date().toISOString(),
-                userId: user._id, // Changed user.id to user._id
+                userId: user._id,
+                maxStock: selectedProduct.quantity,
             });
         }
-    
+
         localStorage.setItem("cartItems", JSON.stringify(cartItems));
-        // Update cart count
-        const newCartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+        // Update cart count state for the Navbar
+        const userCartItems = cartItems.filter(
+            (item) => item.userId === user._id
+        );
+        const newCartCount = userCartItems.reduce(
+            (total, item) => total + item.quantity,
+            0
+        );
         setCartCount(newCartCount);
-    
-        setOpenAddToOrder(false);
-        alert("Item added to cart successfully!");
+
+        setOpenAddToOrder(false); // Close the modal
+        alert("Item added to cart successfully!"); // Add success alert
     };
+
+    // ... (rest of the component code remains the same) ...
 
     const handleOpenAddToOrder = (product) => {
         setSelectedProduct(product);
@@ -137,10 +164,12 @@ export default function Menu() {
 
     const handleQuantityChange = (operation) => {
         if (operation === "+" && quantity >= selectedProduct.quantity) {
-            alert(`Cannot add more. Only ${selectedProduct.quantity} items available in stock.`);
+            alert(
+                `Cannot add more. Only ${selectedProduct.quantity} items available in stock.`
+            );
             return;
         }
-        
+
         setQuantity((prevQuantity) =>
             operation === "+" ? prevQuantity + 1 : Math.max(1, prevQuantity - 1)
         );
@@ -316,7 +345,7 @@ function ProductCard({ menu, handleOpen }) {
                     {menu.description}
                 </Typography>
                 {menu.quantity <= 0 ? (
-                    <Button 
+                    <Button
                         variant="contained"
                         disabled
                         sx={{
@@ -324,10 +353,10 @@ function ProductCard({ menu, handleOpen }) {
                             width: "100%",
                             backgroundColor: "#d3d3d3",
                             color: "#666",
-                            "&.Mui-disabled": { 
+                            "&.Mui-disabled": {
                                 backgroundColor: "#d3d3d3",
-                                color: "#666"
-                            }
+                                color: "#666",
+                            },
                         }}
                     >
                         Not Available
