@@ -63,7 +63,7 @@ export default function Menu() {
         // Load cart count from localStorage
         const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
         const userCartItems = storedUser
-            ? cartItems.filter((item) => item.userId === storedUser.id)
+            ? cartItems.filter((item) => item.userId === storedUser._id) // Changed storedUser.id to storedUser._id
             : [];
         const count = userCartItems.reduce((total, item) => total + item.quantity, 0);
         setCartCount(count);
@@ -98,7 +98,7 @@ export default function Menu() {
     
         const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
         const existingItemIndex = cartItems.findIndex(
-            (item) => item.id === selectedProduct._id && item.userId === user.id
+            (item) => item.id === selectedProduct._id && item.userId === user._id // Changed user.id to user._id
         );
     
         // If the item is already in cart, check if total quantity would exceed stock
@@ -116,12 +116,11 @@ export default function Menu() {
                 price: selectedProduct.price,
                 quantity: quantity,
                 addedDate: new Date().toISOString(),
-                userId: user.id,
+                userId: user._id, // Changed user.id to user._id
             });
         }
     
         localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    
         // Update cart count
         const newCartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
         setCartCount(newCartCount);
@@ -156,12 +155,17 @@ export default function Menu() {
     };
 
     const filteredMenuItems = dataList.filter((menu) => {
+        // Add this condition to check if the item is NOT disabled
+        const isNotDisabled = !menu.disabled;
+
         const matchesSearch = `${menu.name} ${menu.description} ${menu.price}`
             .toLowerCase()
             .includes(searchQuery.toLowerCase());
         const matchesCategory =
             !selectedCategory || menu.category === selectedCategory;
-        return matchesSearch && matchesCategory;
+
+        // Include the isNotDisabled check in the return statement
+        return isNotDisabled && matchesSearch && matchesCategory;
     });
 
     return (
