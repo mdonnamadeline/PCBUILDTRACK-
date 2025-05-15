@@ -41,9 +41,17 @@ export default function SignUp() {
             const result = response.data;
 
             if (result.success) {
-                localStorage.removeItem("cartItems");
-                localStorage.removeItem("user");
-                navigate("/");
+                alert("Signup successful!"); // Display success message
+                // Clear the form fields
+                setUser({
+                    firstname: "",
+                    lastname: "",
+                    middlename: "",
+                    email: "",
+                    password: "",
+                });
+                // localStorage.removeItem("cartItems"); // Decide if these are needed
+                // localStorage.removeItem("user");
             } else {
                 alert(result.message);
             }
