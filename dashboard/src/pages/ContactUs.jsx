@@ -56,64 +56,66 @@ function ContactUs() {
   return (
     <>
       <Navbar />
-      <div className="manage-user">
-        <div className="content">
-          <div className="viewuser">
-            <div className="vucon">
-              <h1>Contact Us</h1>
-              <p>
-                If you have any questions or feedback, please fill out the form below.
-              </p>
-              <form onSubmit={handleSubmit} className="editModalText">
-                <div className="form-group">
-                  <label htmlFor="name">Name:</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="email">Email:</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="contact">Contact:</label>
-                  <input
-                    type="text"
-                    id="contact"
-                    name="contact"
-                    value={formData.contact}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="message">Message:</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows="5"
-                    required
-                  ></textarea>
-                </div>
-                <button type="submit" className="submit-button">
-                  Send Message
-                </button>
-              </form>
-            </div>
+      <div className="contactUsContainer">
+        <div className="contactUsContent">
+          <div className="contactFormContainer">
+            <h1>Contact Us</h1>
+            <p>
+              If you have any questions or feedback, please fill out the form below.
+            </p>
+            <form onSubmit={handleSubmit} className="editModalText">
+              <div className="form-group">
+                <label htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="Enter your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="contact">Mobile</label>
+                <input
+                  type="text"
+                  id="contact"
+                  name="contact"
+                  placeholder="Enter your mobile number"
+                  value={formData.contact}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="message">Message / Suggestion / Comments</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  placeholder="Enter your message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows="5"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" className="submit-button">
+                Send
+              </button>
+            </form>
           </div>
         </div>
       </div>

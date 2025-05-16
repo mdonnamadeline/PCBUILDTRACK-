@@ -297,11 +297,11 @@ export default function ManageProducts() {
     });
 
     return (
-        <div className="manage-user">
+        <div className="manage-project">
             <Sidebar />
             <div className="content">
-                <div className="viewuser">
-                    <div className="vucon">
+                <div className="view-product">
+                    <div className="vpcon">
                         <h1>Manage Products</h1>
                         <div className="addbutton">
                             <Button
@@ -311,10 +311,12 @@ export default function ManageProducts() {
                                 style={{
                                     backgroundColor: "#b893fd",
                                     color: "white",
+                                    mb: 2,
                                 }}
                             >
                                 ADD PRODUCT
                             </Button>
+
                         </div>
                         <div className="search">
                             <TextField

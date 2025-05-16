@@ -1,65 +1,143 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: white;
+  margin: 0;
+}
 
-.contact-us-container {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 2rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background-color: #f9f9f9;
+.manage-user {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding: 1em;
+  flex: 1;
+  padding-left: 250px;
+}
+
+.viewuser {
+  display: flex;
+  flex-direction: column;
+}
+
+.vucon {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  gap: 1em;
+  max-width: 550px;
+}
+
+.vucon h1 {
+  margin-left: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.vucon p {
+  margin-left: 10px;
+  color: #555;
+}
+
+.contactUsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.contactUsContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  min-width: 300px;
+  height: 500px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.08);
+  overflow: hidden;
+  padding: 32px 24px;
+  font-size: 12px; /* Set font size to 12px only for the container */
+}
+
+.contactFormContainer {
+  width: 100%;
+}
+
+.editModalText {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3em;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 0.2em;
+  color: #222;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.7em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1em;
+  font-family: inherit;
+  background: #fafaff;
+  transition: border 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border: 1.5px solid #b893fd;
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.submit-button {
+  background-color: #b893fd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7em 2em;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5em;
+  transition: background 0.2s;
+}
+
+.submit-button:hover {
+  background-color: #a07be6;
+}
+
+.contact-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 80vh;
+}
+
+@media (max-width: 767px) {
+  .contactUsContent {
+    padding: 16px 4px;
   }
-  
-  .contact-us-container h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: #333;
-  }
-  
-  .contact-us-container p {
-    text-align: center;
-    margin-bottom: 2rem;
-    color: #555;
-  }
-  
-  .contact-form .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  .contact-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #444;
-  }
-  
-  .contact-form input[type="text"],
-  .contact-form input[type="email"],
-  .contact-form textarea {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box; 
-    font-size: 1rem;
-  }
-  
-  .contact-form textarea {
-    resize: vertical; 
-  }
-  
-  .contact-form .submit-button {
-    display: block;
-    width: 100%;
-    padding: 0.8rem 1.5rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .contact-form .submit-button:hover {
-    background-color: #0056b3;
-  }
-  
+}

@@ -65,7 +65,9 @@ export default function Reports() {
                 const response = await axios.get(
                     `${VITE_REACT_APP_API_HOST}/api/reports`
                 );
-                setTransactions(Array.isArray(response.data) ? response.data : []);
+                setTransactions(
+                    Array.isArray(response.data) ? response.data : []
+                );
             } catch (error) {
                 setError("Failed to fetch transactions");
                 setTransactions([]);
@@ -125,56 +127,165 @@ export default function Reports() {
     };
 
     return (
-        <div className="manage-user">
+        <div className="manage-report">
             <Sidebar />
             <div className="content">
-                <div className="viewuser">
-                    <div className="vucon">
+                <div className="view-report">
+                    <div className="vrcon">
                         <h1>Customer Transactions</h1>
-                        <Typography variant="h6" gutterBottom className="total-sales">
-                            Total Sales: ₱{typeof totalSales === 'number' ? totalSales.toFixed(2) : '0.00'}
+                        <Typography
+                            variant="h6"
+                            gutterBottom
+                            className="total-sales"
+                        >
+                            Total Sales: ₱
+                            {typeof totalSales === "number"
+                                ? totalSales.toFixed(2)
+                                : "0.00"}
                         </Typography>
                         {error && (
-                            <Typography color="error" className="error-message">{error}</Typography>
+                            <Typography color="error" className="error-message">
+                                {error}
+                            </Typography>
                         )}
-                        <TableContainer component={Paper} className="table-container">
-                            <Table>
+                        <TableContainer
+                            component={Paper}
+                            sx={{ mt: 4, borderRadius: 2, boxShadow: 2 }}
+                        >
+                            <Table sx={{ minWidth: 700 }}>
                                 <TableHead>
                                     <TableRow>
-                                        <StyledTableCell>Customer ID</StyledTableCell>
-                                        <StyledTableCell>Product Name</StyledTableCell>
-                                        <StyledTableCell>Quantity</StyledTableCell>
-                                        <StyledTableCell>Price</StyledTableCell>
-                                        <StyledTableCell>Bank</StyledTableCell>
-                                        <StyledTableCell>Date and Time</StyledTableCell>
-                                        <StyledTableCell>Action</StyledTableCell>
+                                        <TableCell
+                                            variant="head"
+                                            sx={{
+                                                fontWeight: 600,
+                                                fontSize: "1rem",
+                                                background: "#fafafa",
+                                                letterSpacing: "0.03em",
+                                            }}
+                                        >
+                                            Customer ID
+                                        </TableCell>
+                                        <TableCell
+                                            variant="head"
+                                            sx={{
+                                                fontWeight: 600,
+                                                fontSize: "1rem",
+                                                background: "#fafafa",
+                                                letterSpacing: "0.03em",
+                                            }}
+                                        >
+                                            Product Name
+                                        </TableCell>
+                                        <TableCell
+                                            variant="head"
+                                            sx={{
+                                                fontWeight: 600,
+                                                fontSize: "1rem",
+                                                background: "#fafafa",
+                                                letterSpacing: "0.03em",
+                                            }}
+                                        >
+                                            Quantity
+                                        </TableCell>
+                                        <TableCell
+                                            variant="head"
+                                            sx={{
+                                                fontWeight: 600,
+                                                fontSize: "1rem",
+                                                background: "#fafafa",
+                                                letterSpacing: "0.03em",
+                                            }}
+                                        >
+                                            Price
+                                        </TableCell>
+                                        <TableCell
+                                            variant="head"
+                                            sx={{
+                                                fontWeight: 600,
+                                                fontSize: "1rem",
+                                                background: "#fafafa",
+                                                letterSpacing: "0.03em",
+                                            }}
+                                        >
+                                            Bank
+                                        </TableCell>
+                                        <TableCell
+                                            variant="head"
+                                            sx={{
+                                                fontWeight: 600,
+                                                fontSize: "1rem",
+                                                background: "#fafafa",
+                                                letterSpacing: "0.03em",
+                                            }}
+                                        >
+                                            Date and Time
+                                        </TableCell>
+                                        <TableCell
+                                            variant="head"
+                                            sx={{
+                                                fontWeight: 600,
+                                                fontSize: "1rem",
+                                                background: "#fafafa",
+                                                letterSpacing: "0.03em",
+                                            }}
+                                        >
+                                            Action
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {transactions.map((transaction) => (
-                                        <TableRow key={transaction._id}>
-                                            <TableCell>
+                                    {transactions.map((transaction, idx) => (
+                                        <TableRow
+                                            key={transaction._id}
+                                            sx={{
+                                                backgroundColor:
+                                                    idx % 2 === 0
+                                                        ? "#f9f9f9"
+                                                        : "white",
+                                                "&:hover": {
+                                                    backgroundColor: "#f1f7ff",
+                                                },
+                                            }}
+                                        >
+                                            <TableCell variant="body">
                                                 {transaction.customerId}
                                             </TableCell>
-                                            <TableCell>
-                                                {transaction.productName || "Unknown Product"}
+                                            <TableCell variant="body">
+                                                {transaction.productName ||
+                                                    "Unknown Product"}
                                             </TableCell>
-                                            <TableCell>
-                                                <strong>{parseInt(transaction.quantity, 10) || 1}</strong>
+                                            <TableCell variant="body">
+                                                <strong>
+                                                    {parseInt(
+                                                        transaction.quantity,
+                                                        10
+                                                    ) || 1}
+                                                </strong>
                                             </TableCell>
-                                            <TableCell>
-                                                ₱{(parseFloat(transaction.price) || 0).toFixed(2)}
+                                            <TableCell variant="body">
+                                                ₱
+                                                {(
+                                                    parseFloat(
+                                                        transaction.price
+                                                    ) || 0
+                                                ).toFixed(2)}
                                             </TableCell>
-                                            <TableCell>{transaction.bank}</TableCell>
-                                            <TableCell>
+                                            <TableCell variant="body">
+                                                {transaction.bank}
+                                            </TableCell>
+                                            <TableCell variant="body">
                                                 {formatDate(transaction.date)}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell variant="body">
                                                 <DeleteIcon
-                                                    onClick={() => handleClickOpen(transaction._id)}
+                                                    onClick={() =>
+                                                        handleClickOpen(
+                                                            transaction._id
+                                                        )
+                                                    }
                                                     color="error"
-                                                    className="delete-icon"
-                                                    style={{ cursor: 'pointer' }}
+                                                    sx={{ cursor: "pointer" }}
                                                 />
                                             </TableCell>
                                         </TableRow>
@@ -190,20 +301,30 @@ export default function Reports() {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title" className="dialog-title">
+                    <DialogTitle
+                        id="alert-dialog-title"
+                        className="dialog-title"
+                    >
                         {"Confirm Deletion"}
                     </DialogTitle>
                     <DialogContent>
-                        <DialogContentText id="alert-dialog-description" className="dialog-content-text">
-                            Are you sure you want to delete this transaction record?
-                            This action cannot be undone.
+                        <DialogContentText
+                            id="alert-dialog-description"
+                            className="dialog-content-text"
+                        >
+                            Are you sure you want to delete this transaction
+                            record? This action cannot be undone.
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={handleDelete} color="secondary" autoFocus>
+                        <Button
+                            onClick={handleDelete}
+                            color="secondary"
+                            autoFocus
+                        >
                             Delete
                         </Button>
                     </DialogActions>

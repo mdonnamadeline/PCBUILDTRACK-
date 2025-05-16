@@ -113,3 +113,30 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.addbutton {
+    margin-bottom: 16px; /* Add space below the button */
+}
+
+.tablebutton {
+    /* Remove background-color if you use sx or inline style in React */
+    color: white;
+    font-weight: 500;
+    padding: 10px 28px; /* More padding for a larger button */
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    text-transform: none;
+}
+
+.search {
+    margin-top: 8px; /* Add space above the search/filter row */
+    margin-bottom: 16px; /* Add space below the search/filter row */
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.vpcon {
+    padding: 24px 0;
+}
