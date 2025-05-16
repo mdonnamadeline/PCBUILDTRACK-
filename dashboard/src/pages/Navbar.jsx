@@ -78,11 +78,13 @@ export default function Navbar({ cartItemCount }) {
                                     <Link to="/manageproduct">
                                         Manage Product
                                     </Link>
+                                    
                                 </>
                             ) : (
                                 <>
                                     <Link to="/home">Home</Link>
                                     <Link to="/menu">Menu</Link>
+                                    <Link to="/contactus">Contact Us</Link> {/* Added Contact Us */}
                                 </>
                             )}
                             <Link to="/cart" onClick={handleCartClick}>
@@ -101,6 +103,7 @@ export default function Navbar({ cartItemCount }) {
                         <>
                             <Link to="/home">Home</Link>
                             <Link to="/menu">Menu</Link>
+                            <Link to="/contactus">Contact Us</Link> {/* Added Contact Us */}
                             <Link to="/login">Login</Link>
                             <Link to="/cart" onClick={handleCartClick}>
                                 <ShoppingCartIcon />

@@ -1,0 +1,58 @@
+.page {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-content {
+  padding-top: 60px;
+  padding: 20px;
+  flex-grow: 1;
+  padding-left: 250px; /* Same as Product page for sidebar space */
+}
+
+.table-container {
+  margin-top: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.MuiTable-root {
+  min-width: 700px;
+}
+
+.MuiTableCell-head {
+  background: #fafafa;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+}
+
+.MuiTableCell-body {
+  font-size: 0.97rem;
+}
+
+.MuiTableRow-root:nth-of-type(even) {
+  background-color: #f9f9f9;
+}
+
+.MuiTableRow-root:hover {
+  background-color: #f1f7ff;
+}
+
+.container {
+  padding: 2rem 0;
+}
+
+h1, .MuiTypography-h4 {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.description-cell {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -32,7 +32,7 @@ export default function ManageProducts() {
         price: "",
         disabled: false,
         quantity: "",
-        category: "", // New field for category
+        category: "",
     };
 
     const [currentData, setCurrentData] = useState(initialData);
@@ -297,295 +297,318 @@ export default function ManageProducts() {
     });
 
     return (
-        <div className="page">
+        <div className="manage-user">
             <Sidebar />
-            <div className="page-content">
-                <h1>Product </h1>
-
-                <div className="column-gap">
-                    <div className="search-filter">
-                        <FormControl sx={{ minWidth: 160 }}>
-                            <InputLabel>Filter</InputLabel>
-                            <Select
-                                value={filterSearch}
-                                label="Filter"
-                                onChange={handleFilterSearchChange}
-                            >
-                                <MenuItem value="">
-                                    <em>None</em>
-                                </MenuItem>
-                                <MenuItem value={"Name"}>Name</MenuItem>
-                                <MenuItem value={"Description"}>
-                                    Description
-                                </MenuItem>
-                                <MenuItem value={"Price"}>Price</MenuItem>
-                                <MenuItem value={"Disabled"}>Disabled</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            variant="outlined"
-                            id="search"
-                            label="Search"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            sx={{ flexGrow: 1 }}
-                        />
-                    </div>
-
-                    <Button
-                        className="tablebutton"
-                        variant="contained"
-                        onClick={() => openModal(initialData, false)}
-                        style={{
-                            backgroundColor: "#b893fd",
-                        }}
-                    >
-                        ADD PRODUCT
-                    </Button>
-                </div>
-
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Description</TableCell>
-                                <TableCell>Image</TableCell>
-                                <TableCell>Stocks</TableCell>
-                                <TableCell>Price</TableCell>
-                                <TableCell>Disabled</TableCell>
-                                <TableCell>Edit</TableCell>
-                            </TableRow>
-                        </TableHead>
-
-                        <TableBody>
-                            {filteredDataList.map((data) => (
-                                <TableRow key={data._id}>
-                                    <TableCell>{data.name}</TableCell>
-                                    <TableCell className="description-cell">
-                                        {data.description}
-                                    </TableCell>
-                                    <TableCell>
-                                        {data.image && (
-                                            <img
-                                                src={`${VITE_REACT_APP_API_HOST}/uploads/${data.image}`}
-                                                alt={data.name}
-                                                style={{
-                                                    width: "50px",
-                                                    height: "50px",
-                                                    objectFit: "cover",
-                                                    cursor: "pointer",
-                                                }}
-                                                onClick={() => {
-                                                    setImageUrl(
-                                                        `${VITE_REACT_APP_API_HOST}/uploads/${data.image}`
-                                                    );
-                                                    setViewImageModal(true);
-                                                }}
-                                            />
-                                        )}
-                                    </TableCell>
-                                    <TableCell>{data.quantity}</TableCell>
-                                    <TableCell>{data.price}</TableCell>
-                                    <TableCell>
-                                        {data.disabled ? "Yes" : "No"}
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="buttongroup">
-                                            <IconButton
-                                                onClick={() =>
-                                                    openModal(data, true)
-                                                }
-                                            >
-                                                <Edit className="actionicon" />
-                                            </IconButton>
-                                            <IconButton
-                                                onClick={() =>
-                                                    handleDeleteData(data)
-                                                }
-                                            >
-                                                <Delete className="actionicon" />
-                                            </IconButton>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                <Modal open={modalState} onClose={closeModal}>
-                    <Box className="modal">
-                        <form
-                            className="modalform"
-                            onSubmit={
-                                isEditMode ? handleUpdateData : handleAddData
-                            }
-                        >
-                            {imageUrl ? (
-                                <div className="image-container">
-                                    <img
-                                        src={imageUrl}
-                                        alt="Current"
-                                        style={{
-                                            width: "300px",
-                                            height: "194px",
-                                            objectFit: "cover",
-                                            cursor: "pointer",
-                                        }}
-                                        onClick={handleImageClick}
-                                    />
-                                </div>
-                            ) : typeof currentData.image === "string" &&
-                              currentData.image !== "" ? (
-                                <div className="image-container">
-                                    <img
-                                        src={`${VITE_REACT_APP_API_HOST}/uploads/${currentData.image}`}
-                                        alt="Current"
-                                        style={{
-                                            width: "300px",
-                                            height: "194px",
-                                            objectFit: "cover",
-                                            cursor: "pointer",
-                                        }}
-                                        onClick={handleImageClick}
-                                    />
-                                </div>
-                            ) : (
-                                <div className="image-container">
-                                    <div
-                                        style={{
-                                            width: "300px",
-                                            height: "194px",
-                                            border: "1px solid #ccc",
-                                            display: "flex",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                        }}
-                                    >
-                                        No image yet
-                                    </div>
-                                </div>
-                            )}
-
-                            <TextField
-                                variant="outlined"
-                                id="name"
-                                required
-                                label="Name"
-                                value={currentData.name}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                variant="outlined"
-                                id="description"
-                                required
-                                label="Description"
-                                value={currentData.description}
-                                onChange={handleChange}
-                            />
-
-                            <TextField
-                                variant="outlined"
-                                id="image"
-                                required={!isEditMode}
-                                type="file"
-                                label={
-                                    isEditMode ? "Update Image" : "Add Image"
-                                }
-                                onChange={handleImageChange}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-
-                            <TextField
-                                label="Quantity"
-                                name="quantity"
-                                type="number"
-                                value={currentData.quantity || ""}
-                                onChange={handleInputChange}
-                            />
-
-                            <TextField
-                                variant="outlined"
-                                id="price"
-                                required
-                                type="number"
-                                label="Price"
-                                value={currentData.price}
-                                onChange={handleChange}
-                                inputProps={{ className: "hide-arrows" }}
-                            />
-
-                            {/* Category Dropdown */}
-                            <FormControl fullWidth>
-                                <InputLabel id="category-label">Category</InputLabel>
-                                <Select
-                                    labelId="category-label"
-                                    id="category"
-                                    name="category"
-                                    value={currentData.category}
-                                    onChange={handleInputChange}
-                                    required
-                                >
-                                    {categories.map((category) => (
-                                        <MenuItem key={category} value={category}>
-                                            {category}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={currentData.disabled}
-                                        onChange={handleSwitch}
-                                        name="disabled"
-                                        inputProps={{
-                                            "aria-label": "Disabled toggle",
-                                        }}
-                                    />
-                                }
-                                label="Disabled"
-                            />
-
+            <div className="content">
+                <div className="viewuser">
+                    <div className="vucon">
+                        <h1>Manage Products</h1>
+                        <div className="addbutton">
                             <Button
                                 className="tablebutton"
                                 variant="contained"
-                                type="submit"
+                                onClick={() => openModal(initialData, false)}
                                 style={{
                                     backgroundColor: "#b893fd",
-                                    width: "100px",
+                                    color: "white",
                                 }}
                             >
-                                {isEditMode ? "UPDATE" : "ADD"}
+                                ADD PRODUCT
                             </Button>
-                        </form>
-                    </Box>
-                </Modal>
+                        </div>
+                        <div className="search">
+                            <TextField
+                                variant="outlined"
+                                id="search"
+                                label="Search"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                sx={{ width: 300 }}
+                            />
+                            <FormControl sx={{ minWidth: 160, marginLeft: 2 }}>
+                                <InputLabel>Filter</InputLabel>
+                                <Select
+                                    value={filterSearch}
+                                    label="Filter"
+                                    onChange={handleFilterSearchChange}
+                                >
+                                    <MenuItem value="">
+                                        <em>None</em>
+                                    </MenuItem>
+                                    <MenuItem value={"Name"}>Name</MenuItem>
+                                    <MenuItem value={"Description"}>
+                                        Description
+                                    </MenuItem>
+                                    <MenuItem value={"Price"}>Price</MenuItem>
+                                    <MenuItem value={"Disabled"}>
+                                        Disabled
+                                    </MenuItem>
+                                </Select>
+                            </FormControl>
+                        </div>
+                        <TableContainer className="table-container">
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell>Description</TableCell>
+                                        <TableCell>Image</TableCell>
+                                        <TableCell>Stocks</TableCell>
+                                        <TableCell>Price</TableCell>
+                                        <TableCell>Disabled</TableCell>
+                                        <TableCell>Edit</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {filteredDataList.map((data) => (
+                                        <TableRow key={data._id}>
+                                            <TableCell>{data.name}</TableCell>
+                                            <TableCell className="description-cell">
+                                                {data.description}
+                                            </TableCell>
+                                            <TableCell>
+                                                {data.image && (
+                                                    <img
+                                                        src={`${VITE_REACT_APP_API_HOST}/uploads/${data.image}`}
+                                                        alt={data.name}
+                                                        style={{
+                                                            width: "50px",
+                                                            height: "50px",
+                                                            objectFit: "cover",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={() => {
+                                                            setImageUrl(
+                                                                `${VITE_REACT_APP_API_HOST}/uploads/${data.image}`
+                                                            );
+                                                            setViewImageModal(
+                                                                true
+                                                            );
+                                                        }}
+                                                    />
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {data.quantity}
+                                            </TableCell>
+                                            <TableCell>{data.price}</TableCell>
+                                            <TableCell>
+                                                {data.disabled ? "Yes" : "No"}
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="buttongroup">
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            openModal(
+                                                                data,
+                                                                true
+                                                            )
+                                                        }
+                                                    >
+                                                        <Edit className="actionicon" />
+                                                    </IconButton>
+                                                    <IconButton
+                                                        onClick={() =>
+                                                            handleDeleteData(
+                                                                data
+                                                            )
+                                                        }
+                                                    >
+                                                        <Delete className="actionicon" />
+                                                    </IconButton>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
 
-                <Modal
-                    open={viewImageModal}
-                    onClose={closeImageModal}
-                    onClick={handleModalClick}
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <Box className="view-image-modal">
-                        <Box className="modal-content">
-                            <img src={imageUrl} alt="Full Size" />
-                        </Box>
-                    </Box>
-                </Modal>
+                        <Modal open={modalState} onClose={closeModal}>
+                            <Box className="modal">
+                                <form
+                                    className="modalform"
+                                    onSubmit={
+                                        isEditMode
+                                            ? handleUpdateData
+                                            : handleAddData
+                                    }
+                                >
+                                    {imageUrl ? (
+                                        <div className="image-container">
+                                            <img
+                                                src={imageUrl}
+                                                alt="Current"
+                                                style={{
+                                                    width: "300px",
+                                                    height: "194px",
+                                                    objectFit: "cover",
+                                                    cursor: "pointer",
+                                                }}
+                                                onClick={handleImageClick}
+                                            />
+                                        </div>
+                                    ) : typeof currentData.image === "string" &&
+                                      currentData.image !== "" ? (
+                                        <div className="image-container">
+                                            <img
+                                                src={`${VITE_REACT_APP_API_HOST}/uploads/${currentData.image}`}
+                                                alt="Current"
+                                                style={{
+                                                    width: "300px",
+                                                    height: "194px",
+                                                    objectFit: "cover",
+                                                    cursor: "pointer",
+                                                }}
+                                                onClick={handleImageClick}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="image-container">
+                                            <div
+                                                style={{
+                                                    width: "300px",
+                                                    height: "194px",
+                                                    border: "1px solid #ccc",
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                }}
+                                            >
+                                                No image yet
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    <TextField
+                                        variant="outlined"
+                                        id="name"
+                                        required
+                                        label="Name"
+                                        value={currentData.name}
+                                        onChange={handleChange}
+                                    />
+
+                                    <TextField
+                                        variant="outlined"
+                                        id="description"
+                                        required
+                                        label="Description"
+                                        value={currentData.description}
+                                        onChange={handleChange}
+                                    />
+
+                                    <TextField
+                                        variant="outlined"
+                                        id="image"
+                                        required={!isEditMode}
+                                        type="file"
+                                        label={
+                                            isEditMode
+                                                ? "Update Image"
+                                                : "Add Image"
+                                        }
+                                        onChange={handleImageChange}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+
+                                    <TextField
+                                        label="Quantity"
+                                        name="quantity"
+                                        type="number"
+                                        value={currentData.quantity || ""}
+                                        onChange={handleInputChange}
+                                    />
+
+                                    <TextField
+                                        variant="outlined"
+                                        id="price"
+                                        required
+                                        type="number"
+                                        label="Price"
+                                        value={currentData.price}
+                                        onChange={handleChange}
+                                        inputProps={{
+                                            className: "hide-arrows",
+                                        }}
+                                    />
+
+                                    <FormControl fullWidth>
+                                        <InputLabel id="category-label">
+                                            Category
+                                        </InputLabel>
+                                        <Select
+                                            labelId="category-label"
+                                            id="category"
+                                            name="category"
+                                            value={currentData.category}
+                                            onChange={handleInputChange}
+                                            required
+                                        >
+                                            {categories.map((category) => (
+                                                <MenuItem
+                                                    key={category}
+                                                    value={category}
+                                                >
+                                                    {category}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+
+                                    <FormControlLabel
+                                        control={
+                                            <Switch
+                                                checked={currentData.disabled}
+                                                onChange={handleSwitch}
+                                                name="disabled"
+                                                inputProps={{
+                                                    "aria-label":
+                                                        "Disabled toggle",
+                                                }}
+                                            />
+                                        }
+                                        label="Disabled"
+                                    />
+
+                                    <Button
+                                        className="tablebutton"
+                                        variant="contained"
+                                        type="submit"
+                                        style={{
+                                            backgroundColor: "#b893fd",
+                                            width: "100px",
+                                        }}
+                                    >
+                                        {isEditMode ? "UPDATE" : "ADD"}
+                                    </Button>
+                                </form>
+                            </Box>
+                        </Modal>
+
+                        <Modal
+                            open={viewImageModal}
+                            onClose={closeImageModal}
+                            onClick={handleModalClick}
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Box className="view-image-modal">
+                                <Box className="modal-content">
+                                    <img src={imageUrl} alt="Full Size" />
+                                </Box>
+                            </Box>
+                        </Modal>
+                    </div>
+                </div>
             </div>
         </div>
     );

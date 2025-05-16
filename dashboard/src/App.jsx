@@ -9,6 +9,8 @@ import ManageProducts from "./pages/ManageProducts";
 import Cart from "./pages/Cart";
 import Payment from "./pages/Payment";
 import Reports from "./pages/Reports";
+import ContactUs from "./pages/ContactUs"; // Import ContactUs component
+import ViewMessage from "./pages/ViewContactMessage";
 
 function App() {
     return (
@@ -25,7 +27,9 @@ function App() {
                 <Route path="/cart" Component={Cart} />
                 <Route path="/payment" Component={Payment} />
                 <Route path="/reports" Component={Reports} />
-            </Routes>
+                <Route path="/contactus" Component={ContactUs} /> 
+                <Route path="/viewcontactmessages" Component={ViewMessage} />
+                </Routes>
         </BrowserRouter>
     );
 }

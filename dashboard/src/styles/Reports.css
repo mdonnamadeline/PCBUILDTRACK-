@@ -1,3 +1,8 @@
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: white;
+}
+
 .container {
     margin-top: 8rem;
 }
@@ -13,6 +18,9 @@
 
 .table-container {
     margin-top: 2rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .delete-icon {
@@ -25,4 +33,84 @@
 
 .dialog-content-text {
     font-size: 1rem;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-content {
+    padding: 1em;
+    flex: 1;
+    padding-left: 250px; /* Match Manage User sidebar space */
+}
+
+.reports-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.reports-controls {
+    padding: 1em 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+    gap: 1em;
+}
+
+.reports-controls h1 {
+    margin-left: 10px;
+}
+
+.addbutton {
+    display: flex;
+}
+
+.editModalText {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1em;
+}
+
+.box {
+    display: flex;
+    gap: 1em;
+    flex-direction: column;
+}
+
+.MuiTable-root {
+    min-width: 700px;
+}
+
+.MuiTableCell-head {
+    background: #fafafa;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+}
+
+.MuiTableCell-body {
+    font-size: 0.97rem;
+}
+
+.MuiTableRow-root:nth-of-type(even) {
+    background-color: #f9f9f9;
+}
+
+.MuiTableRow-root:hover {
+    background-color: #f1f7ff;
+}
+
+h1, .MuiTypography-h4 {
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
+    margin-bottom: 0;
 }

@@ -22,7 +22,7 @@ export default function Sidebar() {
                     </Link>
                 </>
             );
-        } else {
+        } else { // Assuming Admin/Owner roles fall here
             return (
                 <>
                     <Link to="/manageuser" className="sidebar-item">
@@ -33,6 +33,9 @@ export default function Sidebar() {
                     </Link>
                     <Link to="/reports" className="sidebar-item">
                         REPORTS
+                    </Link>
+                    <Link to="/viewcontactmessages" className="sidebar-item">
+                        VIEW MESSAGES
                     </Link>
                     <Link to="/login" className="sidebar-item">
                         LOGOUT
