@@ -1,55 +1,99 @@
-body {
-    font-family: "Poppins", sans-serif;
-    background-color: white;
+.user-table-container {
+    max-height: 500px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-top: 24px;
+    background: #fff;
+    width: 100%;
+    min-width: 1000px;
 }
 
-.manage-user {
+.user-table {
+    min-width: 1000px;
+    background: #fff;
+}
+
+.user-table-header {
+    font-weight: 600;
+    background: #fafafa;
+    font-size: 1rem;
+}
+
+.user-table-row-even {
+    background-color: #f9f9f9;
+    transition: background 0.2s;
+}
+
+.user-table-row-odd {
+    background-color: #fff;
+    transition: background 0.2s;
+}
+
+.user-table-row-even:hover,
+.user-table-row-odd:hover {
+    background-color: #f1f7ff;
+}
+
+.edit-btn {
+    background-color: #b893fd !important;
+    color: #fff !important;
+    margin-right: 8px;
+    text-transform: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    box-shadow: none;
+}
+
+.edit-btn:hover {
+    background-color: #a07be7 !important;
+}
+
+.box {
     display: flex;
     flex-direction: column;
-}
-
-.content {
-    padding: 1em;
-    flex: 1;
-    padding-left: 250px;
-}
-
-.viewuser {
-    display: flex;
-    flex-direction: column;
-}
-
-.vucon {
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    flex: 1;
-    gap: 1em;
-}
-
-.vucon h1 {
-    margin-left: 10px;
-}
-
-.addbutton {
-    display: flex;
+    gap: 1.5em;
+    width: 100%;
+    max-width: 500px;
+    padding: 2em 2.5em 1.5em 2.5em;
+    background: #fff;
+    border-radius: 12px;
+    box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .editModalText {
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 1.2em;
 }
 
-.buttonGroup {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1em;
+.editModalText .MuiTextField-root,
+.editModalText .MuiFormControl-root {
+    width: 100%;
 }
 
-.box {
-    display: flex;
-    gap: 1em;
-    flex-direction: column;
+.editModalText button[type="submit"] {
+    align-self: flex-end;
+    min-width: 120px;
+    font-size: 1rem;
+    padding: 10px 24px;
+    background-color: #b893fd;
+    color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-transform: none;
+    font-weight: 500;
+}
+
+.editModalText button[type="submit"]:hover {
+    background-color: #a07be7;
+}
+
+.vucon h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    font-family: 'Poppins', sans-serif;
+    color: #000;
 }

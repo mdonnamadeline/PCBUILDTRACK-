@@ -32,8 +32,8 @@ const style = {
     bgcolor: "background.paper",
     boxShadow: 2,
     borderRadius: "10px",
-    width: "20%",
-    p: 4,
+    width: "100%",
+    minWidth: 800,
 };
 
 export default function ManageUser() {
@@ -192,9 +192,19 @@ export default function ManageUser() {
         <div className="manage-user">
             <Sidebar />
             <div className="content">
-                <div className="viewuser">
+                <div className="view-user">
                     <div className="vucon">
-                        <h1>Manage User</h1>
+                        <h1
+                            style={{
+                                fontSize: "2.5rem",
+                                fontWeight: "600",
+                                margin: "0 0 20px 0",
+                                fontFamily: "Poppins, sans-serif",
+                                color: "#000",
+                            }}
+                        >
+                            Manage User
+                        </h1>
                         <div className="addbutton">
                             <Button
                                 variant="contained"
@@ -216,22 +226,43 @@ export default function ManageUser() {
                                 onChange={handleSearchChange}
                             />
                         </div>
-                        <TableContainer style={{ maxHeight: 500 }}>
-                            <Table stickyHeader>
+                        <TableContainer className="user-table-container">
+                            <Table stickyHeader className="user-table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>First Name</TableCell>
-                                        <TableCell>Last Name</TableCell>
-                                        <TableCell>Middle Name</TableCell>
-                                        <TableCell>Email</TableCell>
-                                        <TableCell>Role</TableCell>
-                                        <TableCell>EDIT</TableCell>
+                                        <TableCell className="user-table-header">
+                                            First Name
+                                        </TableCell>
+                                        <TableCell className="user-table-header">
+                                            Last Name
+                                        </TableCell>
+                                        <TableCell className="user-table-header">
+                                            Middle Name
+                                        </TableCell>
+                                        <TableCell className="user-table-header">
+                                            Email
+                                        </TableCell>
+                                        <TableCell className="user-table-header">
+                                            Role
+                                        </TableCell>
+                                        <TableCell
+                                            className="user-table-header"
+                                            align="center"
+                                        >
+                                            Edit
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
-
                                 <TableBody>
-                                    {filteredUsers.map((user) => (
-                                        <TableRow key={user.email}>
+                                    {filteredUsers.map((user, idx) => (
+                                        <TableRow
+                                            key={user.email}
+                                            className={
+                                                idx % 2 === 0
+                                                    ? "user-table-row-even"
+                                                    : "user-table-row-odd"
+                                            }
+                                        >
                                             <TableCell>
                                                 {user.firstname}
                                             </TableCell>
@@ -243,18 +274,13 @@ export default function ManageUser() {
                                             </TableCell>
                                             <TableCell>{user.email}</TableCell>
                                             <TableCell>{user.role}</TableCell>
-
-                                            <TableCell>
+                                            <TableCell align="center">
                                                 <Button
                                                     variant="contained"
                                                     onClick={() =>
                                                         handleOpen(user, true)
                                                     }
-                                                    style={{
-                                                        backgroundColor:
-                                                            "#b893fd", // Updated button color
-                                                        color: "white", // Ensure text is readable
-                                                    }}
+                                                    className="edit-btn"
                                                 >
                                                     EDIT
                                                 </Button>
