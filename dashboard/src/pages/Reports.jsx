@@ -54,7 +54,12 @@ export default function Reports() {
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("user"));
-        if (!user || user.role !== "Admin") {
+        if (
+            !user ||
+            (user.role !== "Admin" &&
+                user.role !== "Owner" &&
+                user.role !== "Staff")
+        ) {
             navigate("/login");
         }
     }, [navigate]);
