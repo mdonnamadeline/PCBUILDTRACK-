@@ -5,12 +5,21 @@ exports.addUser = async (req, res) => {
     const incomingData = req.body;
 
     try {
+        // Hash password before saving
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(incomingData.password, salt);
+        incomingData.password = hashedPassword;
+
         const dataObject = new User(incomingData);
         await dataObject.save();
         res.json({ success: true, message: "User added successfully!" });
     } catch (error) {
         console.error("Error adding User:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: error.message,
+        });
     }
 };
 
@@ -21,9 +30,9 @@ exports.signup = async (req, res) => {
         // Check if user exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.json({ 
-                success: false, 
-                message: "Email already registered" 
+            return res.json({
+                success: false,
+                message: "Email already registered",
             });
         }
 
@@ -36,7 +45,7 @@ exports.signup = async (req, res) => {
             lastname,
             middlename,
             email,
-            password: hashedPassword // Save the hashed password
+            password: hashedPassword, // Save the hashed password
         });
 
         await newUser.save();
@@ -46,7 +55,7 @@ exports.signup = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Internal Server Error",
-            error: error.message
+            error: error.message,
         });
     }
 };
@@ -96,7 +105,20 @@ exports.updateUser = async (req, res) => {
     try {
         const dataObject = await User.findById(req.params.id);
         if (!dataObject) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        // If password is being updated, hash it
+        if (incomingData.password) {
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(
+                incomingData.password,
+                salt
+            );
+            incomingData.password = hashedPassword;
         }
 
         Object.assign(dataObject, incomingData);

@@ -240,6 +240,8 @@ export default function Menu() {
                     )}
                 </div>
             </div>
+
+            
             {/* Modal for Add to Order */}
             <Modal
                 open={openAddToOrder}

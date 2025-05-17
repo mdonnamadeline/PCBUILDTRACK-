@@ -114,9 +114,14 @@ export default function ManageUser() {
     const handleUpdateUser = async (e) => {
         e.preventDefault();
 
-        console.log("Updating user with data:", currentUser);
+        // Only validate password if it's being changed
+        if (currentUser.password && currentUser.password.length < 8) {
+            alert("Password must be at least 8 characters long");
+            return;
+        }
 
         try {
+            // The encryption will happen on the backend
             const response = await axios.put(
                 `${VITE_REACT_APP_API_HOST}/api/users/${currentUser._id}`,
                 currentUser
@@ -129,7 +134,7 @@ export default function ManageUser() {
                 setRefreshData(!refreshData);
                 setOpen(false);
             } else {
-                alert("Failed to update user. Please try again!");
+                alert(result.message || "Failed to update user");
             }
         } catch (error) {
             console.error("Error updating user:", error);
@@ -169,7 +174,14 @@ export default function ManageUser() {
     const handleAddUser = async (e) => {
         e.preventDefault();
 
+        // Basic password validation
+        if (currentUser.password.length < 8) {
+            alert("Password must be at least 8 characters long");
+            return;
+        }
+
         try {
+            // The encryption will happen on the backend
             const response = await axios.post(
                 `${VITE_REACT_APP_API_HOST}/api/users`,
                 currentUser
@@ -180,8 +192,10 @@ export default function ManageUser() {
             if (result.success) {
                 setRefreshData(!refreshData);
                 setOpen(false);
+                alert(result.message);
+            } else {
+                alert(result.message || "Failed to add user");
             }
-            alert(result.message);
         } catch (error) {
             console.error("Error adding user:", error);
             alert("An error occurred. Please try again.");
