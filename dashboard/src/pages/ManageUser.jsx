@@ -435,9 +435,10 @@ export default function ManageUser() {
                                             <MenuItem value="Owner">
                                                 Owner
                                             </MenuItem>
-                                            <MenuItem value="Costumer">
-                                                Costumer
-                                            </MenuItem>
+                                            <MenuItem value="Customer">
+                                                Customer
+                                            </MenuItem>{" "}
+                                            {/* Fixed typo: Costumer → Customer */}
                                             <MenuItem value="Staff">
                                                 Staff
                                             </MenuItem>
@@ -473,7 +474,10 @@ export default function ManageUser() {
                                 >
                                     Confirm Delete
                                 </Typography>
-                                <Typography sx={{ mt: 2, mb: 3 }} align="center">
+                                <Typography
+                                    sx={{ mt: 2, mb: 3 }}
+                                    align="center"
+                                >
                                     Are you sure you want to delete this user?
                                 </Typography>
                                 <Box
@@ -492,7 +496,7 @@ export default function ManageUser() {
                                     <Button
                                         variant="contained"
                                         onClick={handleDeleteDialogClose}
-                                        sx={{ bgcolor: 'grey.500' }}
+                                        sx={{ bgcolor: "grey.500" }}
                                     >
                                         Cancel
                                     </Button>

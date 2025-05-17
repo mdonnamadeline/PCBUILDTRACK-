@@ -23,11 +23,11 @@ const dataModel = new mongoose.Schema({
         type: String,
         required: true
     },
-    role: { 
-        type: String, 
-        default: "Customer",
-        enum: ['Customer', 'Admin', 'Staff', 'Owner']
-    }
+   role: {
+        type: String,
+        required: true,
+        enum: ['Admin', 'Owner', 'Customer', 'Staff']
+    },
 }, { 
     timestamps: true 
 });
