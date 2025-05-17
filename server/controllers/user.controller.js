@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const bcrypt = require("bcryptjs");
 
 exports.addUser = async (req, res) => {
     const incomingData = req.body;
@@ -17,19 +18,27 @@ exports.signup = async (req, res) => {
     const { firstname, lastname, middlename, email, password } = req.body;
 
     try {
-        if (!firstname || !lastname || !email || !password) {
-            return res
-                .status(400)
-                .json({ success: false, message: "Missing required fields" });
+        // Check if user exists
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.json({ 
+                success: false, 
+                message: "Email already registered" 
+            });
         }
+
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = new User({
             firstname,
             lastname,
             middlename,
             email,
-            password,
+            password: hashedPassword // Save the hashed password
         });
+
         await newUser.save();
         res.json({ success: true, message: "Signed up successfully!" });
     } catch (error) {
@@ -37,7 +46,7 @@ exports.signup = async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Internal Server Error",
-            error: error.message,
+            error: error.message
         });
     }
 };
@@ -47,16 +56,21 @@ exports.signin = async (req, res) => {
 
     try {
         const user = await User.findOne({ email });
-
         if (!user) {
             return res.json({ success: false, message: "User not found" });
         }
 
-        if (user.password !== password) {
+        // Compare password with bcrypt
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword) {
             return res.json({ success: false, message: "Invalid password" });
         }
 
-        res.json({ success: true, user });
+        // Remove password from response
+        const userWithoutPassword = user.toObject();
+        delete userWithoutPassword.password;
+
+        res.json({ success: true, user: userWithoutPassword });
     } catch (error) {
         console.error("Error during sign-in:", error);
         res.status(500).json({ success: false, message: "Server error" });
@@ -118,4 +132,3 @@ exports.deleteUser = async (req, res) => {
         });
     }
 };
-

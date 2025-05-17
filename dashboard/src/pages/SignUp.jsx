@@ -33,6 +33,13 @@ export default function SignUp() {
 
     const handleSignup = async (e) => {
         e.preventDefault();
+
+        // Basic password validation
+        if (user.password.length < 8) {
+            alert("Password must be at least 8 characters long");
+            return;
+        }
+
         try {
             const response = await axios.post(
                 `${VITE_REACT_APP_API_HOST}/api/users/signup`,
@@ -41,8 +48,7 @@ export default function SignUp() {
             const result = response.data;
 
             if (result.success) {
-                alert("Signup successful!"); // Display success message
-                // Clear the form fields
+                alert("Signup successful!");
                 setUser({
                     firstname: "",
                     lastname: "",
@@ -50,8 +56,6 @@ export default function SignUp() {
                     email: "",
                     password: "",
                 });
-                // localStorage.removeItem("cartItems"); // Decide if these are needed
-                // localStorage.removeItem("user");
             } else {
                 alert(result.message);
             }
