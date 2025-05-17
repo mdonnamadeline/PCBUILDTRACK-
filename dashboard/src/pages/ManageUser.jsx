@@ -36,6 +36,19 @@ const style = {
     minWidth: 800,
 };
 
+// Modify the delete modal style
+const deleteModalStyle = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    bgcolor: "background.paper",
+    boxShadow: 2,
+    borderRadius: "10px",
+    width: "400px", // Smaller width for delete modal
+    p: 4, // Add padding
+};
+
 export default function ManageUser() {
     const [users, setUsers] = useState([]);
     const [open, setOpen] = useState(false);
@@ -451,21 +464,23 @@ export default function ManageUser() {
                             open={deleteDialogOpen}
                             onClose={handleDeleteDialogClose}
                         >
-                            <Box sx={style}>
+                            <Box sx={deleteModalStyle}>
                                 <Typography
                                     id="modal-modal-title"
                                     variant="h6"
                                     component="h2"
+                                    align="center" // Center the title
                                 >
                                     Confirm Delete
                                 </Typography>
-                                <Typography sx={{ mt: 2 }}>
+                                <Typography sx={{ mt: 2, mb: 3 }} align="center">
                                     Are you sure you want to delete this user?
                                 </Typography>
                                 <Box
                                     mt={2}
                                     display="flex"
-                                    justifyContent="space-between"
+                                    justifyContent="center" // Center the buttons
+                                    gap={2} // Add space between buttons
                                 >
                                     <Button
                                         variant="contained"
@@ -477,6 +492,7 @@ export default function ManageUser() {
                                     <Button
                                         variant="contained"
                                         onClick={handleDeleteDialogClose}
+                                        sx={{ bgcolor: 'grey.500' }}
                                     >
                                         Cancel
                                     </Button>

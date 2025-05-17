@@ -74,10 +74,10 @@ export default function Navbar({ cartItemCount }) {
                                 <>
                                     <Link to="/home">Home</Link>
                                     <Link to="/menu">Menu</Link>
-                                    <Link to="/manageuser">Manage User</Link>
+                                    {/* <Link to="/manageuser">Manage User</Link>
                                     <Link to="/manageproduct">
                                         Manage Product
-                                    </Link>
+                                    </Link> */}
                                     
                                 </>
                             ) : (

@@ -241,7 +241,6 @@ export default function Menu() {
                 </div>
             </div>
 
-            
             {/* Modal for Add to Order */}
             <Modal
                 open={openAddToOrder}
@@ -371,7 +370,7 @@ function ProductCard({ menu, handleOpen }) {
                             marginTop: "10px",
                             width: "100%",
                             color: "white",
-                            backgroundColor: "#b893fd",
+                            backgroundColor: "rgb(56, 31, 96) !important",
                         }}
                         onClick={() => handleOpen(menu)}
                     >

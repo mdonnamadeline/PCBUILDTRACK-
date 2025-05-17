@@ -41,7 +41,7 @@ export default function Home() {
                         <h3>SITEMAP</h3>
                         <Link to="/home"><p>Home</p></Link>
                         <Link to="/menu"><p>Browse Product</p></Link>
-                        <p>Contact Us</p>
+                         <Link to="/contactus"><p>Contact Us</p></Link>
                     </div>
                     <div className="footerSection">
                         <h3>About PCBuild Track</h3>

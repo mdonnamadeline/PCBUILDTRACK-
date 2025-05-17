@@ -5,7 +5,7 @@
     z-index: 1000;
     top: 0;
     left: -220px;
-    background-color: rgb(100, 100, 201) !important;
+    background-color: rgb(20, 20, 120) !important;
     overflow-x: hidden;
     padding-top: 20px;
     align-items: left;
@@ -31,11 +31,11 @@
   }
   
   .sidebar-item a:hover {
-    color:  rgb(184, 147, 253) !important;
+    color:  rgb(240, 223, 251) !important;
   }
 
   .sidebar-item:hover {
-    color:  rgb(184, 147, 253) !important;
+    color:  rgb(240, 223, 251) !important;
   }
   
   .sidebar .sidebar-items img {

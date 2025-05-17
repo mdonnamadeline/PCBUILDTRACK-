@@ -12,35 +12,55 @@ import { PieChart, Pie, Cell, Label, Tooltip } from "recharts";
 import Sidebar from "./Sidebar";
 import "../styles/Dashboard.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function Dashboard() {
+     const navigate = useNavigate(); 
     const [totalSales, setTotalSales] = useState(0);
     const [totalOrders, setTotalOrders] = useState(0);
     const [totalQuantity, setTotalQuantity] = useState(0);
 
+     useEffect(() => {
+        const checkAuth = () => {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (!user) {
+                navigate("/login");
+                return;
+            }
+        };
+        checkAuth();
+    }, [navigate]);
+
     const fetchData = async () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+            return;
+        }
+
         try {
             // Fetch all transactions from the /api/reports endpoint
             const response = await axios.get(
                 `${import.meta.env.VITE_REACT_APP_API_HOST}/api/reports`
             );
             const transactions = response.data;
-    
+
             // Calculate totals from the transaction data
             let totalSales = 0;
             let totalOrders = transactions.length;
             let totalQuantity = 0;
-    
+
             transactions.forEach((transaction) => {
                 totalSales += parseFloat(transaction.price) || 0;
                 totalQuantity += transaction.quantity || 0;
             });
-    
+
             // Update state with calculated totals
             setTotalSales(totalSales);
             setTotalOrders(totalOrders);
             setTotalQuantity(totalQuantity);
-    
+
             // Optionally store totals in localStorage
             localStorage.setItem("totalSales", totalSales);
             localStorage.setItem("totalOrders", totalOrders);
@@ -79,10 +99,8 @@ export default function Dashboard() {
         { name: "Other", value: 580, fill: "#fbd5da" },
     ];
 
-    const totalVisitors = chartData.reduce(
-        (acc, curr) => acc + curr.value,
-        0
-    );
+    const totalVisitors = chartData.reduce((acc, curr) => acc + curr.value, 0);
+
 
     return (
         <Box className="dashboard">
