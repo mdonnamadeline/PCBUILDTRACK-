@@ -22,7 +22,7 @@ export default function Navbar({ cartItemCount }) {
             );
             setCartCount(count);
         }
-    }, []);
+    }, [cartItemCount]); // Add cartItemCount as dependency
 
     const isAdminOrOwner =
         user && (user.role === "Admin" || user.role === "Owner");
@@ -46,7 +46,8 @@ export default function Navbar({ cartItemCount }) {
     const handleCartClick = (e) => {
         if (!isLoggedIn) {
             e.preventDefault();
-            alert("Your cart is empty. Please sign in first.");
+            alert("Please sign in first to access the cart.");
+            navigate("/login");
         }
     };
 
